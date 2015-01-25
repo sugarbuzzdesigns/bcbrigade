@@ -54,10 +54,8 @@ This can decrease the css file size drastically, and should be done before produ
 /* Assets */
 @import "assets/icons"; // Load Foundation icon fonts
 
-body {
-	background: url(../assets/img/images/wood-bg-dark.jpg);
-	background-size: cover;
-}
+/* Global styles */
+@import "site/global";
 
 // Logo/Hero image styles
 #logo {
