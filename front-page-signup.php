@@ -1,6 +1,6 @@
 <?php 
 /*
-Template Name: Signup Form Home
+Template Name: Pre-Release Sign Up
 */ 
 ?>
 <?php get_header(); ?>
