@@ -1,6 +1,6 @@
 <?php
 /**
- * Plugin Name: Hoydar Plugin Test 2
+ * Plugin Name: Plaugin Placeholder
  * Plugin URI: http://URI_Of_Page_Describing_Plugin_and_Updates
  * Description: This is just a test Plugin that will be awesome
  * Version: The plugin's version number. Example: 1.0.0
