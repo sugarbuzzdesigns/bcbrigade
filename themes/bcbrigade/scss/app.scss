@@ -57,31 +57,5 @@ This can decrease the css file size drastically, and should be done before produ
 /* Global styles */
 @import "site/global";
 
-// Logo/Hero image styles
-#logo {
-	margin: 0 auto;
-	display: block;
-	width: 500px;
-}
-
-#signUp {
-	width: 500px;
-	max-width: 100%;
-	padding: 10px 15px 10px;
-	background: #ffffff;
-	box-shadow: 0 0 20px rgba(0,0,0,0.5);
-	margin: 0 auto;
-	opacity: 0.85;
-	border-radius: 1px;	
-	font-family: 'Oswald', sans-serif;
-	text-align: center;
-
-	h4 {
-		font-weight: bold;
-		text-transform: uppercase;
-	}
-
-	p {
-		font-weight: lighter;
-	}
-}
+/* Custom animations with animate.css */
+@import "config/animations";

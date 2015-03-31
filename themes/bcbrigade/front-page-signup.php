@@ -3,13 +3,13 @@
 Template Name: Pre-Release Sign Up
 */ 
 ?>
-<?php get_header(); ?>
+<?php get_header('pre-release'); ?>
 <div class="row">
 	<div class="small-12 large-12 columns" role="main">
 	
-		<img id="logo" src="<?php bloginfo('template_url'); ?>/assets/img/images/brigade-logo-distressed.png" alt="BC Brigade">
+		<img id="logo" class="animated fadeInDown" src="<?php bloginfo('template_url'); ?>/assets/img/images/brigade-logo-distressed.png" alt="BC Brigade">
 
-		<div id="signUp">
+		<div id="signUp" class="animated fadeInUp">
 			<h4>BC Brigade will be launching soon</h4>
 			<p>Get an email notification when we're ready!</p>
 			
