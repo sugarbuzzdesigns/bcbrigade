@@ -1,11 +1,12 @@
 /* Global config */
 @import "config/variables"; // Your custom variables
 @import "config/colors"; // Your custom color scheme
-@import "config/settings"; // Default settings file. Uncomment each setting you need to change
+@import "config/settings";
+@import "config/animations"; 
 @import url("http://fonts.googleapis.com/css?family=Oswald:400,700,300");
 
 /* Foundation 5 */
-@import "foundation"; // Foundation 5 by Zurb
+@import "../bower_components/foundation/scss/foundation"; // Foundation 5 by Zurb
 
 /* Behold, here are all the Foundation components. Comment out "foundation" above if you would select the parts
 of Foundation used instead.
@@ -53,6 +54,9 @@ This can decrease the css file size drastically, and should be done before produ
 
 /* Assets */
 @import "assets/icons"; // Load Foundation icon fonts
+
+/* Just used for the pre-release signup home page */
+@import "site/pre-release-signup";
 
 /* Global styles */
 @import "site/global";
