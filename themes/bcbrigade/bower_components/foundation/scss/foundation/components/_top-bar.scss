@@ -25,10 +25,10 @@ $topbar-title-weight: $font-weight-normal !default;
 $topbar-title-font-size: rem-calc(17) !default;
 
 // Set the link colors and styles for top-level nav
-$topbar-link-color: $white !default;
-$topbar-link-color-hover: $white !default;
-$topbar-link-color-active: $white !default;
-$topbar-link-color-active-hover: $white !default;
+$topbar-link-color: #3e3e3e !default;
+$topbar-link-color-hover: #3e3e3e !default;
+$topbar-link-color-active: #3e3e3e !default;
+$topbar-link-color-active-hover: #3e3e3e !default;
 $topbar-link-weight: $font-weight-normal !default;
 $topbar-link-font-size: rem-calc(13) !default;
 $topbar-link-hover-lightness: -10% !default; // Darken by 10%
@@ -47,12 +47,12 @@ $topbar-button-top: 7px !default;
 
 // Style the top bar dropdown elements
 $topbar-dropdown-bg: $oil !default;
-$topbar-dropdown-link-color: $white !default;
+$topbar-dropdown-link-color: #3e3e3e !default;
 $topbar-dropdown-link-color-hover: $topbar-link-color-hover !default;
 $topbar-dropdown-link-bg: $oil !default;
 $topbar-dropdown-link-weight: $font-weight-normal !default;
 $topbar-dropdown-toggle-size: 5px !default;
-$topbar-dropdown-toggle-color: $white !default;
+$topbar-dropdown-toggle-color: #3e3e3e !default;
 $topbar-dropdown-toggle-alpha: 0.4 !default;
 
 $topbar-dropdown-label-color: $monsoon !default;
@@ -65,8 +65,8 @@ $topbar-dropdown-label-bg: $oil !default;
 $topbar-menu-link-transform: uppercase !default;
 $topbar-menu-link-font-size: rem-calc(13) !default;
 $topbar-menu-link-weight: $font-weight-bold !default;
-$topbar-menu-link-color: $white !default;
-$topbar-menu-icon-color: $white !default;
+$topbar-menu-link-color: #3e3e3e !default;
+$topbar-menu-icon-color: #3e3e3e !default;
 $topbar-menu-link-color-toggled: $jumbo !default;
 $topbar-menu-icon-color-toggled: $jumbo !default;
 

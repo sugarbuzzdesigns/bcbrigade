@@ -49,6 +49,9 @@ This can decrease the css file size drastically, and should be done before produ
 //  @import "foundation/components/offcanvas";
 //  @import "foundation/components/visibility";
 
+/* Custom animations with animate.css */
+@import "config/animations";
+
 /* Site structure */
 @import "site/structure"; // Your site structure
 
@@ -61,5 +64,12 @@ This can decrease the css file size drastically, and should be done before produ
 /* Global styles */
 @import "site/global";
 
-/* Custom animations with animate.css */
-@import "config/animations";
+/* Header */
+@import "partials/header";
+
+/* Member buttons */
+@import "partials/member-buttons";
+
+
+/* ONLY FOR LAYING OUT DEV */
+@import "config/dev";
