@@ -44,7 +44,7 @@ Stylesheet: Homepage Stylesheet
 			display: block;
 		}
 
-		a {
+		.level-image {
 			padding: 5px;
 			background: #fff;
 			border: solid 1px #DEDEDE;
@@ -57,6 +57,59 @@ Stylesheet: Homepage Stylesheet
 	}
 
 	.membership_level {
+		aside {
+			background: #fff;
+			color: #454545;
+			text-align: center;
+			padding: 0 0 10px 0;
+			margin: 10px 0 0 0;
+
+			header {
+				background: #688684;
+				color: #fff;
+				padding: 10px 0;
+				font-size: 2.5em;
+				font-weight: bolder;
+
+				small {
+					font-size: 50%;
+				}
+
+				sup {
+					font-size: 0.5em;
+					top: -0.7em;
+				}
+			}
+
+			.inner {
+
+				.initiation-fee {
+					background: #565656;
+					color: #fff;
+					padding: 10px 0;
+					margin-bottom: 10px;
+				}
+			}
+
+			em {
+				font-weight: bold;
+				color: #000;
+			}
+
+			ul {
+				margin: 0;
+				padding: 0 10px;
+			}
+
+			li {
+				margin-bottom: 15px;
+
+				&:last-child {
+					margin-bottom: 0;
+				}
+			}
+		}
+
 		&.active:before {
 			content: "CURRENT MEMBER";
 			position: absolute;
@@ -70,10 +123,23 @@ Stylesheet: Homepage Stylesheet
 			text-shadow: 1px 1px 1px rgb(102, 65, 65);
 			box-shadow: 2px 2px 2px rgba(0,0,0,0.5);
 		}
+
+		.level-btn {
+			display: inline-block;
+			text-align: center;
+			text-decoration: none;
+			background: #688684;
+			color: #fff;
+			padding: 10px;
+			border-radius: 5px;
+			margin: 10px 0;
+			font-weight: bold;
+			text-shadow: 0 0 1px rgba(0,0,0,0.5);
+		}		
 	}
 }
 
-.media-merch {
+.media {
 	background: #151004 url(../images/bg/purty-wood.png) fixed top center repeat;
 	padding: 20px 0;
 
@@ -97,7 +163,12 @@ Stylesheet: Homepage Stylesheet
 			width: 100%;
 			display: block;
 		}
-	}
+	}	
+
+}
+
+.shop {
+	background: #fff url(../images/bg/bedge-grunge.png);
 
 	.product {
 		margin-bottom: 10px;
@@ -111,5 +182,14 @@ Stylesheet: Homepage Stylesheet
 				display: block;
 			}
 		}
+	}	
+}
+
+.socialize {
+	background: #151004 url(../images/bg/purty-wood.png) fixed top center repeat;
+	padding: 20px 0;
+
+	h3 {
+		text-align: center;
 	}
 }

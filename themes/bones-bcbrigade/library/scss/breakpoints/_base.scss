@@ -329,7 +329,7 @@ POSTS & CONTENT STYLES
 }
 
 		.hentry {
-			background-color: $white;
+			background: #fff url(../images/bg/bedge-grunge.png);
 			border-radius: 3px;
 			margin-bottom: 1.5em;
 			border: 1px solid $border-color;
@@ -414,7 +414,7 @@ POSTS & CONTENT STYLES
 
 			table {
 				width: 100%;
-				border: 1px solid $gray;
+				border: 1px solid #D1CCC3;
 				margin-bottom: 1.5em;
 
 				caption {
@@ -427,7 +427,7 @@ POSTS & CONTENT STYLES
 			}
 
 			tr {
-				border-bottom: 1px solid $gray;
+				border-bottom: 1px solid #D1CCC3;
 
 				&:nth-child(even) {
 					background-color: $light-gray;
@@ -445,8 +445,8 @@ POSTS & CONTENT STYLES
 
 			th {
 				background-color: $light-gray;
-				border-bottom: 1px solid $gray;
-				border-right: 1px solid $gray;
+				border-bottom: 1px solid #D1CCC3;
+				border-right: 1px solid #D1CCC3;
 
 				&:last-child {
 					border-right: 0;
@@ -974,3 +974,12 @@ FORUM STYLES
 		background: #fff url(../images/bg/bedge-grunge.png);
 	}
 }
+
+/*********************
+STORE STYLES
+*********************/
+#products-wrap {
+	background: #fff url(../images/bg/bedge-grunge.png);	
+}
+
+

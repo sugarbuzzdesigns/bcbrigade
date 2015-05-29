@@ -20,12 +20,10 @@ foreach($pmpro_levels as $level)
   else
 	  $current_level = false;
 ?>
-<?php 
-	$levelName = $level->name; 
-	$levelNameLower = strtolower($levelName);
-	$levelNameEscaped = str_replace(" ", "_", $levelNameLower);
-?>
-<div class="membership_level m-all t-1of3 d-1of3 <?php echo $levelNameEscaped; ?><?php if($current_level == $level) { ?> active<?php } ?>">
+
+<?php $slug = strtolower(str_replace(" ", "_", $level->name)); ?>
+
+<div class="membership_level m-all t-1of3 d-1of3 <?php echo pmpro_level_slug($current_user); ?><?php if($current_level == $level) { ?> active<?php } ?>">
 	<!-- <div><?php echo $current_level ? "<strong>{$level->name}</strong>" : $level->name?></div> -->
 <!-- 	<div class="cost">
 		<?php 
@@ -43,13 +41,23 @@ foreach($pmpro_levels as $level)
 		?>
 	</div> -->
 	<?php if(empty($current_user->membership_level->ID)) { ?>
-		<a href="<?php echo pmpro_url("checkout", "?level=" . $level->id, "https")?>">
-			<img src="<?php bloginfo('template_directory'); ?>/library/images/membership_levels/<?php echo $levelNameEscaped; ?>.jpg" alt="">
+		<a class="level-image" href="<?php echo pmpro_url("checkout", "?level=" . $level->id, "https")?>">
+			<img src="<?php bloginfo('template_directory'); ?>/library/images/membership_levels/<?php echo $slug; ?>.jpg" alt="">
 		</a>
+		<aside>
+			<?php echo $level->description; ?>
+			<a class="level-btn" href="<?php echo pmpro_url("checkout", "?level=" . $level->id, "https")?>">SIGNUP</a>
+		</aside>
+		
 	<?php } elseif ( !$current_level ) { ?>                	
-		<a href="<?php echo pmpro_url("checkout", "?level=" . $level->id, "https")?>">
-			<img src="<?php bloginfo('template_directory'); ?>/library/images/membership_levels/<?php echo $levelNameEscaped; ?>.jpg" alt="">
+		<a class="level-image" href="<?php echo pmpro_url("checkout", "?level=" . $level->id, "https")?>">
+			<img src="<?php bloginfo('template_directory'); ?>/library/images/membership_levels/<?php echo $slug; ?>.jpg" alt="">
 		</a>
+		<aside>
+			<?php echo $level->description; ?>
+			<a class="level-btn" href="<?php echo pmpro_url("checkout", "?level=" . $level->id, "https")?>">SIGNUP</a>
+		</aside>
+		
 	<?php } elseif($current_level) { ?>      
 		
 		<?php
@@ -57,15 +65,20 @@ foreach($pmpro_levels as $level)
 			if(!pmpro_isLevelRecurring($current_user->membership_level) && !empty($current_user->membership_level->enddate))
 			{
 			?>
-				<a class="pmpro_btn pmpro_btn-select" href="<?php echo pmpro_url("checkout", "?level=" . $level->id, "https")?>"><?php _e('Renew', 'pmpro');?></a>
+				<a class="level-image" class="pmpro_btn pmpro_btn-select" href="<?php echo pmpro_url("checkout", "?level=" . $level->id, "https")?>"><?php _e('Renew', 'pmpro');?></a>
 			<?php
 			}
 			else
 			{
 			?>
-				<a class="current_level" href="<?php echo pmpro_url("checkout", "?level=" . $level->id, "https")?>">
-					<img src="<?php bloginfo('template_directory'); ?>/library/images/membership_levels/<?php echo $levelNameEscaped; ?>.jpg" alt="">
+				<a class="level-image" class="current_level" href="<?php echo pmpro_url("checkout", "?level=" . $level->id, "https")?>">
+					<img src="<?php bloginfo('template_directory'); ?>/library/images/membership_levels/<?php echo $slug; ?>.jpg" alt="">
 				</a>
+				<aside>
+					<?php echo $level->description; ?>
+					<a class="current_level level-btn" href="<?php echo pmpro_url("checkout", "?level=" . $level->id, "https")?>">SIGNUP</a>
+				</aside>
+				
 			<?php
 			}
 		?>

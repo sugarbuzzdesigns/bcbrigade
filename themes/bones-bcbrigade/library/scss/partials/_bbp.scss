@@ -1,0 +1,26 @@
+#bbpress-forums li.bbp-header {
+	background: $forest-green;
+}
+
+#bbpress-forums li.bbp-header ul {
+	color: #fff;
+}
+
+#bbpress-forums li.bbp-body ul.forum,
+#bbpress-forums li.bbp-body ul.topic {
+	border: none;
+	border-radius: 0;
+}
+
+#bbpress-forums li.bbp-header, 
+#bbpress-forums li.bbp-footer {
+	border: none;
+}
+
+#bbpress-forums ul.bbp-lead-topic,
+#bbpress-forums ul.bbp-topics,
+#bbpress-forums ul.bbp-forums,
+#bbpress-forums ul.bbp-replies,
+#bbpress-forums ul.bbp-search-results {
+	border: 1px solid #DCDCDC;
+}

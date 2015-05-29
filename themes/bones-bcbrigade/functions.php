@@ -1,4 +1,5 @@
 <?php
+define( 'WP_DEBUG', true );
 /*
 Author: Eddie Machado
 URL: htp://themble.com/bones/
@@ -205,7 +206,88 @@ function bones_fonts() {
 
 add_action('wp_print_styles', 'bones_fonts');
 
+// Add Wocommerce support
+add_theme_support( 'woocommerce' );
 
+// More Woocommerce stuff
+remove_action( 'woocommerce_before_main_content', 'woocommerce_output_content_wrapper', 10);
+remove_action( 'woocommerce_after_main_content', 'woocommerce_output_content_wrapper_end', 10);
+
+add_action('woocommerce_before_main_content', 'bc_theme_wrapper_start', 10);
+add_action('woocommerce_after_main_content', 'bc_theme_wrapper_end', 10);
+
+function bc_theme_wrapper_start() {
+  echo '<div id="products-wrap" class="wrap">';
+  echo '<div id="products-interior" class="entry-content">';
+}
+
+function bc_theme_wrapper_end() {
+  echo '</div></div>';
+}
+
+
+function show_woo_cart() {
+global $woocommerce;
+
+// get cart quantity
+$qty = $woocommerce->cart->get_cart_contents_count();
+
+// get cart total
+$total = $woocommerce->cart->get_cart_total();
+
+// get cart url
+$cart_url = $woocommerce->cart->get_cart_url();
+
+// if multiple products in cart
+if($qty>1)
+      echo '<a class="cart-contents fa fa-shopping-cart" href="'.$cart_url.'"><span>'.$qty.'</span></a>';
+
+// if single product in cart
+if($qty==1)
+      echo '<a class="cart-contents fa fa-shopping-cart" href="'.$cart_url.'"><span>1</span></a>';
+
+}
+
+add_filter( 'woocommerce_product_tabs', 'woo_remove_product_tabs', 98 );
+ 
+function woo_remove_product_tabs( $tabs ) {
+ 
+    unset( $tabs['reviews'] );      // Remove the reviews tab
+ 
+    return $tabs;
+ 
+}
+
+//CUSTOM PMPRO FUNCTIONS
+function pmpro_level_slug($user){
+  $levelName = $user->membership_level->name;
+  $levelNameLower = strtolower($levelName);
+  $levelNameEscaped = str_replace(" ", "_", $levelNameLower);
+
+  return $levelNameEscaped;
+}
+
+add_action( 'pre_get_posts', 'custom_pre_get_posts_query' );
+
+function custom_pre_get_posts_query( $q ) {
+
+  if ( ! $q->is_main_query() ) return;
+  if ( ! $q->is_post_type_archive() ) return;
+  
+  if ( ! is_admin() && is_shop() ) {
+
+    $q->set( 'tax_query', array(array(
+      'taxonomy' => 'product_cat',
+      'field' => 'slug',
+      'terms' => array( 'bundled-variations' ), // Don't display products in the knives category on the shop page
+      'operator' => 'NOT IN'
+    )));
+  
+  }
+
+  remove_action( 'pre_get_posts', 'custom_pre_get_posts_query' );
+
+}
 
 // $text = new PMProRH_Field("company", "text", array("size"=>40, "class"=>"company", "profile"=>true, "required"=>true));
 // pmprorh_add_registration_field("after_username", $text);

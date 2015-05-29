@@ -1,0 +1,64 @@
+.product {
+	width: 100%;
+	position: relative;
+	display: block;
+
+	a {
+		width: 100%;
+		display: block;
+
+		img {
+			display: block;
+			width: 100%;
+			height: auto;
+		}
+	}
+}
+
+.shop {
+	.see-all-products {
+		text-align: center;
+		display: block;
+		background: #fff url(../images/bg/bedge-grunge.png);
+		padding: 10px;
+		text-decoration: none;
+	}
+
+	.product {
+		.add_to_cart_button {
+			display: none;
+		}
+
+		h3 {
+			margin: 0;
+		}
+
+		.info {
+			position: absolute;
+			bottom: 0;
+			width: 100%;
+			background: rgba(0,0,0,0.5);
+			color: #fff;
+			padding: 10px;
+			font-size: 0.8em;			
+		}
+	}
+}
+
+// <li class="post-51 product type-product status-publish first shipping-taxable purchasable product-type-simple instock">
+
+		
+// 		<a href="http://brigade.loc/product/healing-highway-trucker-hat/">
+
+// 			<img src="http://brigade.loc/wp-content/plugins/woocommerce/assets/images/placeholder.png" alt="Placeholder" width="300" class="woocommerce-placeholder wp-post-image" height="300">		
+						
+// 			<h3>Healing Highway Trucker Hat</h3>
+
+			
+
+// 	<span class="price"><span class="amount">$20.00</span></span>
+
+// 		</a>
+
+// 		<a href="/?add-to-cart=51" rel="nofollow" data-product_id="51" data-product_sku="" class="button add_to_cart_button product_type_simple">Add to cart</a>
+// 	</li>
