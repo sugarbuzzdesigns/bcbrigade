@@ -19,16 +19,12 @@ function pmpro_membership_level_profile_fields($user)
 														LIMIT 1");*/
 	$user->membership_level = pmpro_getMembershipLevelForUser($user->ID);
 
-	$level = pmpro_getMembershipLevelForUser($user->ID);
-
-	echo '<h1>'.$level->name.'</h1>';
-
 	$levels = $wpdb->get_results( "SELECT * FROM {$wpdb->pmpro_membership_levels}", OBJECT );
 
 	if(!$levels)
 		return "";
 ?>
-<h3><?php _e("Brigade Membership Level", "pmpro"); ?></h3>
+<h3><?php _e("Membership Level", "pmpro"); ?></h3>
 <table class="form-table">
     <?php
 		$show_membership_level = true;
@@ -71,7 +67,7 @@ function pmpro_membership_level_profile_fields($user)
 		<?php
 		}
 		
-		$show_expiration = false;
+		$show_expiration = true;
 		$show_expiration = apply_filters("pmpro_profile_show_expiration", $show_expiration, $user);
 		if($show_expiration)
 		{					

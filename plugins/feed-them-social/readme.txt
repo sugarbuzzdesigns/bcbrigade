@@ -3,7 +3,7 @@ Contributors: slickremix
 Tags:  facebook photos, facebook albums, albums, photos facebook, photo, facebook feed, facebook posts, hastags, social, social plugin, social networking, networking, custom feed, custom facebook feed, facebook plugin, facebook group, facebook groups, events, facebook events, facebook page events, facebook group events, facebook page, facebook pages, twitter, twitter plugin, instagram, instagram plugin, feed me social, social plugin, feed, feeds, shortcode, facebook wall, slickremix, plugin, pages, posts, images, page, post, image, youtube, youtube feed, youtube channel, youtube video, youtube videos, videos, youtube embed, embed, video iframe, admin, comments, widgets, seo, wordpress, pinterest, pinterest boards, pinterest feeds, pinterest photos, pinterest widget, pinterest widgets, instagram popup, Facebook videos, twitter videos
 Requires at least: 3.6.0
 Tested up to: 4.2.2
-Stable tag: 1.7.9
+Stable tag: 1.8.1
 License: GPLv2 or later
 
 Display custom feeds for Facebook Pages, Groups, Events, Album Photos and Covers -Twitter, Instagram, Pinterest and YouTube on pages, posts or widgets.
@@ -61,13 +61,19 @@ If you enjoy using our plugin please tell others. [Click here to share](http://w
   * Extract the zip file and drop the contents in the wp-content/plugins/ directory of your WordPress installation and then activate the Plugin from Plugins page. 
 
 == Changelog ==
+= Version 1.8.1 Friday, May 22nd, 2015 =
+ * FIXED: Revert 1.8.0 serialization for Database using WP functions.
+
+= Version 1.8.0 Thursday, May 21st, 2015 =
+ * FIXED: All feeds to have proper serialization for Database using WP functions.
+
 = Version 1.7.9 Saturday, May 16th, 2015 =
  * FIXED: New cache method using transient instead of cache folder.
  * FIXED: Facebook post icon link and name link now open in new window.
  * FIXED: Facebook Language problem that was causing fb feeds to fail. Thanks to [Brad Allen](http://www.slickremix.com/support-forum/topic/facebook-feed-issue) for pointing this issue out.
  * NEW: Facebook like button color option, dark or light, now on the Facebook Options page.
  * NEW: Instagram height option available when you generate a shortcode so you can create a scrolling feed.
-	* NEW: Instagram comment and like counts have proper number formatting including rounding for numbers above 10k and 1m like Instagram.
+ * NEW: Instagram comment and like counts have proper number formatting including rounding for numbers above 10k and 1m like Instagram.
  * REMOVED: Unneeded get_curl function for retrieving short url for Twitter videos.
  * NEW IN PREMIUM: Instagram Load More Options. Includes loadmore button, or if you set the height of the Instagram feed you can choose Autoscroll so when the scrollbar reaches the bottom it will automatically load the next set of images.
 	
