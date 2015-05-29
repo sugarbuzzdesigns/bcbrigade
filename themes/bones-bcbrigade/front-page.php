@@ -59,14 +59,29 @@
 	<section class="cf socialize">
 		<div class="wrap">
 			<h2><hr>Socialize<hr></h2>
-			<div class="d-1of2">
+			<div class="d-1of3">
+				<a href="">
+					<img src="<?php bloginfo('template_directory'); ?>/library/images/social/homepage/social-twitter.png" alt="">
+				</a>
+			</div>
+			<div class="d-1of3">
+				<a href="">
+					<img src="<?php bloginfo('template_directory'); ?>/library/images/social/homepage/social-instagram.png" alt="">
+				</a>
+			</div>
+			<div class="d-1of3">
+				<a href="">
+					<img src="<?php bloginfo('template_directory'); ?>/library/images/social/homepage/social-fb.png" alt="">
+				</a>
+			</div>			
+<!-- 			<div class="d-1of2">
 				<a class="twitter-timeline" href="https://twitter.com/officialbcb" data-widget-id="501590129476001792">Tweets by @officialbcb</a>
 				<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+"://platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>
 			</div>
 			<div class="d-1of2 last-col">
 				<div class="fb-page" data-href="https://www.facebook.com/officialbriancollinsband" data-width="100%" data-height="500px" data-hide-cover="false" data-show-facepile="true" data-show-posts="true"><div class="fb-xfbml-parse-ignore"><blockquote cite="https://www.facebook.com/officialbriancollinsband"><a href="https://www.facebook.com/officialbriancollinsband">Brian Collins</a></blockquote></div></div>
 				<?php echo do_shortcode( '[fts instagram instagram_id=1112679586 type=user]' ); ?>
-			</div>			
+			</div>	 -->		
 		</div>
 		<div
   class="fb-like"
