@@ -35,43 +35,41 @@ if ( 0 == ( $woocommerce_loop['loop'] - 1 ) % $woocommerce_loop['columns'] || 1 
 if ( 0 == $woocommerce_loop['loop'] % $woocommerce_loop['columns'] )
 	$classes[] = 'last';
 ?>
-<div class="d-1of2">
-	<li <?php post_class( $classes ); ?>>
+<li <?php post_class( $classes ); ?>>
 
-		<?php do_action( 'woocommerce_before_shop_loop_item' ); ?>
+	<?php do_action( 'woocommerce_before_shop_loop_item' ); ?>
 
-		<a href="<?php the_permalink(); ?>">
+	<a href="<?php the_permalink(); ?>">
+
+		<?php
+			/**
+			 * woocommerce_before_shop_loop_item_title hook
+			 *
+			 * @hooked woocommerce_show_product_loop_sale_flash - 10
+			 * @hooked woocommerce_template_loop_product_thumbnail - 10
+			 */
+			do_action( 'woocommerce_before_shop_loop_item_title' );
+		?>
+	
+		<?php if(wp_is_mobile()){ ?>
+			<i class="fa fa-chevron-right"></i>
+		<?php } ?>
+		
+		<span class="info">
+			<h3><?php the_title(); ?></h3>
 
 			<?php
 				/**
-				 * woocommerce_before_shop_loop_item_title hook
+				 * woocommerce_after_shop_loop_item_title hook
 				 *
-				 * @hooked woocommerce_show_product_loop_sale_flash - 10
-				 * @hooked woocommerce_template_loop_product_thumbnail - 10
+				 * @hooked woocommerce_template_loop_rating - 5
+				 * @hooked woocommerce_template_loop_price - 10
 				 */
-				do_action( 'woocommerce_before_shop_loop_item_title' );
+				do_action( 'woocommerce_after_shop_loop_item_title' );
 			?>
-		
-			<?php if(wp_is_mobile()){ ?>
-				<i class="fa fa-chevron-right"></i>
-			<?php } ?>
-			
-			<span class="info">
-				<h3><?php the_title(); ?></h3>
+		</span>
+	</a>
 
-				<?php
-					/**
-					 * woocommerce_after_shop_loop_item_title hook
-					 *
-					 * @hooked woocommerce_template_loop_rating - 5
-					 * @hooked woocommerce_template_loop_price - 10
-					 */
-					do_action( 'woocommerce_after_shop_loop_item_title' );
-				?>
-			</span>
-		</a>
+	<?php do_action( 'woocommerce_after_shop_loop_item' ); ?>
 
-		<?php do_action( 'woocommerce_after_shop_loop_item' ); ?>
-
-	</li>
-</div>	
+</li>

@@ -1541,6 +1541,18 @@ a, a:visited {
     */
     -webkit-tap-highlight-color: rgba(0, 0, 0, 0.3); }
 
+.button.cta {
+  display: inline-block;
+  text-align: center;
+  text-decoration: none;
+  background: #688684;
+  color: #fff;
+  padding: 10px;
+  border-radius: 5px;
+  margin: 10px 0;
+  font-weight: bold;
+  text-shadow: 0 0 1px rgba(0, 0, 0, 0.5); }
+
 /******************************************************************
 H1, H2, H3, H4, H5 STYLES
 ******************************************************************/
@@ -2279,6 +2291,15 @@ you can add resource intensive styles.
   Stylesheet: Homepage Stylesheet
   
   ******************************************************************/
+  .home .d-1of3 {
+    padding-right: 0;
+    padding: 0 5px; }
+  .home .d-1of2 {
+    padding-right: 0;
+    padding: 0 5px; }
+  .home .d-1of4 {
+    padding-right: 0;
+    padding: 0 5px; }
   .home h2 hr:nth-of-type(2) {
     float: right; }
 
@@ -2344,17 +2365,6 @@ you can add resource intensive styles.
       font-weight: bold;
       text-shadow: 1px 1px 1px #664141;
       box-shadow: 2px 2px 2px rgba(0, 0, 0, 0.5); }
-    .membership_levels .membership_level .level-btn {
-      display: inline-block;
-      text-align: center;
-      text-decoration: none;
-      background: #688684;
-      color: #fff;
-      padding: 10px;
-      border-radius: 5px;
-      margin: 10px 0;
-      font-weight: bold;
-      text-shadow: 0 0 1px rgba(0, 0, 0, 0.5); }
 
   .media {
     background: #151004 url(../images/bg/purty-wood.png) fixed top center repeat;
@@ -2368,14 +2378,19 @@ you can add resource intensive styles.
         border-bottom: solid 1px #fff; }
     .media .video-wrap {
       padding: 5px;
-      background: #fff;
       margin-bottom: 10px; }
+      .media .video-wrap .video-inner {
+        border: solid #fff 5px; }
       .media .video-wrap iframe {
         width: 100%;
-        display: block; }
+        display: block;
+        background: #fff; }
 
   .shop {
     background: #fff url(../images/bg/bedge-grunge.png); }
+    .shop .see-all {
+      text-align: center;
+      padding-bottom: 10px; }
     .shop .product {
       margin-bottom: 10px; }
       .shop .product .product-wrap {
@@ -2384,6 +2399,10 @@ you can add resource intensive styles.
         .shop .product .product-wrap img {
           width: 100%;
           display: block; }
+      .shop .product .button.product_type_bundle {
+        display: none; }
+      .shop .product .button.cta {
+        margin: 0 auto; }
 
   .socialize {
     background: #151004 url(../images/bg/purty-wood.png) fixed top center repeat;
