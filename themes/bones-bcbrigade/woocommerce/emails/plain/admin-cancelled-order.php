@@ -1,27 +1,18 @@
 <?php
 /**
- * Customer note email
+ * Admin cancelled order email (plain text)
  *
- * @author 		WooThemes
- * @package 	WooCommerce/Templates/Emails/Plain
- * @version     2.0.0
+ * @author  WooThemes
+ * @package WooCommerce/Templates/Emails/Plain
+ * @version 2.3.0
  */
-
 if ( ! defined( 'ABSPATH' ) ) {
 	exit; // Exit if accessed directly
 }
 
 echo "= " . $email_heading . " =\n\n";
 
-echo __( "Hello, a note has just been added to your order:", 'woocommerce' ) . "\n\n";
-
-echo "----------\n\n";
-
-echo wptexturize( $customer_note ) . "\n\n";
-
-echo "----------\n\n";
-
-echo __( "For your reference, your order details are shown below.", 'woocommerce' ) . "\n\n";
+echo sprintf( __( 'The order #%d from %s has been cancelled. The order was as follows:', 'woocommerce' ), $order->id, $order->billing_first_name . ' ' . $order->billing_last_name ) . "\n\n";
 
 echo "=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=\n\n";
 
@@ -32,7 +23,7 @@ echo date_i18n( __( 'jS F Y', 'woocommerce' ), strtotime( $order->order_date ) )
 
 do_action( 'woocommerce_email_order_meta', $order, $sent_to_admin, $plain_text );
 
-echo "\n" . $order->email_order_items_table( $order->is_download_permitted(), true, '', '', '', true );
+echo "\n" . $order->email_order_items_table( false, true, '', '', '', true );
 
 echo "==========\n\n";
 
@@ -41,6 +32,8 @@ if ( $totals = $order->get_order_item_totals() ) {
 		echo $total['label'] . "\t " . $total['value'] . "\n";
 	}
 }
+
+echo "\n" . sprintf( __( 'View order: %s', 'woocommerce'), admin_url( 'post.php?post=' . $order->id . '&action=edit' ) ) . "\n";
 
 echo "\n=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=\n\n";
 
