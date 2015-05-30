@@ -46,7 +46,7 @@ foreach($pmpro_levels as $level)
 		</a>
 		<aside>
 			<?php echo $level->description; ?>
-			<a class="level-btn" href="<?php echo pmpro_url("checkout", "?level=" . $level->id, "https")?>">SIGNUP</a>
+			<a class="level-btn button cta" href="<?php echo pmpro_url("checkout", "?level=" . $level->id, "https")?>">SIGNUP</a>
 		</aside>
 		
 	<?php } elseif ( !$current_level ) { ?>                	
@@ -55,7 +55,7 @@ foreach($pmpro_levels as $level)
 		</a>
 		<aside>
 			<?php echo $level->description; ?>
-			<a class="level-btn" href="<?php echo pmpro_url("checkout", "?level=" . $level->id, "https")?>">SIGNUP</a>
+			<a class="level-btn button cta" href="<?php echo pmpro_url("checkout", "?level=" . $level->id, "https")?>">SIGNUP</a>
 		</aside>
 		
 	<?php } elseif($current_level) { ?>      
@@ -76,7 +76,7 @@ foreach($pmpro_levels as $level)
 				</a>
 				<aside>
 					<?php echo $level->description; ?>
-					<a class="current_level level-btn" href="<?php echo pmpro_url("checkout", "?level=" . $level->id, "https")?>">SIGNUP</a>
+					<a class="current_level level-btn button cta" href="<?php echo pmpro_url("checkout", "?level=" . $level->id, "https")?>">SIGNUP</a>
 				</aside>
 				
 			<?php

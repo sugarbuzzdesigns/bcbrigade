@@ -120,6 +120,19 @@ a, a:visited {
 	}
 }
 
+.button.cta {
+	display: inline-block;
+	text-align: center;
+	text-decoration: none;
+	background: #688684;
+	color: #fff;
+	padding: 10px;
+	border-radius: 5px;
+	margin: 10px 0;
+	font-weight: bold;
+	text-shadow: 0 0 1px rgba(0, 0, 0, 0.5);	
+}
+
 /******************************************************************
 H1, H2, H3, H4, H5 STYLES
 ******************************************************************/
