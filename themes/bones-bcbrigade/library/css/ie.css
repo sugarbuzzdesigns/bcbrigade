@@ -332,6 +332,9 @@ Stylesheet: Homepage Stylesheet
   padding: 0 5px; }
 .home h2 hr:nth-of-type(2) {
   float: right; }
+.home .see-all {
+  text-align: center;
+  padding-bottom: 10px; }
 
 .membership_levels {
   background: #fff url(../images/bg/bedge-grunge.png);
@@ -418,9 +421,6 @@ Stylesheet: Homepage Stylesheet
 
 .shop {
   background: #fff url(../images/bg/bedge-grunge.png); }
-  .shop .see-all {
-    text-align: center;
-    padding-bottom: 10px; }
   .shop .product {
     margin-bottom: 10px; }
     .shop .product .product-wrap {
@@ -440,12 +440,15 @@ Stylesheet: Homepage Stylesheet
   .socialize h2 {
     color: #fff;
     text-shadow: none;
-    margin-bottom: 20px; }
+    margin-bottom: 40px; }
     .socialize h2 hr {
       border-top: solid 1px #fff;
       border-bottom: solid 1px #fff; }
   .socialize h3 {
     text-align: center; }
+  .socialize h5 {
+    text-align: center;
+    color: #fff; }
   .socialize img {
     width: 100%;
     border: solid #fff 5px;

@@ -33,7 +33,10 @@
 						<iframe width="550" height="309" src="https://www.youtube.com/embed/llbn88Lun7o" frameborder="0" allowfullscreen></iframe>
 					</div>
 				</div>
-			</div>		
+			</div>	
+			<div class="d-all see-all">
+				<a href="#" class="button cta">See All Videos</a>	
+			</div>
 		</div>
 	</section>	
 
@@ -69,17 +72,20 @@
 				<a href="">
 					<img src="<?php bloginfo('template_directory'); ?>/library/images/social/homepage/social-twitter.png" alt="">
 				</a>
+				<h5>Follow BC on Twitter</h5>				
 			</div>
 			<div class="d-1of3">
 				<a href="">
 					<img src="<?php bloginfo('template_directory'); ?>/library/images/social/homepage/social-instagram.png" alt="">
 				</a>
+				<h5>Follow BC on Instagram</h5>				
 			</div>
 			<div class="d-1of3">
 				<a href="">
 					<img src="<?php bloginfo('template_directory'); ?>/library/images/social/homepage/social-fb.png" alt="">
 				</a>
-			</div>				
+				<h5>Follow BC on Facebook</h5>				
+			</div>	
 		</div>
 	</section>	
 
