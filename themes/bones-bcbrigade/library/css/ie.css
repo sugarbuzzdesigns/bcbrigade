@@ -330,11 +330,31 @@ Stylesheet: Homepage Stylesheet
 .home .d-1of4 {
   padding-right: 0;
   padding: 0 5px; }
+.home #hero {
+  padding-top: 20px; }
 .home h2 hr:nth-of-type(2) {
   float: right; }
 .home .see-all {
   text-align: center;
   padding-bottom: 10px; }
+
+#intro {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 100;
+  background: rgba(0, 0, 0, 0.8);
+  padding: 20px 0;
+  display: none; }
+  #intro .vjs-big-play-button {
+    display: none; }
+  #intro.show-intro {
+    margin: 0;
+    display: block; }
+  #intro .video-js {
+    margin: 0 auto; }
 
 .membership_levels {
   background: #fff url(../images/bg/bedge-grunge.png);

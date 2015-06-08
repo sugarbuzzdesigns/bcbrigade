@@ -219,9 +219,11 @@ HEADER STYLES
 *********************/
 
 .header {
-	margin-bottom: 20px;
+	// margin-bottom: 20px;
 	background: #323944 url(http://www.transparenttextures.com/patterns/soft-wallpaper.png);
 	border-bottom: solid 2px #36393E;
+	z-index: 1;
+	position: relative;
 }
 
 #inner-header {

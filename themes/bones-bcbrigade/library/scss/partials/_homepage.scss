@@ -23,6 +23,7 @@ Stylesheet: Homepage Stylesheet
 	}			
 
 	#hero {
+		padding-top: 20px;
 
 		img {
 
@@ -45,6 +46,31 @@ Stylesheet: Homepage Stylesheet
 		text-align: center;
 		padding-bottom: 10px;
 	}	
+}
+
+#intro {
+	position: fixed;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	z-index: 100;
+	background: rgba(0,0,0, 0.8);
+	padding: 20px 0;
+	display: none;
+
+	.vjs-big-play-button {
+		display: none;
+	}
+
+	&.show-intro {
+		margin: 0;
+		display: block;	
+	}	
+
+	.video-js {
+		margin: 0 auto;
+	}
 }
 
 // Homepage membership buttons

@@ -121,6 +121,17 @@ jQuery(document).ready(function($) {
 
   $(function(){
     $('.bxslider').bxSlider();
+
+    var introVideo = videojs('intro_video', {
+      autoplay: true,
+      controlBar: {
+        // muteToggle: false
+      }
+    });
+    introVideo.on('ended', function(){
+      $('#intro').fadeOut().removeClass('show-intro');  
+    });  
+    $('#intro').addClass('show-intro');  
   });
 
 })(jQuery);
