@@ -216,9 +216,6 @@ NAVIGATION STYLES
       you can use hover styles here even though this size
       has the possibility of being a mobile device.
       */ }
-      .nav li a:hover, .nav li a:focus {
-        color: #fff;
-        text-decoration: underline; }
     .nav li ul.sub-menu,
     .nav li ul.children {
       margin-top: 0;
@@ -331,7 +328,7 @@ Stylesheet: Homepage Stylesheet
   padding-right: 0;
   padding: 0 5px; }
 .home #hero {
-  padding-top: 20px; }
+  padding-top: 1.5em; }
 .home h2 hr:nth-of-type(2) {
   float: right; }
 .home .see-all {
@@ -432,6 +429,9 @@ Stylesheet: Homepage Stylesheet
   .media .video-wrap {
     padding: 5px;
     margin-bottom: 10px; }
+    .media .video-wrap .video-js {
+      border: solid 3px #fff;
+      background: #fff; }
     .media .video-wrap .video-inner {
       border: solid #fff 5px; }
     .media .video-wrap iframe {

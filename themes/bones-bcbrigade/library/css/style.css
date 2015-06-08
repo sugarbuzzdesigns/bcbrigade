@@ -1028,6 +1028,30 @@ them however you see fit.
 #bbpress-forums ul.bbp-search-results {
   border: 1px solid #DCDCDC; }
 
+#bbp_search_submit {
+  line-height: 40px;
+  padding: 0 12px;
+  border: none;
+  display: inline-block;
+  vertical-align: top;
+  border-radius: 3px;
+  margin-left: 10px;
+  background: #808C8C;
+  color: #fff;
+  -webkit-transition: all 0.3s;
+  -moz-transition: all 0.3s;
+  -o-transition: all 0.3s;
+  transition: all 0.3s; }
+
+#bbp_search_submit:hover {
+  background: #677272; }
+
+#bbp_search_submit:focus {
+  outline: none; }
+
+#bbpress-forums #bbp-search-form #bbp_search:focus {
+  outline: none; }
+
 .product {
   width: 100%;
   position: relative;
@@ -1673,12 +1697,19 @@ and more scalable.
       text-decoration: none;
       padding: 0.75em;
       text-transform: uppercase;
+      -webkit-transition: all 0.5s;
+      -moz-transition: all 0.5s;
+      -o-transition: all 0.5s;
+      transition: all 0.5s;
       /*
       remember this is for mobile ONLY, so there's no need
       to even declare hover styles here, you can do it in
       the style.scss file where it's relevant. We want to
       keep this file as small as possible!
       */ }
+      .nav li a:hover, .nav li a:focus {
+        color: rgba(255, 255, 255, 0.55);
+        outline: none; }
     .nav li:first-child a {
       padding-left: 0; }
     .nav li ul.sub-menu li a,
@@ -2180,9 +2211,6 @@ you can add resource intensive styles.
         you can use hover styles here even though this size
         has the possibility of being a mobile device.
         */ }
-        .nav li a:hover, .nav li a:focus {
-          color: #fff;
-          text-decoration: underline; }
       .nav li ul.sub-menu,
       .nav li ul.children {
         margin-top: 0;
@@ -2302,7 +2330,7 @@ you can add resource intensive styles.
     padding-right: 0;
     padding: 0 5px; }
   .home #hero {
-    padding-top: 20px; }
+    padding-top: 1.5em; }
   .home h2 hr:nth-of-type(2) {
     float: right; }
   .home .see-all {
@@ -2403,6 +2431,9 @@ you can add resource intensive styles.
     .media .video-wrap {
       padding: 5px;
       margin-bottom: 10px; }
+      .media .video-wrap .video-js {
+        border: solid 3px #fff;
+        background: #fff; }
       .media .video-wrap .video-inner {
         border: solid #fff 5px; }
       .media .video-wrap iframe {

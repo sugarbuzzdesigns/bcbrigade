@@ -101,37 +101,53 @@ function loadGravatars() {
 	}
 } // end function
 
-
-/*
- * Put all your regular jQuery in here.
-*/
-jQuery(document).ready(function($) {
-
-  /*
-   * Let's fire off the gravatar function
-   * You can remove this if you don't need it
-  */
-  loadGravatars();
-
-
-}); /* end of as page load scripts */
-
-
 (function($){
 
-  $(function(){
-    $('.bxslider').bxSlider();
+  var BCB = {
+    init: function(){
+      $('.bxslider').bxSlider();
+      loadGravatars();
+      this.checkIfLoggedIn();
 
-    var introVideo = videojs('intro_video', {
-      autoplay: true,
-      controlBar: {
-        // muteToggle: false
+      if(this.loggedIn){
+        this.loadVideos();
+        this.removeGate();
+      } else {
+        this.loadIntroVideo();
       }
-    });
-    introVideo.on('ended', function(){
-      $('#intro').fadeOut().removeClass('show-intro');  
-    });  
-    $('#intro').addClass('show-intro');  
+    },
+
+    checkIfLoggedIn: function(){
+      this.loggedIn = $('body').is('.logged-in');
+    },
+
+    loadIntroVideo: function(){
+      var introVideo = videojs('intro_video', {
+        autoplay: true,
+        controlBar: {
+          // muteToggle: false
+        }
+      });
+    },
+
+    removeGate: function(){
+      console.log('remove the gate');
+    },
+
+    loadVideos: function(){
+      $('.watch .video-js').each(function(i, elm){
+        var videoId = 'video-' + (i+1);
+        $(this).attr('id', videoId);
+
+        videojs(videoId, {
+          autoplay: false
+        });          
+      });
+    },
+  }  
+
+  $(function(){
+    BCB.init();
   });
 
 })(jQuery);

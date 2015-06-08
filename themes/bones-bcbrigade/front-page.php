@@ -34,14 +34,22 @@
 			<div class="d-all watch">
 				<h2><hr>Watch<hr class="hr-right"></h2>
 				<div class="video-wrap d-1of2">
-					<div class="video-inner">
-						<iframe width="550" height="309" src="https://www.youtube.com/embed/Wsn_2SR1N9s" frameborder="0" allowfullscreen></iframe>
-					</div>
+					<video class="video-js vjs-default-skin" controls preload="auto">
+						<source src="http://sugarbuzzdesigns.com/files/video-js/Welcome_To_The_Brigade_Introduction.mp4" type='video/mp4'>
+						<p class="vjs-no-js">
+							To view this video please enable JavaScript, and consider upgrading to a web browser
+							that <a href="http://videojs.com/html5-video-support/" target="_blank">supports HTML5 video</a>
+						</p>
+					</video>
 				</div>					
 				<div class="video-wrap d-1of2">
-					<div class="video-inner">
-						<iframe width="550" height="309" src="https://www.youtube.com/embed/llbn88Lun7o" frameborder="0" allowfullscreen></iframe>
-					</div>
+					<video class="video-js vjs-default-skin" controls preload="auto">
+						<source src="http://sugarbuzzdesigns.com/files/video-js/Welcome_To_The_Brigade_Introduction.mp4" type='video/mp4'>
+						<p class="vjs-no-js">
+							To view this video please enable JavaScript, and consider upgrading to a web browser
+							that <a href="http://videojs.com/html5-video-support/" target="_blank">supports HTML5 video</a>
+						</p>
+					</video>
 				</div>
 			</div>	
 			<div class="d-all see-all">
@@ -97,6 +105,5 @@
 				<h5>Follow BC on Facebook</h5>				
 			</div>	
 		</div>
-	</section>	
-
+	</section>
 <?php get_footer(); ?>

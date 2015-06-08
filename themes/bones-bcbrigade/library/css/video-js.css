@@ -221,7 +221,7 @@ Create your own skin at http://designer.videojs.com
     left: 0;
     height: .5em;
     width: 100%;
-    background: #66a8cc url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAYAAAAGCAYAAADgzO9IAAAAP0lEQVQIHWWMAQoAIAgDR/QJ/Ub//04+w7ZICBwcOg5FZi5iBB82AGzixEglJrd4TVK5XUJpskSTEvpdFzX9AB2pGziSQcvAAAAAAElFTkSuQmCC) -50% 0 repeat;
+    background: #688684 url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAYAAAAGCAYAAADgzO9IAAAAP0lEQVQIHWWMAQoAIAgDR/QJ/Ub//04+w7ZICBwcOg5FZi5iBB82AGzixEglJrd4TVK5XUJpskSTEvpdFzX9AB2pGziSQcvAAAAAAElFTkSuQmCC) -50% 0 repeat;
 }
 
 .vjs-default-skin .vjs-volume-bar .vjs-volume-handle {
@@ -297,7 +297,7 @@ Create your own skin at http://designer.videojs.com
 }
 
 .vjs-default-skin .vjs-play-progress {
-    background: #66a8cc url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAYAAAAGCAYAAADgzO9IAAAAP0lEQVQIHWWMAQoAIAgDR/QJ/Ub//04+w7ZICBwcOg5FZi5iBB82AGzixEglJrd4TVK5XUJpskSTEvpdFzX9AB2pGziSQcvAAAAAAElFTkSuQmCC) -50% 0 repeat;
+    background: #688684 url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAYAAAAGCAYAAADgzO9IAAAAP0lEQVQIHWWMAQoAIAgDR/QJ/Ub//04+w7ZICBwcOg5FZi5iBB82AGzixEglJrd4TVK5XUJpskSTEvpdFzX9AB2pGziSQcvAAAAAAElFTkSuQmCC) -50% 0 repeat;
 }
 
 .vjs-default-skin .vjs-load-progress {
@@ -371,14 +371,15 @@ Create your own skin at http://designer.videojs.com
 }
 
 .vjs-default-skin .vjs-big-play-button {
-    left: .5em;
-    top: .5em;
+    left: 50%;
+    top: 50%;
     font-size: 3em;
     display: block;
     z-index: 2;
     position: absolute;
     width: 4em;
     height: 2.6em;
+    margin: -1.3em 0 0 -2em;
     text-align: center;
     vertical-align: middle;
     cursor: pointer;
@@ -422,9 +423,9 @@ Create your own skin at http://designer.videojs.com
     border-color: #fff;
     background-color: #505050;
     background-color: rgba(50,50,50,.75);
-    -webkit-box-shadow: 0 0 3em #fff;
-    -moz-box-shadow: 0 0 3em #fff;
-    box-shadow: 0 0 3em #fff;
+    /*-webkit-box-shadow: 0 0 3em #fff;*/
+    /*-moz-box-shadow: 0 0 3em #fff;*/
+    /*box-shadow: 0 0 3em #fff;*/
     -webkit-transition: all 0s;
     -moz-transition: all 0s;
     -o-transition: all 0s;
@@ -675,7 +676,8 @@ Create your own skin at http://designer.videojs.com
 .video-js {
     background-color: transparent;
     position: relative;
-    padding: 0;
+    width: 100% !important;
+    padding: 0 0 56.25% 0;
     font-size: 10px;
     vertical-align: middle;
     font-weight: 400;

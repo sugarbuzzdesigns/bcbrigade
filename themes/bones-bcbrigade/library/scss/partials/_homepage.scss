@@ -23,7 +23,7 @@ Stylesheet: Homepage Stylesheet
 	}			
 
 	#hero {
-		padding-top: 20px;
+		padding-top: 1.5em;
 
 		img {
 
@@ -189,6 +189,11 @@ Stylesheet: Homepage Stylesheet
 	.video-wrap {
 		padding: 5px;
 		margin-bottom: 10px;
+
+		.video-js {
+			border: solid 3px #fff;
+			background: #fff;
+		}
 
 		.video-inner {
 			border: solid #fff 5px;

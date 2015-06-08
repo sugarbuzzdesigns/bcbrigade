@@ -24,3 +24,31 @@
 #bbpress-forums ul.bbp-search-results {
 	border: 1px solid #DCDCDC;
 }
+
+#bbp_search_submit {
+	line-height: 40px;
+	padding: 0 12px;
+	border: none;
+	display: inline-block;
+	vertical-align: top;
+	border-radius: 3px;
+	margin-left: 10px;
+	background: #808C8C;
+	color: #fff;
+    -webkit-transition: all 0.3s;
+    -moz-transition: all 0.3s;
+    -o-transition: all 0.3s;
+    transition: all 0.3s;		
+}
+
+#bbp_search_submit:hover {
+	background: darken(#808C8C, 10%);
+}
+
+#bbp_search_submit:focus {
+	outline: none;
+}
+
+#bbpress-forums #bbp-search-form #bbp_search:focus {
+	outline: none;
+}
