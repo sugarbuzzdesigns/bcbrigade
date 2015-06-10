@@ -59,21 +59,29 @@
 
 }
 
-.woocommerce ul.products li.product h3,
+.woocommerce ul.products li.product h3 {
+
+}
+
 .woocommerce ul.products li.product .price {
+	position: absolute;
+	top: 10px;
+	left: 0;
+	background-color: rgba(0,0,0,0.5);
+	color: #fff;	
 	padding: 10px;
-	background: #fff;
 }
 
 .woocommerce ul.products li.product .button {
-
+	margin: 0;
 }
 
 .woocommerce #respond input#submit, .woocommerce a.button, .woocommerce button.button, .woocommerce input.button {
 	background: #688684;
 	color: #fff;
 	margin-top: 10px;
-	display: block;	
+	display: inline-block;	
+	width: auto;
 }
 
 .woocommerce #respond input#submit:hover, .woocommerce a.button:hover, .woocommerce button.button:hover, .woocommerce input.button:hover {
