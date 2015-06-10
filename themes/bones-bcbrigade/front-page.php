@@ -36,7 +36,7 @@
 			<div class="d-all watch">
 				<h2><hr>Watch<hr class="hr-right"></h2>
 				<div class="video-wrap d-1of2">
-					<video class="video-js vjs-default-skin" controls preload="auto">
+					<video class="video-js vjs-default-skin" controls preload="auto" data-poster="<?php bloginfo('template_directory'); ?>/library/video/posters/BC_BRIGADE_COMING_SOON_LONG-poster.jpg">
 						<source src="<?php bloginfo('template_directory'); ?>/library/video/BC_BRIGADE_COMING_SOON_LONG_960x540.mp4" type='video/mp4'>
 						<p class="vjs-no-js">
 							To view this video please enable JavaScript, and consider upgrading to a web browser
@@ -45,7 +45,7 @@
 					</video>
 				</div>					
 				<div class="video-wrap d-1of2">
-					<video class="video-js vjs-default-skin" controls preload="auto">
+					<video class="video-js vjs-default-skin" controls preload="auto" data-poster="">
 						<source src="<?php bloginfo('template_directory'); ?>/library/video/NEVER_REALLY_LEFT_Lyric_960x540.mp4" type='video/mp4'>
 						<p class="vjs-no-js">
 							To view this video please enable JavaScript, and consider upgrading to a web browser

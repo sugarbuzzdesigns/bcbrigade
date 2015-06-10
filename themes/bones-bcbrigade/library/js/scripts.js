@@ -145,11 +145,16 @@ function loadGravatars() {
 
     loadVideos: function(){
       $('.watch .video-js').each(function(i, elm){
-        var videoId = 'video-' + (i+1);
+        var videoId = 'video-' + (i+1),
+            poster = $(elm).data('poster') ? $(elm).data('poster') : null;
+
+            console.log(poster);
+        
         $(this).attr('id', videoId);
 
         videojs(videoId, {
-          autoplay: false
+          autoplay: false,
+          poster: poster
         });          
       });
     },
