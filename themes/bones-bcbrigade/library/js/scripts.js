@@ -109,7 +109,10 @@ function loadGravatars() {
       loadGravatars();
       this.checkIfLoggedIn();
       this.loadVideos();
-      this.loadIntroVideo();
+      
+      if(!$.cookie('intro-video-shown') === 'true' || !$.cookie('intro-video-shown')){
+        this.loadIntroVideo();
+      }
 
       if(this.loggedIn){
         this.removeGate();
@@ -131,6 +134,7 @@ function loadGravatars() {
       });
       $('#intro').addClass('show-intro');
       introVideo.on('ended', function(){
+        $.cookie('intro-video-shown', 'true');
         $('#intro').remove();
       });
     },
