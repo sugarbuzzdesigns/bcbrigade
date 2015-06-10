@@ -12,6 +12,7 @@
 if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
 
 get_header( 'shop' ); ?>
+<div id="content">
 
 	<div id="hero" class="wrap">
 		<img src="<?php bloginfo('template_directory'); ?>/library/images/heros/store-hero.jpg" />
@@ -93,5 +94,5 @@ get_header( 'shop' ); ?>
 			 */
 			do_action( 'woocommerce_sidebar' );
 		?> -->
-
+</div>
 <?php get_footer( 'shop' ); ?>
