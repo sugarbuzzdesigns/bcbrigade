@@ -108,12 +108,13 @@ function loadGravatars() {
       $('.bxslider').bxSlider();
       loadGravatars();
       this.checkIfLoggedIn();
+      this.loadVideos();
+      this.loadIntroVideo();
 
       if(this.loggedIn){
-        this.loadVideos();
         this.removeGate();
       } else {
-        this.loadIntroVideo();
+        console.log('not logged in');
       }
     },
 

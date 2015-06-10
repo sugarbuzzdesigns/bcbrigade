@@ -2345,8 +2345,7 @@ you can add resource intensive styles.
     height: 100%;
     z-index: 100;
     background: rgba(0, 0, 0, 0.8);
-    padding: 20px 0;
-    display: none; }
+    padding: 20px 0; }
     #intro .vjs-big-play-button {
       display: none; }
     #intro.show-intro {
