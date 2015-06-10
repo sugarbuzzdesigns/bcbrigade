@@ -1083,6 +1083,29 @@ them however you see fit.
   padding: 10px;
   font-size: 0.8em; }
 
+.woocommerce .woocommerce-ordering,
+.woocommerce .woocommerce-breadcrumb,
+.woocommerce .woocommerce-result-count {
+  display: none; }
+
+.woocommerce ul.products li.product a img {
+  margin-bottom: 0; }
+
+.woocommerce ul.products li.product h3,
+.woocommerce ul.products li.product .price {
+  padding: 10px;
+  background: #fff; }
+
+.woocommerce #respond input#submit, .woocommerce a.button, .woocommerce button.button, .woocommerce input.button {
+  background: #688684;
+  color: #fff;
+  margin-top: 10px;
+  display: block; }
+
+.woocommerce #respond input#submit:hover, .woocommerce a.button:hover, .woocommerce button.button:hover, .woocommerce input.button:hover {
+  background: #5d7876;
+  color: #fff; }
+
 /*********************
 IMPORTING MODULES
 Modules are reusable blocks or elements we use throughout the project.
