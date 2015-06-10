@@ -129,6 +129,10 @@ function loadGravatars() {
           // muteToggle: false
         }
       });
+      $('#intro').addClass('show-intro');
+      introVideo.on('ended', function(){
+        $('#intro').remove();
+      });
     },
 
     removeGate: function(){

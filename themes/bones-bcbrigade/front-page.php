@@ -3,7 +3,7 @@
 	<section id="intro">
 		<div class="wrap">
 			<video id="intro_video" class="video-js vjs-default-skin" preload="auto" width="940" height="540">
-			  <source src="http://sugarbuzzdesigns.com/files/video-js/Welcome_To_The_Brigade_Introduction.mp4" type='video/mp4'>
+			  <source src="<?php bloginfo('template_directory'); ?>/library/video/Welcome_To_The_Brigade_Introduction_960x540.mp4" type='video/mp4'>
 			  <p class="vjs-no-js">
 			    To view this video please enable JavaScript, and consider upgrading to a web browser
 			    that <a href="http://videojs.com/html5-video-support/" target="_blank">supports HTML5 video</a>
@@ -37,7 +37,7 @@
 				<h2><hr>Watch<hr class="hr-right"></h2>
 				<div class="video-wrap d-1of2">
 					<video class="video-js vjs-default-skin" controls preload="auto">
-						<source src="http://sugarbuzzdesigns.com/files/video-js/Welcome_To_The_Brigade_Introduction.mp4" type='video/mp4'>
+						<source src="<?php bloginfo('template_directory'); ?>/library/video/BC_BRIGADE_COMING_SOON_LONG_960x540.mp4" type='video/mp4'>
 						<p class="vjs-no-js">
 							To view this video please enable JavaScript, and consider upgrading to a web browser
 							that <a href="http://videojs.com/html5-video-support/" target="_blank">supports HTML5 video</a>
@@ -46,7 +46,7 @@
 				</div>					
 				<div class="video-wrap d-1of2">
 					<video class="video-js vjs-default-skin" controls preload="auto">
-						<source src="http://sugarbuzzdesigns.com/files/video-js/Welcome_To_The_Brigade_Introduction.mp4" type='video/mp4'>
+						<source src="<?php bloginfo('template_directory'); ?>/library/video/NEVER_REALLY_LEFT_Lyric_960x540.mp4" type='video/mp4'>
 						<p class="vjs-no-js">
 							To view this video please enable JavaScript, and consider upgrading to a web browser
 							that <a href="http://videojs.com/html5-video-support/" target="_blank">supports HTML5 video</a>
