@@ -1052,6 +1052,10 @@ them however you see fit.
 #bbpress-forums #bbp-search-form #bbp_search:focus {
   outline: none; }
 
+#products-wrap {
+  overflow: auto;
+  margin-bottom: 1.5em; }
+
 .product {
   width: 100%;
   position: relative;
@@ -1105,13 +1109,27 @@ them however you see fit.
 .woocommerce #respond input#submit, .woocommerce a.button, .woocommerce button.button, .woocommerce input.button {
   background: #688684;
   color: #fff;
-  margin-top: 10px;
   display: inline-block;
   width: auto; }
+
+.post-type-archive-product .woocommerce a.button {
+  margin-top: 10px; }
 
 .woocommerce #respond input#submit:hover, .woocommerce a.button:hover, .woocommerce button.button:hover, .woocommerce input.button:hover {
   background: #5d7876;
   color: #fff; }
+
+.single-product #content div.product .woocommerce-tabs {
+  float: right;
+  clear: none;
+  width: 48%; }
+
+.single-product #content div.product .woocommerce-tabs .tabs {
+  display: none; }
+
+.single-product.woocommerce div.product div.summary,
+.single-product.woocommerce div.product div.images {
+  margin-bottom: 0; }
 
 /*********************
 IMPORTING MODULES
