@@ -1131,14 +1131,46 @@ them however you see fit.
 .single-product.woocommerce div.product div.images {
   margin-bottom: 0; }
 
-.woocommerce .woocommerce-message {
+.woocommerce .woocommerce-message,
+.woocommerce .woocommerce-info {
   border-top-color: #688684; }
 
-.woocommerce .woocommerce-message:before {
+.woocommerce .woocommerce-message:before,
+.woocommerce .woocommerce-info:before {
   color: #688684; }
 
 .woocommerce div.product p.price, .woocommerce div.product span.price {
   color: #688684; }
+
+a.checkout-button.button.alt.wc-forward {
+  background-color: #688684; }
+
+.woocommerce #respond input#submit.alt, .woocommerce a.button.alt, .woocommerce button.button.alt, .woocommerce input.button.alt {
+  background-color: #688684; }
+
+.woocommerce #respond input#submit.alt:hover, .woocommerce a.button.alt:hover, .woocommerce button.button.alt:hover, .woocommerce input.button.alt:hover {
+  background-color: #5d7876; }
+
+.woocommerce #content table.cart td.actions .input-text, .woocommerce table.cart td.actions .input-text, .woocommerce-page #content table.cart td.actions .input-text, .woocommerce-page table.cart td.actions .input-text {
+  width: auto; }
+
+.woocommerce-cart .cart-collaterals .cart_totals table td,
+.woocommerce-cart .cart-collaterals .cart_totals table th {
+  padding: 5px; }
+
+.woocommerce-cart table.cart img {
+  width: 75px;
+  margin-bottom: 0;
+  display: block; }
+
+.woocommerce-cart table.cart td.actions .coupon .input-text {
+  padding: 9px 6px 7px; }
+
+.woocommerce-cart .cart-collaterals .cart_totals tr td, .woocommerce-cart .cart-collaterals .cart_totals tr th {
+  border-right: 1px solid #d1ccc3; }
+
+.woocommerce form .form-row input.input-text, .woocommerce form .form-row textarea {
+  padding: 10px; }
 
 /*********************
 IMPORTING MODULES
@@ -1787,7 +1819,7 @@ POSTS & CONTENT STYLES
   border: 1px solid #ccc; }
   .hentry header {
     border-bottom: 1px solid #f8f9fa;
-    padding: 1.5em; }
+    padding: 0 1.5em 1.5em 0; }
   .hentry footer {
     padding: 1.5em;
     border-top: 1px solid #f8f9fa; }
@@ -1837,7 +1869,8 @@ POSTS & CONTENT STYLES
       text-transform: uppercase;
       letter-spacing: 1px; }
   .entry-content tr {
-    border-bottom: 1px solid #D1CCC3; }
+    border-bottom: 1px solid #D1CCC3;
+    background: #fff; }
     .entry-content tr:nth-child(even) {
       background-color: #f8f9fa; }
   .entry-content td {

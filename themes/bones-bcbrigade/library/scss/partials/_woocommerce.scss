@@ -112,11 +112,13 @@
 	margin-bottom: 0;
 }
 
-.woocommerce .woocommerce-message {
+.woocommerce .woocommerce-message,
+.woocommerce .woocommerce-info {
 	border-top-color: #688684;
 }
 
-.woocommerce .woocommerce-message:before {
+.woocommerce .woocommerce-message:before,
+.woocommerce .woocommerce-info:before {
 	color: #688684;
 }
 
@@ -125,6 +127,44 @@
 }
 
 
+a.checkout-button.button.alt.wc-forward {
+	background-color: #688684;
+}
+
+.woocommerce #respond input#submit.alt, .woocommerce a.button.alt, .woocommerce button.button.alt, .woocommerce input.button.alt {
+	background-color: #688684;
+}
+
+.woocommerce #respond input#submit.alt:hover, .woocommerce a.button.alt:hover, .woocommerce button.button.alt:hover, .woocommerce input.button.alt:hover {
+	background-color: darken(#688684, 5%);
+}
+
+.woocommerce #content table.cart td.actions .input-text, .woocommerce table.cart td.actions .input-text, .woocommerce-page #content table.cart td.actions .input-text, .woocommerce-page table.cart td.actions .input-text {
+	width: auto;
+}
+
+.woocommerce-cart .cart-collaterals .cart_totals table td, 
+.woocommerce-cart .cart-collaterals .cart_totals table th {
+	padding: 5px;
+}
+
+.woocommerce-cart table.cart img {
+	width: 75px;
+	margin-bottom: 0;	
+	display: block;
+}
+
+.woocommerce-cart table.cart td.actions .coupon .input-text {
+	padding: 9px 6px 7px;
+}
+
+.woocommerce-cart .cart-collaterals .cart_totals tr td, .woocommerce-cart .cart-collaterals .cart_totals tr th {
+  	border-right: 1px solid rgb(209, 204, 195);
+}
+
+.woocommerce form .form-row input.input-text, .woocommerce form .form-row textarea {
+	padding: 10px;
+}
 // <li class="post-51 product type-product status-publish first shipping-taxable purchasable product-type-simple instock">
 
 		
