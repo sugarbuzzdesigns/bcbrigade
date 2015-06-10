@@ -1131,6 +1131,15 @@ them however you see fit.
 .single-product.woocommerce div.product div.images {
   margin-bottom: 0; }
 
+.woocommerce .woocommerce-message {
+  border-top-color: #688684; }
+
+.woocommerce .woocommerce-message:before {
+  color: #688684; }
+
+.woocommerce div.product p.price, .woocommerce div.product span.price {
+  color: #688684; }
+
 /*********************
 IMPORTING MODULES
 Modules are reusable blocks or elements we use throughout the project.

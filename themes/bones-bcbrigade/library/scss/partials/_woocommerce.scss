@@ -112,6 +112,18 @@
 	margin-bottom: 0;
 }
 
+.woocommerce .woocommerce-message {
+	border-top-color: #688684;
+}
+
+.woocommerce .woocommerce-message:before {
+	color: #688684;
+}
+
+.woocommerce div.product p.price, .woocommerce div.product span.price {
+	color: #688684;	
+}
+
 
 // <li class="post-51 product type-product status-publish first shipping-taxable purchasable product-type-simple instock">
 
