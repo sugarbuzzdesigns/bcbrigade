@@ -105,15 +105,15 @@ function loadGravatars() {
 
   var BCB = {
     init: function(){
-      // this.is_mobile = BCB_JS_VARS.is_mobile === '1' ? true : false;
+      this.is_mobile = BCB_JS_VARS.is_mobile === '1' ? true : false;
 
       $('.bxslider').bxSlider();
       loadGravatars();
       this.checkIfLoggedIn();
       this.bindEvents();
-      // if(!this.is_mobile){
-      //   this.loadVideos();
-      // }
+      if(!this.is_mobile){
+        this.loadVideos();
+      }
       
       if(!$.cookie('intro-video-shown') === 'true' || !$.cookie('intro-video-shown')){
         this.loadIntroVideo();
