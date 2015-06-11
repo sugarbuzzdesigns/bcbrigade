@@ -105,7 +105,7 @@ function loadGravatars() {
 
   var BCB = {
     init: function(){
-      this.is_mobile = BCB_JS_VARS.is_mobile === '1' ? true : false;
+      // this.is_mobile = BCB_JS_VARS.is_mobile === '1' ? true : false;
 
       $('.bxslider').bxSlider();
       loadGravatars();
