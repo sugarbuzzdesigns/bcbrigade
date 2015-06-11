@@ -307,8 +307,8 @@ $region_abbrevs_names = array(
   'UK'=>'UNITED KINGDOM'
 );
 
-$region = new PMProRH_Field("region", "select", array("options"=>$region_abbrevs_names, "required"=>true));
-pmprorh_add_registration_field("after_email", $region);
+// $region = new PMProRH_Field("region", "select", array("options"=>$region_abbrevs_names, "required"=>true));
+// pmprorh_add_registration_field("after_email", $region);
 
 add_filter( 'woocommerce_product_tabs', 'woo_remove_product_tabs', 98 );
  
