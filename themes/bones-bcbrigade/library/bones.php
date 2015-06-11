@@ -116,6 +116,16 @@ function bones_gallery_style($css) {
 	return preg_replace( "!<style type='text/css'>(.*?)</style>!s", '', $css );
 }
 
+// get mobile or desktop env variable
+function get_screen_type(){
+	return wp_is_mobile() ? 'mobile' : 'desktop';
+}
+
+// get mobile or desktop env variable
+function screen_type(){
+	echo wp_is_mobile() ? 'mobile' : 'desktop';
+}
+
 
 /*********************
 SCRIPTS & ENQUEUEING
@@ -133,6 +143,9 @@ function bones_scripts_and_styles() {
 
 		// register main stylesheet
 		wp_register_style( 'bones-stylesheet', get_stylesheet_directory_uri() . '/library/css/style.css', array(), '', 'all' );
+
+		// font-awesome
+		wp_register_style( 'font-awesome', get_stylesheet_directory_uri() . '/library/css/font-awesome.min.css', array(), '', 'all' );
 
 		// ie-only style sheet
 		wp_register_style( 'bones-ie-only', get_stylesheet_directory_uri() . '/library/css/ie.css', array(), '' );
@@ -154,6 +167,7 @@ function bones_scripts_and_styles() {
 		wp_enqueue_script( 'bones-modernizr' );
 		wp_enqueue_style( 'bones-stylesheet' );
 		wp_enqueue_style( 'bones-ie-only' );
+		wp_enqueue_style( 'font-awesome' );
 		wp_enqueue_style( 'videojs-css' );
 
 		$wp_styles->add_data( 'bones-ie-only', 'conditional', 'lt IE 9' ); // add conditional wrapper around ie stylesheet
@@ -300,6 +314,19 @@ function bones_excerpt_more($more) {
 	return '...  <a class="excerpt-read-more" href="'. get_permalink($post->ID) . '" title="'. __( 'Read ', 'bonestheme' ) . get_the_title($post->ID).'">'. __( 'Read more &raquo;', 'bonestheme' ) .'</a>';
 }
 
+
+/*******************
+SET UP JS VARS
+********************/
+function bc_js_variables(){ ?>
+      <script type="text/javascript">
+      	var BCB_JS_VARS = {
+      		is_mobile: '<?php echo wp_is_mobile(); ?>'
+      	};
+      </script>
+      <?php 
+} 
+add_action ( 'wp_head', 'bc_js_variables' )
 
 
 ?>

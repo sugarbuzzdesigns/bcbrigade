@@ -391,6 +391,14 @@ input[type="submit"] {
     cursor: pointer; /* 3 */
 }
 
+video {
+  width: 100%;
+}
+
+// .video-js {
+//   position: relative;
+// }
+
 /**
  * Re-set default cursor for disabled elements.
  */

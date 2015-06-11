@@ -17,7 +17,10 @@ come into play. Have fun!
 GENERAL STYLES
 *********************/
 
-body {}
+body {
+  	background: #000 url(../images/bg/woods-trees-bg.jpg) fixed top center no-repeat;
+  	padding-top: 0;
+}
 
 /*********************
 LAYOUT & GRID STYLES
@@ -31,9 +34,68 @@ LAYOUT & GRID STYLES
 HEADER STYLES
 *********************/
 
-.header {}
+#hero {
+	padding-bottom: 1.5em;
 
-	#logo {}
+	img {
+		border: solid #F1F1F1 5px;
+	}
+}
+
+.header {
+	background: #323944 url(http://www.transparenttextures.com/patterns/soft-wallpaper.png);
+	position: relative; 
+	top: auto;
+	left: auto;
+
+	.open-menu {
+		display: none;
+	}
+
+}
+
+#menu-main-menu {
+	display: block;
+}
+
+/*********************
+HR STYLES
+*********************/
+h2 {
+	text-align: center;
+    width: 80%;
+	display: block;
+    margin: 0 auto 10px;
+    opacity: 0.9;	
+    color: $text-color;	
+
+	hr {
+		display: block;
+		width: 25%;
+		height: 5px;
+		border-left: none;
+		border-right: none;
+		border-top: solid 1px #868686;
+		border-bottom: solid 1px #868686;
+		margin: 22px 0 0 0;	
+		float: left;		
+
+		&.hr-right {
+			float: right;
+			border-top: solid 1px #868686;
+			border-bottom: solid 1px #868686;			
+		}
+	}
+}	
+
+
+/******************************************************************
+H1, H2, H3, H4, H5 STYLES
+******************************************************************/
+
+h2, .h2 {
+	font-size: 2.25em;
+}
 
 /*********************
 NAVIGATION STYLES
@@ -41,6 +103,7 @@ NAVIGATION STYLES
 
 .nav {
 	border: 0;
+
 	ul {
 		background:$black;
 		margin-top:0;
@@ -61,7 +124,11 @@ NAVIGATION STYLES
 			}
 		}
 
-		&:first-child {}
+		&:first-child {
+			a {
+				padding-left: 0;
+			}
+		}
 		&:last-child {}
 
 		/*
@@ -257,6 +324,15 @@ SIDEBARS & ASIDES
 	.textwidget {}
 	.widget_text {}
 	.textwidget p {}
+
+
+/*********************
+VIDEO JS STYLES
+*********************/	
+
+.video-js {
+    padding: 0 0 56.25% 0;
+}
 
 
 /*********************

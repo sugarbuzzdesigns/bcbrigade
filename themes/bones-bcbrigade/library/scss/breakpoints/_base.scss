@@ -20,61 +20,19 @@ body {
 	font-size: 100%;
 	line-height: 1.5;
 	color: $text-color;
-	background-color: $gray;
+	background-color: #fff;
   	-webkit-font-smoothing: antialiased;
-  	background: #000 url(../images/bg/woods-trees-bg.jpg) fixed top center no-repeat;
+  	padding-top: 48px;
 }
 
 #hero {
-	margin-bottom: 20px; 
+	background: #151004 url(../images/bg/purty-wood.png) fixed;
 
 	img {
 		width: 100%;
 		display: block;	
-		border: solid #F1F1F1 5px;
 	}
 }
-
-/********************
-WORDPRESS BODY CLASSES
-style a page via class
-********************/
-
-.rtl {}                           /* for sites that are read right to left (i.e. hebrew) */
-.home {}                          /* home page */
-.blog {}                          /* blog template page */
-.archive {}                       /* archive page */
-.date {}                          /* date archive page */
-	.date-paged-1 {}                /* replace the number to the corresponding page number */
-.search {}                        /* search page */
-	.search-results {}              /* search result page */
-	.search-no-results {}           /* no results search page */
-	.search-paged-1 {}              /* individual paged search (i.e. body.search-paged-3) */
-.error404 {}                      /* 404 page */
-.single {}                        /* single post page */
-	.postid-1 {}                    /* individual post page by id (i.e. body.postid-73) */
-	.single-paged-1 {}              /* individual paged single (i.e. body.single-paged-3) */
-.attachment {}                    /* attatchment page */
-	.attachmentid-1 {}              /* individual attatchment page (i.e. body.attachmentid-763) */
-	.attachment-mime-type {}        /* style mime type pages */
-.author {}                        /* author page */
-	.author-nicename {}             /* user nicename (i.e. body.author-samueladams) */
-	.author-paged-1 {}              /* paged author archives (i.e. body.author-paged-4) for page 4 */
-.category {}                      /* category page */
-	.category-1 {}                  /* individual category page (i.e. body.category-6) */
-	.category-paged-1 {}            /* replace the number to the corresponding page number */
-.tag {}                           /* tag page */
-	.tag-slug {}                    /* individual tag page (i.e. body.tag-news) */
-	.tag-paged-1 {}                 /* replace the number to the corresponding page number */
-.page-template {}                 /* custom page template page */
-	.page-template-page-php {}      /* individual page template (i.e. body.page-template-contact-php */
-	.page-paged-1 {}                /* replace the number to the corresponding page number */
-	.page-parent {}                 /* parent page template */
-	.page-child {}                  /* child page template */
-	.parent-pageid-1 {}             /* replace the number to the corresponding page number */
-.logged-in {}                     /* if user is logged in */
-.paged {}                         /* paged items like search results or archives */
-	.paged-1 {}                     /* individual paged (i.e. body.paged-3) */
 
 /*********************
 LAYOUT & GRID STYLES
@@ -84,13 +42,6 @@ LAYOUT & GRID STYLES
 	width: 96%;
 	margin: 0 auto;
 }
-
-/*********************
-SECTION STYLES
-*********************/
-section:before {
-}
-
 
 /*********************
 LINK STYLES
@@ -161,12 +112,13 @@ h1.title, .h1.title {
 }
 
 h2, .h2 {
-	font-size: 2.25em;
+	font-size: 1.75em;
 	line-height: 1.4em;
 	margin: 0 0 0.375em 0;
 	text-transform: uppercase;
 	font-weight: bolder;
 	text-shadow: 1px 1px 1px #fff;
+	text-align: center;
 }
 
 h3, .h3 {
@@ -189,28 +141,8 @@ h5, .h5 {
 HR STYLES
 *********************/
 h2 {
-	text-align: center;
-    width: 80%;
-	display: block;
-    margin: 0 auto 10px;
-    opacity: 0.9;	
-    color: $text-color;	
-
 	hr {
-		width: 25%;
-		height: 5px;
-		border-left: none;
-		border-right: none;
-		border-top: solid 1px #868686;
-		border-bottom: solid 1px #868686;
-		margin: 22px 0 0 0;	
-		float: left;		
-
-		&.hr-right {
-			float: right;
-			border-top: solid 1px #868686;
-			border-bottom: solid 1px #868686;			
-		}
+		display: none;
 	}
 }
 
@@ -219,11 +151,24 @@ HEADER STYLES
 *********************/
 
 .header {
-	// margin-bottom: 20px;
-	background: #323944 url(http://www.transparenttextures.com/patterns/soft-wallpaper.png);
+	background: #4E535B;
 	border-bottom: solid 2px #36393E;
 	z-index: 1;
-	position: relative;
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+
+	.open-menu {
+		color: #fff;
+		font-size: 1.6em;
+		padding: 10px 8px;
+		cursor: pointer;
+	}	
+}
+
+#menu-main-menu {
+	display: none;
 }
 
 #inner-header {
@@ -260,6 +205,9 @@ and more scalable.
 .nav {
 	border-bottom: 0;
 	margin: 0;
+	position: relative;
+	top: auto;
+	left: auto;
 
 	li {
 
@@ -290,7 +238,7 @@ and more scalable.
 
 		&:first-child {
 			a {
-				padding-left: 0;
+
 			}
 		}
 
@@ -376,24 +324,6 @@ POSTS & CONTENT STYLES
 			margin: 0;
 		}
 
-		.single-title {}
-
-		.page-title {}
-
-		.entry-title {}
-
-		.archive-title {}
-
-		/* want to style individual post classes? Booya! */
-		.post-id {}         /* post by id (i.e. post-3) */
-		.post {}            /* general post style */
-		.page {}            /* general article on a page style */
-		.attachment {}      /* general style on an attatchment */
-		.sticky {}          /* sticky post style */
-		.hentry {}          /* hentry class */
-		.category-slug {}   /* style by category (i.e. category-videos) */
-		.tag-slug {}        /* style by tag (i.e. tag-news) */
-
 		/* post meta */
 		.byline {
 			color: $meta-gray;
@@ -409,27 +339,6 @@ POSTS & CONTENT STYLES
 
 			p {
 				margin: 0 0 1.5em;
-			}
-
-
-			ul, ol, table, dl {}
-
-			ul, ol {
-
-				li {}
-
-			}
-
-			ul {
-
-				li {}
-
-			}
-
-			ol {
-
-				li {}
-
 			}
 
 			table {
@@ -485,10 +394,6 @@ POSTS & CONTENT STYLES
 
 			}
 
-			dl {}
-
-			dt {}
-
 			dd {
 				margin-left: 0;
 				font-size: 0.9em;
@@ -501,16 +406,6 @@ POSTS & CONTENT STYLES
 				max-width: 100%;
 				height: auto;
 			}
-
-			/*
-			image alignment on a screen this size may be
-			a bit difficult. It's set to start aligning
-			and floating images at the next breakpoint,
-			but it's up to you. Feel free to change it up.
-			*/
-			.alignleft, img.alignleft {}
-			.alignright, img.alignright {}
-			.aligncenter, img.aligncenter {}
 
 			.size-auto,
 			.size-full,
@@ -551,31 +446,6 @@ POSTS & CONTENT STYLES
 			}
 
 		} /* end .wp-caption */
-
-		/* image gallery styles */
-		.gallery {
-
-			dl {
-
-				a {}
-
-				img {}
-
-			}
-
-			dt {}
-
-			dd {}
-
-		} /* end .gallery */
-
-		/* gallery caption styles */
-		.gallery-caption {}
-
-		.size-full {}
-		.size-large {}
-		.size-medium {}
-		.size-thumbnail {}
 
 	// the tag output
 	.tags {
@@ -986,6 +856,19 @@ FOOTER STYLES
 
 
 	.copyright {}
+
+@import "../partials/mobile_homepage"; 
+
+/*********************
+VIDEO JS STYLES
+*********************/
+.video-wrap {
+	margin-bottom: 20px;
+}
+
+.video-js {
+    width: 100% !important;
+}
 
 /*********************
 FORUM STYLES

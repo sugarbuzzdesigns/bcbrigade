@@ -105,10 +105,15 @@ function loadGravatars() {
 
   var BCB = {
     init: function(){
+      this.is_mobile = BCB_JS_VARS.is_mobile === '1' ? true : false;
+
       $('.bxslider').bxSlider();
       loadGravatars();
       this.checkIfLoggedIn();
-      this.loadVideos();
+      this.bindEvents();
+      if(!this.is_mobile){
+        this.loadVideos();
+      }
       
       if(!$.cookie('intro-video-shown') === 'true' || !$.cookie('intro-video-shown')){
         this.loadIntroVideo();
@@ -119,6 +124,14 @@ function loadGravatars() {
       } else {
         console.log('not logged in');
       }
+    },
+
+    bindEvents: function(){
+      $('.open-menu').click(function(){
+        var menu = $(this).next();
+
+        menu.slideToggle();
+      });
     },
 
     checkIfLoggedIn: function(){
@@ -147,8 +160,6 @@ function loadGravatars() {
       $('.watch .video-js').each(function(i, elm){
         var videoId = 'video-' + (i+1),
             poster = $(elm).data('poster') ? $(elm).data('poster') : null;
-
-            console.log(poster);
         
         $(this).attr('id', videoId);
 

@@ -1,0 +1,25 @@
+form.pmpro_form select.input,
+form.pmpro_form select {
+	padding: 0 10px;
+}
+
+#pmpro_payment_information_fields select {
+	padding: 0 40px 0 20px;	
+}
+
+form.pmpro_form .pmpro_submit {
+	margin-left: 0;
+}
+
+.pmpro-checkout article {
+	padding-bottom: 20px;
+}
+
+form.pmpro_form .pmpro_submit span .pmpro_btn-submit-checkout {
+	background: #808C8C;
+	color: #fff;
+}
+
+form.pmpro_form .pmpro_submit span .pmpro_btn-submit-checkout:hover {
+	background: darken(#808C8C, 5%);
+}

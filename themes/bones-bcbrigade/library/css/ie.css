@@ -183,6 +183,10 @@ come into play. Have fun!
 /*********************
 GENERAL STYLES
 *********************/
+body {
+  background: #000 url(../images/bg/woods-trees-bg.jpg) fixed top center no-repeat;
+  padding-top: 0; }
+
 /*********************
 LAYOUT & GRID STYLES
 *********************/
@@ -192,6 +196,53 @@ LAYOUT & GRID STYLES
 /*********************
 HEADER STYLES
 *********************/
+#hero {
+  padding-bottom: 1.5em; }
+  #hero img {
+    border: solid #F1F1F1 5px; }
+
+.header {
+  background: #323944 url(http://www.transparenttextures.com/patterns/soft-wallpaper.png);
+  position: relative;
+  top: auto;
+  left: auto; }
+  .header .open-menu {
+    display: none; }
+
+#menu-main-menu {
+  display: block; }
+
+/*********************
+HR STYLES
+*********************/
+h2 {
+  text-align: center;
+  width: 80%;
+  display: block;
+  margin: 0 auto 10px;
+  opacity: 0.9;
+  color: #434343; }
+  h2 hr {
+    display: block;
+    width: 25%;
+    height: 5px;
+    border-left: none;
+    border-right: none;
+    border-top: solid 1px #868686;
+    border-bottom: solid 1px #868686;
+    margin: 22px 0 0 0;
+    float: left; }
+    h2 hr.hr-right {
+      float: right;
+      border-top: solid 1px #868686;
+      border-bottom: solid 1px #868686; }
+
+/******************************************************************
+H1, H2, H3, H4, H5 STYLES
+******************************************************************/
+h2, .h2 {
+  font-size: 2.25em; }
+
 /*********************
 NAVIGATION STYLES
 *********************/
@@ -216,6 +267,8 @@ NAVIGATION STYLES
       you can use hover styles here even though this size
       has the possibility of being a mobile device.
       */ }
+    .nav li:first-child a {
+      padding-left: 0; }
     .nav li ul.sub-menu,
     .nav li ul.children {
       margin-top: 0;
@@ -282,6 +335,12 @@ SIDEBARS & ASIDES
 /* recent-comments widget */
 /* search widget */
 /* text widget */
+/*********************
+VIDEO JS STYLES
+*********************/
+.video-js {
+  padding: 0 0 56.25% 0; }
+
 /*********************
 FOOTER STYLES
 *********************/
@@ -438,41 +497,6 @@ Stylesheet: Homepage Stylesheet
       width: 100%;
       display: block;
       background: #fff; }
-
-.shop {
-  background: #fff url(../images/bg/bedge-grunge.png); }
-  .shop .product {
-    margin-bottom: 10px; }
-    .shop .product .product-wrap {
-      padding: 5px;
-      background: #fff; }
-      .shop .product .product-wrap img {
-        width: 100%;
-        display: block; }
-    .shop .product .button.product_type_bundle {
-      display: none; }
-    .shop .product .button.cta {
-      margin: 0 auto; }
-
-.socialize {
-  background: #151004 url(../images/bg/purty-wood.png) fixed top center repeat;
-  padding: 20px 0; }
-  .socialize h2 {
-    color: #fff;
-    text-shadow: none;
-    margin-bottom: 40px; }
-    .socialize h2 hr {
-      border-top: solid 1px #fff;
-      border-bottom: solid 1px #fff; }
-  .socialize h3 {
-    text-align: center; }
-  .socialize h5 {
-    text-align: center;
-    color: #fff; }
-  .socialize img {
-    width: 100%;
-    border: solid #fff 5px;
-    border-radius: 50%; }
 
 /*
 you can call the larger styles if you want, but there's really no need

@@ -343,6 +343,9 @@ input[type="submit"] {
   cursor: pointer;
   /* 3 */ }
 
+video {
+  width: 100%; }
+
 /**
  * Re-set default cursor for disabled elements.
  */
@@ -1172,6 +1175,26 @@ a.checkout-button.button.alt.wc-forward {
 .woocommerce form .form-row input.input-text, .woocommerce form .form-row textarea {
   padding: 10px; }
 
+form.pmpro_form select.input,
+form.pmpro_form select {
+  padding: 0 10px; }
+
+#pmpro_payment_information_fields select {
+  padding: 0 40px 0 20px; }
+
+form.pmpro_form .pmpro_submit {
+  margin-left: 0; }
+
+.pmpro-checkout article {
+  padding-bottom: 20px; }
+
+form.pmpro_form .pmpro_submit span .pmpro_btn-submit-checkout {
+  background: #808C8C;
+  color: #fff; }
+
+form.pmpro_form .pmpro_submit span .pmpro_btn-submit-checkout:hover {
+  background: #737f7f; }
+
 /*********************
 IMPORTING MODULES
 Modules are reusable blocks or elements we use throughout the project.
@@ -1576,56 +1599,16 @@ body {
   font-size: 100%;
   line-height: 1.5;
   color: #434343;
-  background-color: #434343;
+  background-color: #fff;
   -webkit-font-smoothing: antialiased;
-  background: #000 url(../images/bg/woods-trees-bg.jpg) fixed top center no-repeat; }
+  padding-top: 48px; }
 
 #hero {
-  margin-bottom: 20px; }
+  background: #151004 url(../images/bg/purty-wood.png) fixed; }
   #hero img {
     width: 100%;
-    display: block;
-    border: solid #F1F1F1 5px; }
+    display: block; }
 
-/********************
-WORDPRESS BODY CLASSES
-style a page via class
-********************/
-/* for sites that are read right to left (i.e. hebrew) */
-/* home page */
-/* blog template page */
-/* archive page */
-/* date archive page */
-/* replace the number to the corresponding page number */
-/* search page */
-/* search result page */
-/* no results search page */
-/* individual paged search (i.e. body.search-paged-3) */
-/* 404 page */
-/* single post page */
-/* individual post page by id (i.e. body.postid-73) */
-/* individual paged single (i.e. body.single-paged-3) */
-/* attatchment page */
-/* individual attatchment page (i.e. body.attachmentid-763) */
-/* style mime type pages */
-/* author page */
-/* user nicename (i.e. body.author-samueladams) */
-/* paged author archives (i.e. body.author-paged-4) for page 4 */
-/* category page */
-/* individual category page (i.e. body.category-6) */
-/* replace the number to the corresponding page number */
-/* tag page */
-/* individual tag page (i.e. body.tag-news) */
-/* replace the number to the corresponding page number */
-/* custom page template page */
-/* individual page template (i.e. body.page-template-contact-php */
-/* replace the number to the corresponding page number */
-/* parent page template */
-/* child page template */
-/* replace the number to the corresponding page number */
-/* if user is logged in */
-/* paged items like search results or archives */
-/* individual paged (i.e. body.paged-3) */
 /*********************
 LAYOUT & GRID STYLES
 *********************/
@@ -1633,9 +1616,6 @@ LAYOUT & GRID STYLES
   width: 96%;
   margin: 0 auto; }
 
-/*********************
-SECTION STYLES
-*********************/
 /*********************
 LINK STYLES
 *********************/
@@ -1688,12 +1668,13 @@ h1.title, .h1.title {
   font-family: "aventurabold", "Helvetica Neue", Helvetica, Arial, sans-serif; }
 
 h2, .h2 {
-  font-size: 2.25em;
+  font-size: 1.75em;
   line-height: 1.4em;
   margin: 0 0 0.375em 0;
   text-transform: uppercase;
   font-weight: bolder;
-  text-shadow: 1px 1px 1px #fff; }
+  text-shadow: 1px 1px 1px #fff;
+  text-align: center; }
 
 h3, .h3 {
   font-size: 1.125em; }
@@ -1711,35 +1692,28 @@ h5, .h5 {
 /*********************
 HR STYLES
 *********************/
-h2 {
-  text-align: center;
-  width: 80%;
-  display: block;
-  margin: 0 auto 10px;
-  opacity: 0.9;
-  color: #434343; }
-  h2 hr {
-    width: 25%;
-    height: 5px;
-    border-left: none;
-    border-right: none;
-    border-top: solid 1px #868686;
-    border-bottom: solid 1px #868686;
-    margin: 22px 0 0 0;
-    float: left; }
-    h2 hr.hr-right {
-      float: right;
-      border-top: solid 1px #868686;
-      border-bottom: solid 1px #868686; }
+h2 hr {
+  display: none; }
 
 /*********************
 HEADER STYLES
 *********************/
 .header {
-  background: #323944 url(http://www.transparenttextures.com/patterns/soft-wallpaper.png);
+  background: #4E535B;
   border-bottom: solid 2px #36393E;
   z-index: 1;
-  position: relative; }
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%; }
+  .header .open-menu {
+    color: #fff;
+    font-size: 1.6em;
+    padding: 10px 8px;
+    cursor: pointer; }
+
+#menu-main-menu {
+  display: none; }
 
 #inner-header {
   padding: 0; }
@@ -1768,6 +1742,9 @@ and more scalable.
 .nav {
   border-bottom: 0;
   margin: 0;
+  position: relative;
+  top: auto;
+  left: auto;
   /* end .menu li */
   /* highlight current page */
   /* end current highlighters */ }
@@ -1799,8 +1776,6 @@ and more scalable.
       .nav li a:hover, .nav li a:focus {
         color: rgba(255, 255, 255, 0.55);
         outline: none; }
-    .nav li:first-child a {
-      padding-left: 0; }
     .nav li ul.sub-menu li a,
     .nav li ul.children li a {
       padding-left: 30px; }
@@ -1832,15 +1807,6 @@ POSTS & CONTENT STYLES
 .entry-title {
   margin: 0; }
 
-/* want to style individual post classes? Booya! */
-/* post by id (i.e. post-3) */
-/* general post style */
-/* general article on a page style */
-/* general style on an attatchment */
-/* sticky post style */
-/* hentry class */
-/* style by category (i.e. category-videos) */
-/* style by tag (i.e. tag-news) */
 /* post meta */
 .byline {
   color: #9fa6b4;
@@ -1849,13 +1815,7 @@ POSTS & CONTENT STYLES
 
 /* entry content */
 .entry-content {
-  padding: 1.5em 1.5em 0;
-  /*
-  image alignment on a screen this size may be
-  a bit difficult. It's set to start aligning
-  and floating images at the next breakpoint,
-  but it's up to you. Feel free to change it up.
-  */ }
+  padding: 1.5em 1.5em 0; }
   .entry-content p {
     margin: 0 0 1.5em; }
   .entry-content table {
@@ -1930,9 +1890,6 @@ POSTS & CONTENT STYLES
     text-align: center; }
 
 /* end .wp-caption */
-/* image gallery styles */
-/* end .gallery */
-/* gallery caption styles */
 .tags {
   margin: 0; }
 
@@ -2154,6 +2111,154 @@ override these styles for the desktop
 view.
 */
 /* end .footer-links */
+#intro {
+  display: none; }
+
+.media {
+  background: #4E535B;
+  padding: 20px 0; }
+  .media h2 {
+    color: #fff;
+    text-shadow: none;
+    margin-bottom: 20px; }
+    .media h2 hr {
+      border-top: solid 1px #fff;
+      border-bottom: solid 1px #fff; }
+  .media .video-wrap {
+    padding: 5px;
+    margin-bottom: 10px; }
+    .media .video-wrap .video-js {
+      border: solid 3px #fff;
+      background: #fff; }
+    .media .video-wrap .video-inner {
+      border: solid #fff 5px; }
+    .media .video-wrap iframe {
+      width: 100%;
+      display: block;
+      background: #fff; }
+
+.membership_levels .membership_level .level-image img {
+  width: 100%; }
+
+.info {
+  position: relative; }
+
+.info .fa-chevron-right {
+  position: absolute;
+  top: 13px;
+  right: 10px;
+  font-size: 2.7em;
+  opacity: 0.3; }
+
+.product-wrap {
+  margin-bottom: 10px; }
+
+.shop {
+  background: #fff url(../images/bg/bedge-grunge.png); }
+  .shop .product-wrap {
+    margin-bottom: 0; }
+  .shop .product {
+    margin-bottom: 10px; }
+    .shop .product img {
+      width: 100%;
+      display: block; }
+    .shop .product .button.product_type_bundle {
+      display: none; }
+    .shop .product .button.cta {
+      margin: 0 auto; }
+
+.socialize {
+  background: #151004 url(../images/bg/purty-wood.png) fixed top center repeat;
+  padding: 20px 0; }
+  .socialize h2 {
+    color: #fff;
+    text-shadow: none;
+    margin-bottom: 40px; }
+    .socialize h2 hr {
+      border-top: solid 1px #fff;
+      border-bottom: solid 1px #fff; }
+  .socialize h3 {
+    text-align: center; }
+  .socialize h5 {
+    text-align: center;
+    color: #fff; }
+  .socialize img {
+    width: 100%;
+    border: solid #fff 5px;
+    border-radius: 50%; }
+
+.membership_levels {
+  background: #fff url(../images/bg/bedge-grunge.png);
+  padding: 20px 0;
+  margin: 0;
+  box-shadow: inset 0 20px 20px -20px #000000; }
+  .membership_levels .membership_level {
+    padding: 5px;
+    position: relative; }
+    .membership_levels .membership_level img {
+      width: 100%;
+      display: block; }
+    .membership_levels .membership_level .level-image {
+      padding: 5px;
+      background: #fff;
+      border: solid 1px #DEDEDE;
+      display: block; }
+    .membership_levels .membership_level p {
+      text-align: center; }
+  .membership_levels .membership_level aside {
+    background: #fff;
+    color: #454545;
+    text-align: center;
+    padding: 0 0 10px 0;
+    margin: 10px 0 0 0; }
+    .membership_levels .membership_level aside header {
+      background: #688684;
+      color: #fff;
+      padding: 10px 0;
+      font-size: 2.5em;
+      font-weight: bolder; }
+      .membership_levels .membership_level aside header small {
+        font-size: 50%; }
+      .membership_levels .membership_level aside header sup {
+        font-size: 0.5em;
+        top: -0.7em; }
+    .membership_levels .membership_level aside .inner .initiation-fee {
+      background: #565656;
+      color: #fff;
+      padding: 10px 0;
+      margin-bottom: 10px; }
+    .membership_levels .membership_level aside em {
+      font-weight: bold;
+      color: #000; }
+    .membership_levels .membership_level aside ul {
+      margin: 0;
+      padding: 0 10px; }
+    .membership_levels .membership_level aside li {
+      margin-bottom: 15px; }
+      .membership_levels .membership_level aside li:last-child {
+        margin-bottom: 0; }
+  .membership_levels .membership_level.active:before {
+    content: "CURRENT MEMBER";
+    position: absolute;
+    top: 30px;
+    left: 0;
+    background: #cc7676;
+    color: #fff;
+    padding: 5px 10px;
+    box-sizing: border-box;
+    font-weight: bold;
+    text-shadow: 1px 1px 1px #664141;
+    box-shadow: 2px 2px 2px rgba(0, 0, 0, 0.5); }
+
+/*********************
+VIDEO JS STYLES
+*********************/
+.video-wrap {
+  margin-bottom: 20px; }
+
+.video-js {
+  width: 100% !important; }
+
 /*********************
 FORUM STYLES
 *********************/
@@ -2268,6 +2373,10 @@ you can add resource intensive styles.
   /*********************
   GENERAL STYLES
   *********************/
+  body {
+    background: #000 url(../images/bg/woods-trees-bg.jpg) fixed top center no-repeat;
+    padding-top: 0; }
+
   /*********************
   LAYOUT & GRID STYLES
   *********************/
@@ -2277,6 +2386,53 @@ you can add resource intensive styles.
   /*********************
   HEADER STYLES
   *********************/
+  #hero {
+    padding-bottom: 1.5em; }
+    #hero img {
+      border: solid #F1F1F1 5px; }
+
+  .header {
+    background: #323944 url(http://www.transparenttextures.com/patterns/soft-wallpaper.png);
+    position: relative;
+    top: auto;
+    left: auto; }
+    .header .open-menu {
+      display: none; }
+
+  #menu-main-menu {
+    display: block; }
+
+  /*********************
+  HR STYLES
+  *********************/
+  h2 {
+    text-align: center;
+    width: 80%;
+    display: block;
+    margin: 0 auto 10px;
+    opacity: 0.9;
+    color: #434343; }
+    h2 hr {
+      display: block;
+      width: 25%;
+      height: 5px;
+      border-left: none;
+      border-right: none;
+      border-top: solid 1px #868686;
+      border-bottom: solid 1px #868686;
+      margin: 22px 0 0 0;
+      float: left; }
+      h2 hr.hr-right {
+        float: right;
+        border-top: solid 1px #868686;
+        border-bottom: solid 1px #868686; }
+
+  /******************************************************************
+  H1, H2, H3, H4, H5 STYLES
+  ******************************************************************/
+  h2, .h2 {
+    font-size: 2.25em; }
+
   /*********************
   NAVIGATION STYLES
   *********************/
@@ -2301,6 +2457,8 @@ you can add resource intensive styles.
         you can use hover styles here even though this size
         has the possibility of being a mobile device.
         */ }
+      .nav li:first-child a {
+        padding-left: 0; }
       .nav li ul.sub-menu,
       .nav li ul.children {
         margin-top: 0;
@@ -2367,6 +2525,12 @@ you can add resource intensive styles.
   /* recent-comments widget */
   /* search widget */
   /* text widget */
+  /*********************
+  VIDEO JS STYLES
+  *********************/
+  .video-js {
+    padding: 0 0 56.25% 0; }
+
   /*********************
   FOOTER STYLES
   *********************/
@@ -2529,42 +2693,7 @@ you can add resource intensive styles.
       .media .video-wrap iframe {
         width: 100%;
         display: block;
-        background: #fff; }
-
-  .shop {
-    background: #fff url(../images/bg/bedge-grunge.png); }
-    .shop .product {
-      margin-bottom: 10px; }
-      .shop .product .product-wrap {
-        padding: 5px;
-        background: #fff; }
-        .shop .product .product-wrap img {
-          width: 100%;
-          display: block; }
-      .shop .product .button.product_type_bundle {
-        display: none; }
-      .shop .product .button.cta {
-        margin: 0 auto; }
-
-  .socialize {
-    background: #151004 url(../images/bg/purty-wood.png) fixed top center repeat;
-    padding: 20px 0; }
-    .socialize h2 {
-      color: #fff;
-      text-shadow: none;
-      margin-bottom: 40px; }
-      .socialize h2 hr {
-        border-top: solid 1px #fff;
-        border-bottom: solid 1px #fff; }
-    .socialize h3 {
-      text-align: center; }
-    .socialize h5 {
-      text-align: center;
-      color: #fff; }
-    .socialize img {
-      width: 100%;
-      border: solid #fff 5px;
-      border-radius: 50%; } }
+        background: #fff; } }
 /*********************
 LARGE VIEWING SIZE
 This is for the larger monitors and possibly full screen viewers.

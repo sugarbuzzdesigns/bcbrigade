@@ -12,17 +12,17 @@
 		</div>	
 	</section>
 
-	<section id="hero" class="cf">
-		<div class="wrap">
-			<!--<ul class="bxslider">
-			  <li><img src="<?php bloginfo('template_directory'); ?>/library/images/slider/dublin.jpg" /></li>
-			  <li><img src="<?php bloginfo('template_directory'); ?>/library/images/slider/dublin.jpg" /></li>
-			  <li><img src="<?php bloginfo('template_directory'); ?>/library/images/slider/dublin.jpg" /></li>
-			  <li><img src="<?php bloginfo('template_directory'); ?>/library/images/slider/dublin.jpg" /></li>
-			</ul> -->
-			<img src="<?php bloginfo('template_directory'); ?>/library/images/heros/home-hero.jpg" />
-		</div>
-	</section>
+
+		<section id="hero" class="cf">
+			<div class="wrap">
+				<?php if ( !wp_is_mobile() ) { ?>
+					<img src="<?php bloginfo('template_directory'); ?>/library/images/heros/home-hero.jpg" />
+				<?php } else { ?>	
+					<img src="<?php bloginfo('template_directory'); ?>/library/images/brigade-logo-distressed.png" />
+				<?php } ?>
+			</div>
+		</section>	
+	
 
 	<section class="cf membership_levels">
 		<div class="wrap">
@@ -35,8 +35,8 @@
 		<div class="wrap">
 			<div class="d-all watch">
 				<h2><hr>Watch<hr class="hr-right"></h2>
-				<div class="video-wrap d-1of2">
-					<video class="video-js vjs-default-skin" controls preload="auto" data-poster="<?php bloginfo('template_directory'); ?>/library/video/posters/BC_BRIGADE_COMING_SOON_LONG-poster.jpg">
+				<div class="video-wrap m-all d-1of2">
+					<video width="auto" height="auto" class="video-js vjs-default-skin" controls preload="auto" poster="<?php bloginfo('template_directory'); ?>/library/video/posters/BC_BRIGADE_COMING_SOON_LONG-poster.jpg">
 						<source src="<?php bloginfo('template_directory'); ?>/library/video/BC_BRIGADE_COMING_SOON_LONG_960x540.mp4" type='video/mp4'>
 						<p class="vjs-no-js">
 							To view this video please enable JavaScript, and consider upgrading to a web browser
@@ -44,8 +44,8 @@
 						</p>
 					</video>
 				</div>					
-				<div class="video-wrap d-1of2">
-					<video class="video-js vjs-default-skin" controls preload="auto" data-poster="">
+				<div class="video-wrap m-all d-1of2">
+					<video width="auto" height="auto" class="video-js vjs-default-skin" controls preload="auto" poster="<?php bloginfo('template_directory'); ?>/library/video/posters/BC_BRIGADE_NRL-Lyrics-poster.jpg">
 						<source src="<?php bloginfo('template_directory'); ?>/library/video/NEVER_REALLY_LEFT_Lyric_960x540.mp4" type='video/mp4'>
 						<p class="vjs-no-js">
 							To view this video please enable JavaScript, and consider upgrading to a web browser
@@ -54,8 +54,8 @@
 					</video>
 				</div>
 			</div>	
-			<div class="d-all see-all">
-				<a href="#" class="button cta">See All Videos</a>	
+			<div class="m-all d-all see-all">
+				<a href="#" class="button cta m-all">See All Videos</a>	
 			</div>
 		</div>
 	</section>	
@@ -69,7 +69,7 @@
 					
 					if ( $loop->have_posts() ) {
 						while ( $loop->have_posts() ) : $loop->the_post(); ?>
-						<div class="d-1of4">
+						<div class="m-all d-1of4 product-wrap">
 							<?php woocommerce_get_template_part( 'content', 'product' ); ?>
 						</div>
 						<?php endwhile;
@@ -78,8 +78,8 @@
 					}
 					wp_reset_postdata();
 				?>	
-				<div class="d-all see-all">
-					<a class="see-all-products button cta" href="#">See All Products</a>
+				<div class="m-all d-all see-all">
+					<a class="see-all-products button cta m-all" href="#">See All Products</a>
 				</div>			
 			</div>			
 		</div>

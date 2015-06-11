@@ -55,6 +55,7 @@
 
 
 					<nav role="navigation">
+					<i class="fa fa-bars open-menu"></i>
 						<?php wp_nav_menu(array(
     					'container' => false,                           // remove nav container
     					'container_class' => 'menu cf',                 // class of container (should you choose to use it)
