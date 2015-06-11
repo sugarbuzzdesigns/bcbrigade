@@ -1,5 +1,4 @@
 <?php
-define( 'WP_DEBUG', true );
 /*
 Author: Eddie Machado
 URL: htp://themble.com/bones/
