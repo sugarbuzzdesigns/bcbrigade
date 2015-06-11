@@ -111,9 +111,9 @@ function loadGravatars() {
       loadGravatars();
       this.checkIfLoggedIn();
       this.bindEvents();
-      if(!this.is_mobile){
-        this.loadVideos();
-      }
+      // if(!this.is_mobile){
+      //   this.loadVideos();
+      // }
       
       if(!$.cookie('intro-video-shown') === 'true' || !$.cookie('intro-video-shown')){
         this.loadIntroVideo();
