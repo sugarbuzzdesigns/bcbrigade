@@ -318,6 +318,15 @@ function bones_excerpt_more($more) {
 /*******************
 SET UP JS VARS
 ********************/
+function bc_js_variables(){ ?>
+      <script type="text/javascript">
+      	var BCB_JS_VARS = {
+      		is_mobile: '<?php echo wp_is_mobile(); ?>'
+      	};
+      </script>
+      <?php 
+} 
+add_action ( 'wp_head', 'bc_js_variables' ); ?>
 
 
 ?>
