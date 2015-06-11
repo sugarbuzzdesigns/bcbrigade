@@ -326,7 +326,7 @@ function bc_js_variables(){ ?>
       </script>
       <?php 
 } 
-add_action ( 'wp_head', 'bc_js_variables' ); ?>
+add_action ( 'wp_head', 'bc_js_variables' ); 
 
 
 ?>
