@@ -120,9 +120,9 @@ function loadGravatars() {
       }
 
       if(this.loggedIn){
-        this.removeGate();
+        console.log('logged in');
       } else {
-        console.log('not logged in');
+        this.gateContent();
       }
     },
 
@@ -152,8 +152,12 @@ function loadGravatars() {
       });
     },
 
-    removeGate: function(){
-      console.log('remove the gate');
+    gateContent: function(){
+      var gate = $('.gated');
+      gate.append('<div class="gate"><div><a href="/membership-account/membership-levels/">JOIN THE BRIGADE</a></div></div>');
+      // $('a', gate).click(function(e){
+      //   e.preventDefault();
+      // });
     },
 
     loadVideos: function(){

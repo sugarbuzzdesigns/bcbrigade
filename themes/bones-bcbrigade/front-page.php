@@ -13,15 +13,15 @@
 	</section>
 
 
-		<section id="hero" class="cf">
-			<div class="wrap">
-				<?php if ( !wp_is_mobile() ) { ?>
-					<img src="<?php bloginfo('template_directory'); ?>/library/images/heros/home-hero.jpg" />
-				<?php } else { ?>	
-					<img src="<?php bloginfo('template_directory'); ?>/library/images/brigade-logo-distressed.png" />
-				<?php } ?>
-			</div>
-		</section>	
+	<section id="hero" class="cf">
+		<div class="wrap">
+			<?php if ( !wp_is_mobile() ) { ?>
+				<img src="<?php bloginfo('template_directory'); ?>/library/images/heros/home-hero.jpg" />
+			<?php } else { ?>	
+				<img src="<?php bloginfo('template_directory'); ?>/library/images/brigade-logo-distressed.png" />
+			<?php } ?>
+		</div>
+	</section>	
 	
 
 	<section class="cf membership_levels">
@@ -31,7 +31,7 @@
 		</div>
 	</section>	
 
-	<section class="cf media">
+	<section class="cf media gated">
 		<div class="wrap">
 			<div class="d-all watch">
 				<h2><hr>Watch<hr class="hr-right"></h2>
@@ -60,7 +60,7 @@
 		</div>
 	</section>	
 
-	<section class="cf shop">
+	<section class="cf shop gated">
 		<div class="wrap">
 			<div class="d-all shop">
 				<h2><hr>Shop<hr class="hr-right"></h2>

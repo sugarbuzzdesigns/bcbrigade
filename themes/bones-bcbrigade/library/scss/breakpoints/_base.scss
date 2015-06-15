@@ -25,12 +25,50 @@ body {
   	padding-top: 48px;
 }
 
+section {
+	position: relative;
+}
+
 #hero {
 	background: #151004 url(../images/bg/purty-wood.png) fixed;
 
 	img {
 		width: 100%;
 		display: block;	
+	}
+}
+
+// CONTENT GATE
+.gate {
+	position: absolute;
+	background-color: rgba(0,0,0,0.5);
+	width: 100%;
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: 0;	
+	z-index: 3;
+
+	div {
+		position: absolute;
+		top: 50%;
+		left: 50%;
+		transform: translate(-50%, -50%);
+
+		a {
+			background-color: #A55252;
+			padding: 10px 10px 10px 10px;
+			color: #fff;
+			font-size: 2em;
+			border-radius: 5px;
+			text-decoration: none;
+			font-weight: bold;		
+
+			&:hover {
+				color: darken(#fff, 10%);
+				background-color: darken(#A55252, 10%);
+			}	
+		}
 	}
 }
 
