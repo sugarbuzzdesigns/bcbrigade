@@ -1756,7 +1756,9 @@ HEADER STYLES
 CONTENT STYLES
 *********************/
 #inner-content {
-  position: relative; }
+  position: relative;
+  background: #fff url(../images/bg/bedge-grunge.png);
+  margin-bottom: 1.5em; }
 
 /*********************
 NAVIGATION STYLES
@@ -1817,9 +1819,7 @@ POSTS & CONTENT STYLES
   margin-top: 1.5em; }
 
 .hentry {
-  background: #fff url(../images/bg/bedge-grunge.png);
   border-radius: 3px;
-  margin-bottom: 1.5em;
   border: 1px solid #ccc; }
   .hentry header {
     border-bottom: 1px solid #f8f9fa;

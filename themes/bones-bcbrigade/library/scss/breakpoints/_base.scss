@@ -226,6 +226,8 @@ CONTENT STYLES
 *********************/
 #inner-content {
   	position: relative;
+  	background: #fff url(../images/bg/bedge-grunge.png);
+  	margin-bottom: 1.5em;
 }
 
 /*********************
@@ -335,9 +337,7 @@ POSTS & CONTENT STYLES
 }
 
 		.hentry {
-			background: #fff url(../images/bg/bedge-grunge.png);
 			border-radius: 3px;
-			margin-bottom: 1.5em;
 			border: 1px solid $border-color;
 
 			header {
