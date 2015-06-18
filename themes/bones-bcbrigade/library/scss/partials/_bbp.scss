@@ -1,3 +1,7 @@
+#bbpress-forums {
+	margin-bottom: 0;
+}
+
 #bbpress-forums li.bbp-header {
 	background: $forest-green;
 }
@@ -15,6 +19,7 @@
 #bbpress-forums li.bbp-header, 
 #bbpress-forums li.bbp-footer {
 	border: none;
+	background: #808C8C;
 }
 
 #bbpress-forums ul.bbp-lead-topic,

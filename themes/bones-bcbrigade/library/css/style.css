@@ -1009,6 +1009,9 @@ them however you see fit.
   font-size: .85em;
   padding: 10px; }
 
+#bbpress-forums {
+  margin-bottom: 0; }
+
 #bbpress-forums li.bbp-header {
   background: #808C8C; }
 
@@ -1022,7 +1025,8 @@ them however you see fit.
 
 #bbpress-forums li.bbp-header,
 #bbpress-forums li.bbp-footer {
-  border: none; }
+  border: none;
+  background: #808C8C; }
 
 #bbpress-forums ul.bbp-lead-topic,
 #bbpress-forums ul.bbp-topics,
@@ -1194,6 +1198,269 @@ form.pmpro_form .pmpro_submit span .pmpro_btn-submit-checkout {
 
 form.pmpro_form .pmpro_submit span .pmpro_btn-submit-checkout:hover {
   background: #737f7f; }
+
+ol {
+  padding: 0px;
+  margin: 0px;
+  list-style: decimal-leading-zero inside;
+  color: #ccc;
+  border-top: 1px solid #ccc;
+  font-size: 0.9em; }
+
+ol li {
+  position: relative;
+  margin: 0px;
+  padding: 9px 2px 10px;
+  border-bottom: 1px solid #ccc;
+  cursor: pointer; }
+
+ol li a {
+  display: block;
+  text-indent: -3.3ex;
+  padding: 0px 0px 0px 20px; }
+
+li.playing {
+  color: #aaa;
+  text-shadow: 1px 1px 0px rgba(255, 255, 255, 0.3); }
+
+li.playing a {
+  color: #000; }
+
+.audiojs audio {
+  position: absolute;
+  left: -1px; }
+
+.audiojs {
+  width: 100%;
+  background: #404040;
+  overflow: hidden;
+  font-family: monospace;
+  font-size: 12px;
+  -webkit-box-shadow: 1px 1px 8px rgba(0, 0, 0, 0.3);
+  -moz-box-shadow: 1px 1px 8px rgba(0, 0, 0, 0.3);
+  -o-box-shadow: 1px 1px 8px rgba(0, 0, 0, 0.3);
+  box-shadow: 1px 1px 8px rgba(0, 0, 0, 0.3); }
+
+.audiojs .poster {
+  display: block;
+  margin: 0; }
+
+.audiojs p {
+  display: none;
+  margin: 0px !important;
+  cursor: pointer; }
+
+.audiojs .play {
+  display: block; }
+
+.audiojs .scrubber {
+  position: relative;
+  width: 100%;
+  background: #5a5a5a;
+  height: 24px;
+  margin: 0;
+  border-left: 0px;
+  border-bottom: 0px;
+  overflow: hidden; }
+
+.audiojs .progress {
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  height: 24px;
+  width: 0px;
+  background: #F7E082;
+  z-index: 1; }
+
+.audiojs .loaded {
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  height: 24px;
+  width: 0px;
+  background: #7E7E7E; }
+
+.audiojs .time {
+  font-size: 1.6em;
+  line-height: 36px;
+  color: #ddd;
+  text-shadow: 1px 1px 0px rgba(0, 0, 0, 0.5); }
+
+.audiojs .time em {
+  padding: 0px 2px 0px 0px;
+  color: #f9f9f9;
+  font-style: normal; }
+
+.audiojs .time strong {
+  padding: 0px 0px 0px 2px;
+  font-weight: normal; }
+
+.audiojs .error-message {
+  float: left;
+  display: none;
+  margin: 0px 10px;
+  height: 36px;
+  width: 400px;
+  overflow: hidden;
+  line-height: 36px;
+  white-space: nowrap;
+  color: #fff;
+  text-overflow: ellipsis;
+  -o-text-overflow: ellipsis;
+  -icab-text-overflow: ellipsis;
+  -khtml-text-overflow: ellipsis;
+  -moz-text-overflow: ellipsis;
+  -webkit-text-overflow: ellipsis; }
+
+.audiojs .error-message a {
+  color: #eee;
+  text-decoration: none;
+  padding-bottom: 1px;
+  border-bottom: 1px solid #999;
+  white-space: wrap; }
+
+.navigation {
+  color: #fff; }
+
+.navigation div {
+  display: inline-block;
+  vertical-align: middle;
+  position: relative;
+  cursor: pointer; }
+
+.audiojs .play-pause {
+  margin: 0px;
+  overflow: hidden;
+  font-size: 2.5em;
+  position: relative;
+  z-index: 1;
+  border: solid 3px #404040;
+  background-color: #5A5A5A;
+  height: 60px;
+  width: 60px;
+  border-radius: 50%; }
+
+.audiojs .play-pause p {
+  position: absolute;
+  left: 55%;
+  top: 50%;
+  transform: translate(-50%, -50%); }
+
+.audiojs .play-pause .pause,
+.audiojs .play-pause .loading {
+  left: 50%; }
+
+.audiojs .prev span,
+.audiojs .next span {
+  position: absolute;
+  top: 50%;
+  left: 8px;
+  transform: translateY(-50%); }
+
+.audiojs .prev.disabled,
+.audiojs .next.disabled {
+  display: none; }
+
+.audiojs .next span {
+  left: auto;
+  right: 8px; }
+
+.audiojs .next,
+.audiojs .prev {
+  font-size: 1.5em;
+  height: 40px;
+  width: 40px;
+  background-color: #5A5A5A;
+  border-radius: 50%;
+  margin-right: -15px; }
+
+.audiojs .next {
+  margin-left: -15px;
+  margin-right: auto; }
+
+.audiojs .error {
+  background: url(../images/player-graphics.gif) -2px -61px no-repeat; }
+
+.playing .play,
+.playing .loading,
+.playing .error {
+  display: none; }
+
+.playing .pause {
+  display: block; }
+
+.loading .play,
+.loading .pause,
+.loading .error {
+  display: none; }
+
+.loading .loading {
+  display: block; }
+
+.error .time,
+.error .play,
+.error .pause,
+.error .scrubber,
+.error .loading {
+  display: none; }
+
+.error .error {
+  display: block; }
+
+.error .play-pause p {
+  cursor: auto; }
+
+.error .error-message {
+  display: block; }
+
+.audiojs .info {
+  text-align: center;
+  margin-top: 20px; }
+
+.audiojs ul li {
+  display: inline-block;
+  color: #fff;
+  cursor: pointer;
+  padding-left: 10px; }
+  .audiojs ul li.active {
+    text-decoration: underline; }
+  .audiojs ul li:first-child {
+    border-right: solid 1px #5F5F5F;
+    padding-right: 10px;
+    padding-left: 0; }
+
+.audiojs h2 {
+  text-transform: none;
+  color: #fff;
+  text-shadow: none;
+  margin: 0 0 15px 0;
+  font-size: 1.5em;
+  width: 100%; }
+
+.entry-content .song {
+  font-family: monospace;
+  background: #fff url(http://subtlepatterns.com/patterns/linedpaper.png);
+  padding: 12px 15px 10px 15px;
+  display: none; }
+  .entry-content .song h3 {
+    margin-top: -10px;
+    margin-bottom: 20px;
+    font-weight: bold;
+    font-size: 2em; }
+  .entry-content .song div {
+    display: none; }
+    .entry-content .song div.selected {
+      display: block; }
+  .entry-content .song.active {
+    display: block; }
+  .entry-content .song .about p {
+    line-height: 25px;
+    margin-top: -2px; }
+  .entry-content .song p {
+    margin: 0 0 2.3em; }
+    .entry-content .song p span {
+      display: block;
+      margin-bottom: 0.5em; }
 
 /*********************
 IMPORTING MODULES
@@ -1758,7 +2025,7 @@ CONTENT STYLES
 #inner-content {
   position: relative;
   background: #fff url(../images/bg/bedge-grunge.png);
-  margin-bottom: 1.5em; }
+  padding-bottom: 1.5em; }
 
 /*********************
 NAVIGATION STYLES
@@ -1816,7 +2083,8 @@ and more scalable.
 POSTS & CONTENT STYLES
 *********************/
 #content {
-  margin-top: 1.5em; }
+  margin-top: 1.5em;
+  margin-bottom: 1.5em; }
 
 .hentry {
   border-radius: 3px;
