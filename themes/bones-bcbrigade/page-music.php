@@ -13,7 +13,7 @@
 					<li><a href="#" data-src="<?php bloginfo('template_directory'); ?>/library/audio/KeepWalkingOn_06.05.15.mp3">Keep Walking On</a></li>
 				</ol>
 			</div>	
-			<div class="d-1of2 last-col song-extras">
+			<div class="m-all t-all d-1of2 last-col song-extras">
 				<div id="keep-walking-on" class="song active">
 					<div class="lyrics selected">
 						<h3>Lyrics</h3>

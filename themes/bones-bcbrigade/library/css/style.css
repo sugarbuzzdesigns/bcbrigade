@@ -1909,7 +1909,7 @@ section {
 LAYOUT & GRID STYLES
 *********************/
 .wrap {
-  width: 96%;
+  width: 100%;
   margin: 0 auto; }
 
 /*********************
@@ -2082,10 +2082,6 @@ and more scalable.
 /*********************
 POSTS & CONTENT STYLES
 *********************/
-#content {
-  margin-top: 1.5em;
-  margin-bottom: 1.5em; }
-
 .hentry {
   border-radius: 3px;
   border: 1px solid #ccc; }
@@ -2791,6 +2787,10 @@ you can add resource intensive styles.
         visibility: visible; }
 
   /* end .nav */
+  #content {
+    margin-top: 1.5em;
+    margin-bottom: 1.5em; }
+
   /*********************
   SIDEBARS & ASIDES
   *********************/
