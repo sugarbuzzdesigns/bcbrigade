@@ -1417,6 +1417,13 @@ li.playing a {
   text-align: center;
   margin-top: 20px; }
 
+.audiojs .info ul {
+  margin: 0 0 15px 0; }
+
+.audiojs .button.buy-song {
+  padding: 5px 12px;
+  margin: 0; }
+
 .audiojs ul li {
   display: inline-block;
   color: #fff;

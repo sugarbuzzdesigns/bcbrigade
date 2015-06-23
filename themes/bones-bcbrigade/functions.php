@@ -340,7 +340,7 @@ function custom_pre_get_posts_query( $q ) {
     $q->set( 'tax_query', array(array(
       'taxonomy' => 'product_cat',
       'field' => 'slug',
-      'terms' => array( 'bundled-variations' ), // Don't display products in the knives category on the shop page
+      'terms' => array( 'bundled-variations', 'hidden' ), // Don't display products in the knives category on the shop page
       'operator' => 'NOT IN'
     )));
   

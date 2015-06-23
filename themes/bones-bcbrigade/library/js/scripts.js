@@ -116,7 +116,10 @@ function loadGravatars() {
       }
       
       if(!$.cookie('intro-video-shown') === 'true' || !$.cookie('intro-video-shown')){
-        this.loadIntroVideo();
+        if($('body').is('.home')){
+          this.loadIntroVideo();
+        }
+
       }
 
       if(this.loggedIn){
@@ -149,6 +152,7 @@ function loadGravatars() {
 
       $('#intro .close').on('click', function(){
         $('#intro').remove();
+        $.cookie('intro-video-shown', 'true');
       });
 
       introVideo.on('ended', function(){
