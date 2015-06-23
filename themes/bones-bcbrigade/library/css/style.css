@@ -1910,6 +1910,7 @@ LAYOUT & GRID STYLES
 *********************/
 .wrap {
   width: 100%;
+  overflow: auto;
   margin: 0 auto; }
 
 /*********************
@@ -2561,6 +2562,25 @@ FORUM STYLES
 /*********************
 STORE STYLES
 *********************/
+#special-offer {
+  margin-bottom: 1.5em;
+  background: red; }
+
+#eagle-member-offer {
+  display: block;
+  position: relative; }
+  #eagle-member-offer img {
+    display: block; }
+  #eagle-member-offer span {
+    position: absolute;
+    top: 10px;
+    left: 0;
+    background: #688684;
+    color: #fff;
+    display: inline-block;
+    padding: 10px;
+    border-radius: 0 5px 5px 0; }
+
 #products-wrap {
   background: #fff url(../images/bg/bedge-grunge.png); }
 
@@ -2680,7 +2700,7 @@ you can add resource intensive styles.
   HEADER STYLES
   *********************/
   #hero {
-    padding-bottom: 1.5em; }
+    margin-bottom: 1.5em; }
     #hero img {
       border: solid #F1F1F1 5px; }
 
@@ -2898,13 +2918,35 @@ you can add resource intensive styles.
     background: rgba(0, 0, 0, 0.8);
     padding: 20px 0;
     display: none; }
+    #intro .wrap {
+      position: relative;
+      overflow: visible;
+      background: #fff; }
     #intro .vjs-big-play-button {
       display: none; }
     #intro.show-intro {
       margin: 0;
       display: block; }
     #intro .video-js {
-      margin: 0 auto; }
+      margin: 0 auto;
+      border: solid 3px #fff;
+      border-top-width: 2px; }
+    #intro .close {
+      position: absolute;
+      top: -13px;
+      right: -13px;
+      z-index: 2;
+      color: #fff;
+      background-color: #000;
+      border-radius: 50%;
+      height: 30px;
+      width: 30px;
+      border: solid #fff 3px; }
+      #intro .close i {
+        position: absolute;
+        top: 4px;
+        left: 50%;
+        transform: translate(-50%, 0); }
 
   .membership_levels {
     background: #fff url(../images/bg/bedge-grunge.png);

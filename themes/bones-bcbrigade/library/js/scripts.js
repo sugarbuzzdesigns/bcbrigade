@@ -146,6 +146,11 @@ function loadGravatars() {
         }
       });
       $('#intro').addClass('show-intro');
+
+      $('#intro .close').on('click', function(){
+        $('#intro').remove();
+      });
+
       introVideo.on('ended', function(){
         $.cookie('intro-video-shown', 'true');
         $('#intro').remove();

@@ -78,6 +78,7 @@ LAYOUT & GRID STYLES
 
 .wrap {
 	width: 100%;
+	overflow: auto;
 	margin: 0 auto;
 }
 
@@ -920,6 +921,31 @@ FORUM STYLES
 /*********************
 STORE STYLES
 *********************/
+#special-offer {
+	margin-bottom: 1.5em;
+	background: red;
+}
+
+#eagle-member-offer {
+	display: block;
+	position: relative;
+
+	img {
+		display: block;
+	}
+	
+	span {
+		position: absolute;
+		top: 10px;
+		left: 0;
+		background: #688684;
+		color: #fff;
+		display: inline-block;
+		padding: 10px;
+		border-radius: 0 5px 5px 0;
+	}
+}
+
 #products-wrap {
 	background: #fff url(../images/bg/bedge-grunge.png);	
 }

@@ -11,6 +11,8 @@
 
 if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
 
+global $current_user;
+
 get_header( 'shop' ); ?>
 <div id="content">
 
@@ -26,6 +28,19 @@ get_header( 'shop' ); ?>
 
 	<?php } ?>	
 		<div>
+		<?php if ( is_user_logged_in() ) {
+			if($current_user->membership_level->ID != 3){ ?>
+				<div id="special-offer" class="wrap">
+					<div class="d-all">
+						<div class="d-1of4">
+							<a id="eagle-member-offer" href="">
+								<span>Special Offer!</span>
+								<img src="http://staging.bcbrigade.com/wp-content/uploads/2015/06/eagle-chair.jpg" alt="">
+							</a>
+						</div>
+					</div>				
+				</div>	
+		<?php } }?> 		
 		<?php
 			/**
 			 * woocommerce_before_main_content hook

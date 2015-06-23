@@ -2,6 +2,9 @@
 <?php global $pmpro_levels; ?>
 	<section id="intro">
 		<div class="wrap">
+			<a href="#" class="close">
+				<i class="fa fa-close"></i>
+			</a>
 			<video id="intro_video" class="video-js vjs-default-skin" preload="auto" width="940" height="540">
 			  <source src="<?php bloginfo('template_directory'); ?>/library/video/Welcome_To_The_Brigade_Introduction_960x540.mp4" type='video/mp4'>
 			  <p class="vjs-no-js">

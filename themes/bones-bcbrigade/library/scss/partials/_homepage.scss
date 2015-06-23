@@ -59,6 +59,12 @@ Stylesheet: Homepage Stylesheet
 	padding: 20px 0;
 	display: none;
 
+	.wrap {
+		position: relative;
+		overflow: visible;
+		background: #fff;
+	}
+
 	.vjs-big-play-button {
 		display: none;
 	}
@@ -70,6 +76,28 @@ Stylesheet: Homepage Stylesheet
 
 	.video-js {
 		margin: 0 auto;
+		border: solid 3px #fff;
+		border-top-width: 2px;
+	}
+
+	.close {
+		position: absolute;
+		top: -13px;
+		right: -13px;
+		z-index: 2;
+		color: #fff;
+		background-color: #000;
+		border-radius: 50%;
+		height: 30px;
+		width: 30px;
+		border: solid #fff 3px;
+
+		i {
+			position: absolute;
+			top: 4px;
+			left: 50%;
+			transform: translate(-50%, 0);			
+		}
 	}
 }
 
