@@ -9,8 +9,10 @@
 		<div class="entry-content entry">
 			<div id="wrapper" class="d-1of2">
 				<audio preload></audio>
-				<ol>
+				<ol class="playlist">
 					<li><a href="#" data-src="<?php bloginfo('template_directory'); ?>/library/audio/KeepWalkingOn_06.05.15.mp3">Keep Walking On</a></li>
+					<li class="coming-soon">Coming in July</li>
+					<li class="coming-soon">Coming in August</li>
 				</ol>
 			</div>	
 			<div class="m-all t-all d-1of2 last-col song-extras">
@@ -106,6 +108,9 @@
 		// Load in a track on click
 		$('ol li').click(function(e) {
 			e.preventDefault();
+			if($(this).is('.coming-soon')){
+				return;
+			}
 			$(this).addClass('playing').siblings().removeClass('playing');
 			audio.load($('a', this).attr('data-src'));
 			var trackTitle = $(this).text();

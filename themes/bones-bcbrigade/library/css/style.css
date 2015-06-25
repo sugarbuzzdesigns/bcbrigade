@@ -1241,6 +1241,9 @@ li.playing a {
   -o-box-shadow: 1px 1px 8px rgba(0, 0, 0, 0.3);
   box-shadow: 1px 1px 8px rgba(0, 0, 0, 0.3); }
 
+.playlist .coming-soon {
+  cursor: not-allowed; }
+
 .audiojs .poster {
   display: block;
   margin: 0; }
