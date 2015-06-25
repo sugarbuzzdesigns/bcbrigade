@@ -27,20 +27,24 @@ get_header( 'shop' ); ?>
 		</div>
 
 	<?php } ?>	
-		<div>
+		<div>	
+
 		<?php if ( is_user_logged_in() ) {
 			if($current_user->membership_level->ID != 3){ ?>
-				<div id="special-offer" class="wrap">
-					<div class="d-all">
-						<div class="d-1of4">
-							<a id="eagle-member-offer" href="">
-								<span>Special Offer!</span>
-								<img src="http://staging.bcbrigade.com/wp-content/uploads/2015/06/eagle-chair.jpg" alt="">
-							</a>
-						</div>
-					</div>				
-				</div>	
-		<?php } }?> 		
+				<section class="wrap">
+					<div id="special-offer">
+						<a id="eagle-member-offer" href="">
+							<img src="http://staging.bcbrigade.com/wp-content/uploads/2015/06/eagle-chair.jpg" alt="">
+						</a>
+						<div class="info">
+							<h2>SPECIAL OFFER</h2>
+							<p>Upgrade your membership to <strong>Brigade Eagle Member</strong> and receive this special gift.</p>
+							<small>** Your chair will be shipped to the address you signed up with. Please update your <a href="#">profile</a> if you need to make changes to your shipping address.</small>
+							<a class="button cta" href="#">UPGRADE NOW!</a>
+						</div>		
+					</div>	
+				</section>		
+		<?php } }?> 			
 		<?php
 			/**
 			 * woocommerce_before_main_content hook
@@ -50,6 +54,7 @@ get_header( 'shop' ); ?>
 			 */
 			do_action( 'woocommerce_before_main_content' );
 		?>
+		
 
 			<?php do_action( 'woocommerce_archive_description' ); ?>
 

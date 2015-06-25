@@ -2571,11 +2571,28 @@ STORE STYLES
 *********************/
 #special-offer {
   margin-bottom: 1.5em;
-  background: red; }
+  background: #fff url(../images/bg/bedge-grunge.png);
+  padding: 1.5em;
+  overflow: auto; }
+  #special-offer #eagle-member-offer {
+    float: left; }
+  #special-offer small {
+    display: block;
+    width: 50%;
+    margin-bottom: 1.5em; }
+  #special-offer .info {
+    float: left;
+    width: 75%;
+    padding-left: 1.5em; }
+    #special-offer .info h2 {
+      text-align: left;
+      line-height: normal;
+      margin: 0; }
 
 #eagle-member-offer {
   display: block;
-  position: relative; }
+  position: relative;
+  width: 22.05%; }
   #eagle-member-offer img {
     display: block; }
   #eagle-member-offer span {
@@ -2706,6 +2723,10 @@ you can add resource intensive styles.
   /*********************
   HEADER STYLES
   *********************/
+  .home #hero {
+    margin-bottom: 0;
+    padding-bottom: 1.5em; }
+
   #hero {
     margin-bottom: 1.5em; }
     #hero img {
