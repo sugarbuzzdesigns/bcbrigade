@@ -1877,8 +1877,7 @@ body {
   line-height: 1.5;
   color: #434343;
   background-color: #fff;
-  -webkit-font-smoothing: antialiased;
-  padding-top: 48px; }
+  -webkit-font-smoothing: antialiased; }
 
 section {
   position: relative; }
