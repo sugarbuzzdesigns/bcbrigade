@@ -1102,6 +1102,7 @@ them however you see fit.
 .woocommerce ul.products li.product a img {
   margin-bottom: 0; }
 
+.home .product-wrap .price,
 .woocommerce ul.products li.product .price {
   position: absolute;
   top: 10px;
