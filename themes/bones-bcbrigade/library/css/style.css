@@ -1242,6 +1242,9 @@ li.playing a {
   -o-box-shadow: 1px 1px 8px rgba(0, 0, 0, 0.3);
   box-shadow: 1px 1px 8px rgba(0, 0, 0, 0.3); }
 
+.playlist .coming-soon {
+  cursor: not-allowed; }
+
 .audiojs .poster {
   display: block;
   margin: 0; }
@@ -1875,8 +1878,7 @@ body {
   line-height: 1.5;
   color: #434343;
   background-color: #fff;
-  -webkit-font-smoothing: antialiased;
-  padding-top: 48px; }
+  -webkit-font-smoothing: antialiased; }
 
 section {
   position: relative; }

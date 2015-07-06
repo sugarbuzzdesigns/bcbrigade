@@ -75,4 +75,10 @@ function FoundationPress_active_list_pages_class( $input ) {
 }
 add_filter( 'wp_list_pages', 'FoundationPress_active_list_pages_class', 10, 2 );
 
+<<<<<<< HEAD
+=======
+// Add Wocommerce support
+add_theme_support( 'woocommerce' );
+
+>>>>>>> dd0fb2acab208fdb77231027c608f6aaec4e63d0
 ?>
