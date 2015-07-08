@@ -1,5 +1,5 @@
 <?php get_header(); ?>
-<?php global $pmpro_levels; var_dump($pmpro_levels);?>
+<?php global $pmpro_levels; ?>
 	<section id="intro">
 		<div class="wrap">
 			<a href="#" class="close">
