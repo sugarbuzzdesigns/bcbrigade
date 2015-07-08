@@ -38,7 +38,11 @@
 		<div class="wrap">
 			<div class="d-1of2">
 				<h2>News</h2>
-				<?php $args = array( 'post_type' => 'post', 'cat' => 15, 'posts_per_page' => 4); ?>
+				<?php 
+					$news_id_obj = get_category_by_slug( 'news' ); 
+					$newsObjId = $news_id_obj->term_id;
+				?>
+				<?php $args = array( 'post_type' => 'post', 'cat' => $newsObjId, 'posts_per_page' => 4); ?>
 
 				<?php $custom_query = new WP_Query($args); if (have_posts()) : while($custom_query->have_posts()) : $custom_query->the_post(); ?>
 				<div class="news-story">
@@ -55,7 +59,11 @@
 			</div>
 			<div class="d-1of2">
 				<h2>Announcements</h2>
-				<?php $args = array( 'post_type' => 'post', 'cat' => 16, 'posts_per_page' => 6); ?>
+				<?php 
+					$announce_id_obj = get_category_by_slug( 'announcements' ); 
+					$announceObjId = $announce_id_obj->term_id;
+				?>
+				<?php $args = array( 'post_type' => 'post', 'cat' => $announceObjId, 'posts_per_page' => 6); ?>
 
 				<?php $custom_query = new WP_Query($args); if (have_posts()) : while($custom_query->have_posts()) : $custom_query->the_post(); ?>
 				<div class="announcement d-1of2">
