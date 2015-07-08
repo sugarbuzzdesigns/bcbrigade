@@ -1,5 +1,3 @@
-<h1>LEVELS</h1>
-
 <?php 
 global $wpdb, $pmpro_msg, $pmpro_msgt, $pmpro_levels, $current_user;
 if($pmpro_msg)
