@@ -3,14 +3,14 @@
 Plugin Name: Paid Memberships Pro - Register Helper Add On
 Plugin URI: http://www.paidmembershipspro.com/pmpro-register-helper/
 Description: Shortcodes and other functions to help customize your registration forms.
-Version: .6.3
+Version: 1.0
 Author: Stranger Studios
 Author URI: http://www.strangerstudios.com
 */
 
 define('PMPRORH_DIR', dirname(__FILE__) );
 define('PMPRORH_URL', WP_PLUGIN_URL . "/pmpro-register-helper");
-define('PMPRORH_VERSION', '.6.2');
+define('PMPRORH_VERSION', '1.0');
 
 /*
 	options - just defaults for now, will be in settings eventually
@@ -80,6 +80,11 @@ $cb->name = "checkout_boxes";
 $cb->label = "More Information";
 $cb->order = 0;
 $pmprorh_checkout_boxes = array("checkout_boxes" => $cb);
+
+/*
+$text = new PMProRH_Field("company", "text", array("size"=>40, "class"=>"company", "profile"=>true, "required"=>true));
+pmprorh_add_registration_field("after_billing_fields", $text);
+*/
 
 /*
 	Add a field to the PMProRH regisration fields global
@@ -931,11 +936,16 @@ function pmprorh_signup_shortcode($atts, $content=null, $code="")
 	), $atts));
 	
 	//turn 0's into falses
-	if($short == "0")
+	if($short === "0" || $short === "false" || $short === "no")
 		$short = false;
-	if($intro == "0")
-		$intro = false;
+	else
+		$short = true;
 	
+	if($intro === "0" || $intro === "false" || $intro === "no")
+		$intro = false;
+	else
+		$intro = true;
+
 	global $current_user, $membership_levels;
 
 	ob_start();	
@@ -1144,10 +1154,10 @@ function pmprorh_email_passed($level)
 	global $wpdb, $pmpro_msg, $pmpro_msgt;
 	
 	//confirm email
-	if(!empty($_GET['bemail']))
+	if(!empty($_GET['bemail']) && !is_user_logged_in())
 	{
 		//make sure the email is available
-		$oldemail = $wpdb->get_var("SELECT ID FROM $wpdb->users WHERE user_email = '" . $wpdb->escape($_REQUEST['bemail']) . "' LIMIT 1");
+		$oldemail = $wpdb->get_var("SELECT ID FROM $wpdb->users WHERE user_email = '" . esc_sql($_REQUEST['bemail']) . "' LIMIT 1");
 		if(!$oldemail || !apply_filters('pmpro_checkout_oldemail', true) )
 		{
 			//confirm email

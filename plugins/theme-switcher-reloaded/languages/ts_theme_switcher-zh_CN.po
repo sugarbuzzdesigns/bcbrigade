@@ -1,0 +1,61 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: \n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2008-02-20 00:29-0800\n"
+"PO-Revision-Date: 2008-02-20 00:30-0800\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Poedit-KeywordsList: __;_e\n"
+"X-Poedit-Basepath: .\n"
+"X-Poedit-SearchPath-0: .\n"
+
+#: theme-switcher-reloaded.php:202
+#: theme-switcher-reloaded.php:251
+#: theme-switcher-reloaded.php:255
+msgid "Theme Switcher"
+msgstr "Theme Switcher"
+
+#: theme-switcher-reloaded.php:220
+msgid "Display style:"
+msgstr "主题列表显示模式:"
+
+#: theme-switcher-reloaded.php:221
+msgid "Title"
+msgstr "标题"
+
+#: theme-switcher-reloaded.php:227
+msgid "List"
+msgstr "文字清单"
+
+#: theme-switcher-reloaded.php:232
+msgid "Drop-Down"
+msgstr "下拉菜单"
+
+#: theme-switcher-reloaded.php:234
+msgid "Display theme names in "
+msgstr "主题名称的显示模式"
+
+#: theme-switcher-reloaded.php:239
+msgid "full name (default option)"
+msgstr "全称 (默认)"
+
+#: theme-switcher-reloaded.php:244
+msgid "short name (faster loading)"
+msgstr "简短名 (速度优化)"
+
+#: theme-switcher-reloaded.php:321
+msgid "Stylesheet is missing."
+msgstr ""
+
+#: theme-switcher-reloaded.php:334
+msgid "File not readable."
+msgstr ""
+
+#: theme-switcher-reloaded.php:348
+msgid "Template is missing."
+msgstr ""
+
