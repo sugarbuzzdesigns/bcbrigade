@@ -27,11 +27,8 @@
 	</head>
 	<body <?php body_class(); ?>>
 
-	
 	<div class="off-canvas-wrap" data-offcanvas>
 	<div class="inner-wrap">
-	
-
 	
 	<nav class="tab-bar show-for-small-only">
 		<section class="left-small">

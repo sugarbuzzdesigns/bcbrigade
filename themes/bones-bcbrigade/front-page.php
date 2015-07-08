@@ -1,4 +1,4 @@
-	<?php if ( !is_user_logged_in() ) { ?>
+	<?php if ( is_user_logged_in() ) { ?>
 	<?php get_header(); ?>
 	<?php global $pmpro_levels; ?>
 		<section id="intro">
@@ -168,7 +168,7 @@
 	<?php } else { ?>
 	<?php get_header('pre-release'); ?>
 	<div class="row">
-		<div class="small-12 large-12 columns" role="main">
+		<div class="m-all t-all d-all" role="main">
 		
 			<img id="logo" class="animated fadeInDown" src="<?php bloginfo('template_url'); ?>/library/images/brigade-logo-distressed.png" alt="BC Brigade">
 
@@ -236,6 +236,6 @@
 
 		</div>
 	</div>
-	<?php get_footer(); ?>
+	<?php get_footer('pre-release'); ?>
 
 	<?php } ?>
