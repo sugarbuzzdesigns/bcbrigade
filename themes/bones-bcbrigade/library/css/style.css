@@ -1113,9 +1113,8 @@ them however you see fit.
 
 .onsale {
   position: absolute;
-  top: 0;
-  right: 0;
-  margin: -6px -6px 0 0;
+  top: -6px;
+  right: -6px;
   min-height: 32px;
   min-width: 32px;
   padding: 4px;
@@ -3068,6 +3067,49 @@ you can add resource intensive styles.
       font-weight: bold;
       text-shadow: 1px 1px 1px #664141;
       box-shadow: 2px 2px 2px rgba(0, 0, 0, 0.5); }
+
+  .news_announcements {
+    background: #020101 url(../images/bg/bedge-grunge.png);
+    color: #fff; }
+    .news_announcements h2 {
+      color: #fff;
+      text-shadow: none; }
+    .news_announcements .news-story {
+      position: relative;
+      width: 100%;
+      padding: 10px;
+      background-color: rgba(255, 255, 255, 0.8);
+      overflow: auto;
+      color: #222;
+      margin-bottom: 1em; }
+      .news_announcements .news-story h4 {
+        margin: 0; }
+      .news_announcements .news-story p:last-child {
+        margin-bottom: 0; }
+      .news_announcements .news-story .news-thumb {
+        width: 30%;
+        float: left;
+        margin-right: 5%; }
+      .news_announcements .news-story .news-content {
+        width: 65%;
+        float: left; }
+    .news_announcements .announcement {
+      overflow: visible;
+      position: relative; }
+      .news_announcements .announcement .inner {
+        background-color: rgba(255, 255, 255, 0.8);
+        color: #222;
+        margin-bottom: 1.5em;
+        padding: 0; }
+      .news_announcements .announcement .content {
+        padding: 10px; }
+      .news_announcements .announcement h4 {
+        margin: 0; }
+      .news_announcements .announcement .date {
+        color: #fff;
+        background: #688684;
+        font-weight: bold;
+        padding: 5px 10px; }
 
   .media {
     background: #151004 url(../images/bg/purty-wood.png) fixed top center repeat;

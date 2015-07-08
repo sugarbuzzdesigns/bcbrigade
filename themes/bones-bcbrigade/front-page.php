@@ -34,6 +34,50 @@
 		</div>
 	</section>	
 
+	<section class="cf news_announcements">
+		<div class="wrap">
+			<div class="d-1of2">
+				<h2>News</h2>
+				<?php $args = array( 'post_type' => 'post', 'cat' => 15, 'posts_per_page' => 4); ?>
+
+				<?php $custom_query = new WP_Query($args); if (have_posts()) : while($custom_query->have_posts()) : $custom_query->the_post(); ?>
+				<div class="news-story">
+					<div class="news-thumb">
+						<?php if(has_post_thumbnail()) { $image_src = wp_get_attachment_image_src( get_post_thumbnail_id(),'thumbname' ); echo '<img src="' . $image_src[0] . '" width="100%" />'; } ?>
+					</div>
+					<div class="news-content">
+						<small><?php the_date(); ?></small>
+						<h4><a href="<?php the_permalink(); ?>"><?php the_title(); ?></a></h4>
+						<?php the_content(); ?>
+					</div>
+				</div>
+				<?php endwhile; wp_reset_postdata(); endif; ?>					
+			</div>
+			<div class="d-1of2">
+				<h2>Announcements</h2>
+				<?php $args = array( 'post_type' => 'post', 'cat' => 16, 'posts_per_page' => 6); ?>
+
+				<?php $custom_query = new WP_Query($args); if (have_posts()) : while($custom_query->have_posts()) : $custom_query->the_post(); ?>
+				<div class="announcement d-1of2">
+					<div class="announcement-content">
+						<div class="inner">
+							<?php // the_date('Y m d', '<small>', '</small>'); ?>
+							<div class="date">
+								<span class="month"><?php the_time('F'); ?></span>
+								<span class="day"><?php the_time('jS'); ?></span>
+							</div>
+							<div class="content">
+								<h4><a href="<?php the_permalink(); ?>"><?php the_title(); ?></a></h4>
+								<?php the_content(); ?>
+							</div>	
+						</div>	
+					</div>
+				</div>
+				<?php endwhile; wp_reset_postdata(); endif; ?>					
+			</div>
+		</div>
+	</section>		
+
 	<section class="cf media gated">
 		<div class="wrap">
 			<div class="d-all watch">
@@ -67,7 +111,7 @@
 		<div class="wrap">
 			<div class="d-all shop">
 				<h2><hr>Shop<hr class="hr-right"></h2>
-					<?php $args = array('post_type' => 'product', 'posts_per_page' => 12);
+					<?php $args = array('post_type' => 'product', 'posts_per_page' => 4);
 					$loop = new WP_Query( $args );
 					
 					if ( $loop->have_posts() ) {
