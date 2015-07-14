@@ -44,6 +44,9 @@ foreach($pmpro_levels as $level)
 		<a class="level-image" href="<?php echo pmpro_url("checkout", "?level=" . $level->id, "https")?>">
 			<img src="<?php bloginfo('template_directory'); ?>/library/images/membership_levels/<?php echo $slug; ?>.jpg" alt="">
 		</a>
+		<?php if(wp_is_mobile()){ ?>
+			<a class="details button" href="#">Show Details</a>
+		<?php } ?>
 		<aside>
 			<?php echo $level->description; ?>
 			<a class="level-btn button cta m-all" href="<?php echo pmpro_url("checkout", "?level=" . $level->id, "https")?>">SIGNUP</a>
@@ -53,6 +56,9 @@ foreach($pmpro_levels as $level)
 		<a class="level-image" href="<?php echo pmpro_url("checkout", "?level=" . $level->id, "https")?>">
 			<img src="<?php bloginfo('template_directory'); ?>/library/images/membership_levels/<?php echo $slug; ?>.jpg" alt="">
 		</a>
+		<?php if(wp_is_mobile()){ ?>
+			<a class="details button" href="#">Show Details</a>
+		<?php } ?>
 		<aside>
 			<?php echo $level->description; ?>
 			<a class="level-btn button cta m-all" href="<?php echo pmpro_url("checkout", "?level=" . $level->id, "https")?>">SIGNUP</a>
@@ -74,6 +80,9 @@ foreach($pmpro_levels as $level)
 				<a class="level-image" class="current_level" href="<?php echo pmpro_url("checkout", "?level=" . $level->id, "https")?>">
 					<img src="<?php bloginfo('template_directory'); ?>/library/images/membership_levels/<?php echo $slug; ?>.jpg" alt="">
 				</a>
+				<?php if(wp_is_mobile()){ ?>
+			<a class="button details" href="#">Show Details</a>
+				<?php } ?>
 				<aside>
 					<?php echo $level->description; ?>
 					<a class="current_level level-btn button cta m-all" href="<?php echo pmpro_url("checkout", "?level=" . $level->id, "https")?>">SIGNUP</a>

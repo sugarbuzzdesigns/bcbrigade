@@ -132,6 +132,7 @@ Stylesheet: Homepage Stylesheet
 	.membership_level {
 		aside {
 			background: #fff;
+			display: block;
 			color: #454545;
 			text-align: center;
 			padding: 0 0 10px 0;
@@ -241,11 +242,11 @@ Stylesheet: Homepage Stylesheet
 	.announcement {
 		overflow: visible;
 		position: relative;
+		margin-bottom: 10px;
 
 		.inner {
 			background-color: rgba(255,255,255,0.8);
 			color: #222;
-			margin-bottom: 1.5em;	
 			padding: 0;
 		}
 

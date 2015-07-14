@@ -3,6 +3,9 @@
 	display: none;
 }
 
+#hero {
+	padding: 20px 0;
+}
 
 .media {
 	background: #4E535B;
@@ -46,8 +49,25 @@
 	width: 100%;
 }
 
-.membership_levels aside {
+.membership_levels {
+	.details {
+		display: block;
+		text-decoration: none;
+		text-align: center;
+		background: #fff;
+		border: solid 1px #DEDEDE;
+		margin-top: 5px;
+		text-transform: uppercase;
+		padding: 5px;
 
+		&.open {
+
+		}
+	}
+}
+
+.membership_levels aside {
+	display: none;
 }
 
 // Shop
@@ -121,6 +141,77 @@
 		width: 100%;
 		border: solid #fff 5px;
 		border-radius: 50%;
+	}
+}
+
+// Homepage announcements
+.news_announcements {
+	background: #020101 url(../images/bg/bedge-grunge.png);
+	color: #fff;
+
+	h2 {
+		color: #fff;
+		text-shadow: none;
+	}
+
+	.news-story {
+		position: relative;
+		width: 100%;
+		padding: 10px;
+		background-color: rgba(255,255,255,0.8);
+		overflow: auto;
+		color: #222;
+		margin-bottom: 1em;	
+
+		h4 {
+			margin: 0;
+		}	
+
+		p:last-child {
+			margin-bottom: 0;
+		}
+
+		.news-thumb {
+			width: 30%;
+			float: left;
+			margin-right: 5%;			
+		}
+
+		.news-content {
+			width: 65%;
+			float: left;			
+		}
+	}
+
+	.announcement {
+		overflow: visible;
+		position: relative;
+		margin-bottom: 10px;
+
+		.inner {
+			background-color: rgba(255,255,255,0.8);
+			color: #222;
+			padding: 0;
+		}
+
+		.content {
+			padding: 10px;
+		}	
+
+		h4 {
+			margin: 0;
+		}
+
+		.date {
+			color: #fff;
+			background: #688684;
+			font-weight: bold;
+			padding: 5px 10px;
+
+			span {
+
+			}
+		}
 	}
 }
 

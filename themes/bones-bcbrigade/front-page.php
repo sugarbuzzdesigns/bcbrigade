@@ -1,6 +1,6 @@
 	<?php if ( is_user_logged_in() ) { ?>
 	<?php get_header(); ?>
-	<?php global $pmpro_levels; ?>
+	<?php global $pmpro_levels, $current_user; ?>
 		<section id="intro">
 			<div class="wrap">
 				<a href="#" class="close">
@@ -60,6 +60,7 @@
 				</div>
 				<div class="d-1of2">
 					<h2>Announcements</h2>
+					<div class="grid">
 					<?php 
 						$announce_id_obj = get_category_by_slug( 'announcements' ); 
 						$announceObjId = $announce_id_obj->term_id;
@@ -67,22 +68,36 @@
 					<?php $args = array( 'post_type' => 'post', 'cat' => $announceObjId, 'posts_per_page' => 6); ?>
 
 					<?php $custom_query = new WP_Query($args); if (have_posts()) : while($custom_query->have_posts()) : $custom_query->the_post(); ?>
-					<div class="announcement d-1of2">
-						<div class="announcement-content">
-							<div class="inner">
-								<?php // the_date('Y m d', '<small>', '</small>'); ?>
-								<div class="date">
-									<span class="month"><?php the_time('F'); ?></span>
-									<span class="day"><?php the_time('jS'); ?></span>
-								</div>
-								<div class="content">
-									<h4><a href="<?php the_permalink(); ?>"><?php the_title(); ?></a></h4>
-									<?php the_content(); ?>
+					
+						<div class="announcement d-1of2 m-all grid-item">
+							<div class="announcement-content">
+								<div class="inner">
+									<?php // the_date('Y m d', '<small>', '</small>'); ?>
+									<div class="date">
+										<span class="month"><?php the_time('F'); ?></span>
+										<span class="day"><?php the_time('jS'); ?></span>
+									</div>
+									<div class="content">
+										<h4><a href="<?php the_permalink(); ?>"><?php the_title(); ?></a></h4>
+										<?php the_content(); ?>
+									</div>	
 								</div>	
-							</div>	
+							</div>
 						</div>
-					</div>
+
 					<?php endwhile; wp_reset_postdata(); endif; ?>					
+					</div>		
+
+					<script>
+					(function($){
+						$(function(){
+							$('.grid').masonry({
+							  // options
+							  itemSelector: '.grid-item'
+							});							
+						});
+					})(jQuery)
+					</script>					
 				</div>
 			</div>
 		</section>		

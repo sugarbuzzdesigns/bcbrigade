@@ -135,6 +135,16 @@ function loadGravatars() {
 
         menu.slideToggle();
       });
+
+      $('.details').click(function(e){
+        e.preventDefault();
+
+        if($(this).is('.open')){
+          $(this).removeClass('open').text('Show Details').next().slideUp();
+        } else {
+          $(this).addClass('open').text('Hide Details').next().slideDown();
+        }
+      });
     },
 
     checkIfLoggedIn: function(){
