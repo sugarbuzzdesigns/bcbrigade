@@ -213,6 +213,9 @@ function bones_theme_support() {
 	    )
 	);
 
+	// remove admin bar
+	add_filter('show_admin_bar', '__return_false');
+
 	// rss thingy
 	add_theme_support('automatic-feed-links');
 
