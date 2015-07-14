@@ -2419,7 +2419,7 @@ view.
   display: none; }
 
 .home #hero {
-  padding: 20px 0; }
+  padding: 60px 0 20px; }
 
 .media {
   background: #4E535B;
@@ -3025,7 +3025,7 @@ you can add resource intensive styles.
     padding-right: 0;
     padding: 0 5px; }
   .home #hero {
-    padding-top: 1.5em; }
+    padding: 1.5em 0 20px; }
   .home h2 hr:nth-of-type(2) {
     float: right; }
   .home .see-all {
