@@ -52,10 +52,7 @@ if ( 0 == $woocommerce_loop['loop'] % $woocommerce_loop['columns'] )
 		?>
 			
 		<span class="info">
-			<h3><?php the_title(); ?></h3>
-			<?php if(wp_is_mobile()){ ?>
-				<i class="fa fa-chevron-right"></i>
-			<?php } ?>			
+			<h3><?php the_title(); ?></h3>		
 		</span>
 		<?php
 			/**

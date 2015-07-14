@@ -1059,41 +1059,6 @@ them however you see fit.
 #bbpress-forums #bbp-search-form #bbp_search:focus {
   outline: none; }
 
-#products-wrap {
-  overflow: auto;
-  margin-bottom: 1.5em; }
-
-.product {
-  width: 100%;
-  position: relative;
-  display: block; }
-  .product a {
-    width: 100%;
-    display: block; }
-    .product a img {
-      display: block;
-      width: 100%;
-      height: auto; }
-
-.shop .see-all-products {
-  text-align: center;
-  display: block;
-  background: #fff url(../images/bg/bedge-grunge.png);
-  padding: 10px;
-  text-decoration: none; }
-.shop .product .add_to_cart_button {
-  display: none; }
-.shop .product h3 {
-  margin: 0; }
-.shop .product .info {
-  position: absolute;
-  bottom: 0;
-  width: 100%;
-  background: rgba(0, 0, 0, 0.5);
-  color: #fff;
-  padding: 10px;
-  font-size: 0.8em; }
-
 .woocommerce .woocommerce-ordering,
 .woocommerce .woocommerce-breadcrumb,
 .woocommerce .woocommerce-result-count {
@@ -1102,7 +1067,6 @@ them however you see fit.
 .woocommerce ul.products li.product a img {
   margin-bottom: 0; }
 
-.home .product-wrap .price,
 .woocommerce ul.products li.product .price {
   position: absolute;
   top: 10px;
@@ -1206,6 +1170,16 @@ a.checkout-button.button.alt.wc-forward {
 .woocommerce form .form-row input.input-text, .woocommerce form .form-row textarea {
   padding: 10px; }
 
+.woocommerce div.product form.cart .variations td.label {
+  padding: 1em; }
+
+@media only screen and (max-width: 481px) {
+  .woocommerce .woocommerce-error .button, .woocommerce .woocommerce-info .button,
+  .woocommerce .woocommerce-message .button {
+    float: none;
+    text-align: center;
+    display: block;
+    margin-bottom: 10px; } }
 form.pmpro_form select.input,
 form.pmpro_form select {
   padding: 0 10px; }
@@ -2444,7 +2418,7 @@ view.
 #intro {
   display: none; }
 
-#hero {
+.home #hero {
   padding: 20px 0; }
 
 .media {
@@ -2495,8 +2469,9 @@ view.
   font-size: 2.7em;
   opacity: 0.3; }
 
-.product-wrap {
-  margin-bottom: 10px; }
+.product-wrap li {
+  background-color: rgba(0, 0, 0, 0.6);
+  overflow: auto; }
 
 .shop {
   background: #fff url(../images/bg/bedge-grunge.png); }
@@ -2505,14 +2480,41 @@ view.
   .shop .product-wrap {
     margin-bottom: 0; }
   .shop .product {
-    margin-bottom: 10px; }
+    margin-bottom: 10px;
+    width: 100%;
+    position: relative;
+    display: block; }
     .shop .product img {
+      width: 50%;
+      float: left;
+      display: block;
+      height: auto; }
+    .shop .product a {
       width: 100%;
-      display: block; }
+      display: block;
+      text-decoration: none; }
     .shop .product .button.product_type_bundle {
       display: none; }
     .shop .product .button.cta {
       margin: 0 auto; }
+    .shop .product .add_to_cart_button {
+      display: none; }
+    .shop .product h3 {
+      margin: 0; }
+    .shop .product .info {
+      position: static;
+      width: 50%;
+      color: #fff;
+      font-size: 0.8em;
+      display: block;
+      float: left;
+      padding: 10px; }
+    .shop .product .price {
+      display: block;
+      float: left;
+      color: #fff;
+      padding: 10px;
+      font-size: 1.2em; }
 
 .socialize {
   background: #151004 url(../images/bg/purty-wood.png) fixed top center repeat;
@@ -3203,10 +3205,59 @@ you can add resource intensive styles.
         display: block;
         background: #fff; }
 
+  .shop {
+    background: #fff url(../images/bg/bedge-grunge.png); }
+    .shop .wrap {
+      padding: 0 10px; }
+    .shop .product-wrap {
+      margin-bottom: 0; }
+    .shop .product {
+      margin-bottom: 10px;
+      width: 100%;
+      position: relative;
+      display: block; }
+      .shop .product img {
+        width: 100%;
+        float: none;
+        display: block;
+        height: auto; }
+      .shop .product a {
+        width: 100%;
+        display: block; }
+      .shop .product .button.product_type_bundle {
+        display: none; }
+      .shop .product .button.cta {
+        margin: 0 auto; }
+      .shop .product .add_to_cart_button {
+        display: none; }
+      .shop .product h3 {
+        margin: 0; }
+      .shop .product .info {
+        position: absolute;
+        bottom: 0;
+        width: 100%;
+        background: rgba(0, 0, 0, 0.5);
+        color: #fff;
+        padding: 10px;
+        font-size: 0.8em;
+        float: none; }
+    .shop .product-wrap .price {
+      position: absolute;
+      top: 10px;
+      left: 0;
+      background-color: rgba(0, 0, 0, 0.5);
+      color: #fff;
+      padding: 10px;
+      float: none; }
+
   .socialize {
     padding: 20px 0; }
     .socialize h5 {
-      margin-top: 5px; } }
+      margin-top: 5px; }
+
+  #products-wrap {
+    overflow: auto;
+    margin-bottom: 1.5em; } }
 /*********************
 LARGE VIEWING SIZE
 This is for the larger monitors and possibly full screen viewers.

@@ -575,10 +575,59 @@ Stylesheet: Homepage Stylesheet
       display: block;
       background: #fff; }
 
+.shop {
+  background: #fff url(../images/bg/bedge-grunge.png); }
+  .shop .wrap {
+    padding: 0 10px; }
+  .shop .product-wrap {
+    margin-bottom: 0; }
+  .shop .product {
+    margin-bottom: 10px;
+    width: 100%;
+    position: relative;
+    display: block; }
+    .shop .product img {
+      width: 100%;
+      float: none;
+      display: block;
+      height: auto; }
+    .shop .product a {
+      width: 100%;
+      display: block; }
+    .shop .product .button.product_type_bundle {
+      display: none; }
+    .shop .product .button.cta {
+      margin: 0 auto; }
+    .shop .product .add_to_cart_button {
+      display: none; }
+    .shop .product h3 {
+      margin: 0; }
+    .shop .product .info {
+      position: absolute;
+      bottom: 0;
+      width: 100%;
+      background: rgba(0, 0, 0, 0.5);
+      color: #fff;
+      padding: 10px;
+      font-size: 0.8em;
+      float: none; }
+  .shop .product-wrap .price {
+    position: absolute;
+    top: 10px;
+    left: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    color: #fff;
+    padding: 10px;
+    float: none; }
+
 .socialize {
   padding: 20px 0; }
   .socialize h5 {
     margin-top: 5px; }
+
+#products-wrap {
+  overflow: auto;
+  margin-bottom: 1.5em; }
 
 /*
 you can call the larger styles if you want, but there's really no need

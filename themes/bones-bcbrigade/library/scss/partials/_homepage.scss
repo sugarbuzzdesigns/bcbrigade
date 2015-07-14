@@ -313,6 +313,75 @@ Stylesheet: Homepage Stylesheet
 
 }
 
+.shop {
+	background: #fff url(../images/bg/bedge-grunge.png);
+
+	.wrap {
+		padding: 0 10px;
+	}
+
+	.product-wrap {
+		margin-bottom: 0;
+	}
+
+	.product {
+		margin-bottom: 10px;
+		width: 100%;
+		position: relative;
+		display: block;		
+	
+		img {
+			width: 100%;
+			float: none;
+			display: block;
+			height: auto;
+		}
+
+		a {
+			width: 100%;
+			display: block;
+		}
+
+		.button.product_type_bundle {
+			display: none;
+		}
+
+		.button.cta {
+			margin: 0 auto;
+		}
+
+		.add_to_cart_button {
+			display: none;
+		}
+
+		h3 {
+			margin: 0;
+		}
+
+		.info {
+			position: absolute;
+			bottom: 0;
+			width: 100%;
+			background: rgba(0,0,0,0.5);
+			color: #fff;
+			padding: 10px;
+			font-size: 0.8em;	
+			float: none;		
+		}		
+	}	
+
+	.product-wrap .price {
+		position: absolute;
+		top: 10px;
+		left: 0;
+		background-color: rgba(0,0,0,0.5);
+		color: #fff;	
+		padding: 10px;	
+		float: none;	
+	}
+
+}
+
 .socialize {
 	padding: 20px 0;
 
