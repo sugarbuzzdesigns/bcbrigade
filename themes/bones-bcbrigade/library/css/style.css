@@ -2449,7 +2449,7 @@ view.
 
 .media {
   background: #4E535B;
-  padding: 20px 0; }
+  padding: 20px 10px; }
   .media h2 {
     color: #fff;
     text-shadow: none;
@@ -2458,7 +2458,6 @@ view.
       border-top: solid 1px #fff;
       border-bottom: solid 1px #fff; }
   .media .video-wrap {
-    padding: 5px;
     margin-bottom: 10px; }
     .media .video-wrap .video-js {
       border: solid 3px #fff;
@@ -2501,6 +2500,8 @@ view.
 
 .shop {
   background: #fff url(../images/bg/bedge-grunge.png); }
+  .shop .wrap {
+    padding: 0 10px; }
   .shop .product-wrap {
     margin-bottom: 0; }
   .shop .product {
@@ -2515,7 +2516,7 @@ view.
 
 .socialize {
   background: #151004 url(../images/bg/purty-wood.png) fixed top center repeat;
-  padding: 20px 0; }
+  padding: 20px 10px; }
   .socialize h2 {
     color: #fff;
     text-shadow: none;
@@ -2527,7 +2528,8 @@ view.
     text-align: center; }
   .socialize h5 {
     text-align: center;
-    color: #fff; }
+    color: #fff;
+    margin-top: 0; }
   .socialize img {
     width: 100%;
     border: solid #fff 5px;
@@ -2535,10 +2537,14 @@ view.
 
 .news_announcements {
   background: #020101 url(../images/bg/bedge-grunge.png);
-  color: #fff; }
+  color: #fff;
+  padding: 10px 10px; }
   .news_announcements h2 {
     color: #fff;
     text-shadow: none; }
+  .news_announcements p {
+    font-size: 0.8em;
+    padding-right: 10px; }
   .news_announcements .news-story {
     position: relative;
     width: 100%;
@@ -3130,10 +3136,14 @@ you can add resource intensive styles.
 
   .news_announcements {
     background: #020101 url(../images/bg/bedge-grunge.png);
-    color: #fff; }
+    color: #fff;
+    padding: 0; }
     .news_announcements h2 {
       color: #fff;
       text-shadow: none; }
+    .news_announcements p {
+      font-size: .9em;
+      padding-right: 0px; }
     .news_announcements .news-story {
       position: relative;
       width: 100%;
@@ -3173,7 +3183,7 @@ you can add resource intensive styles.
 
   .media {
     background: #151004 url(../images/bg/purty-wood.png) fixed top center repeat;
-    padding: 20px 0; }
+    padding: 20px 0px; }
     .media h2 {
       color: #fff;
       text-shadow: none;
@@ -3182,8 +3192,7 @@ you can add resource intensive styles.
         border-top: solid 1px #fff;
         border-bottom: solid 1px #fff; }
     .media .video-wrap {
-      padding: 5px;
-      margin-bottom: 10px; }
+      padding: 5px; }
       .media .video-wrap .video-js {
         border: solid 3px #fff;
         background: #fff; }
@@ -3192,7 +3201,12 @@ you can add resource intensive styles.
       .media .video-wrap iframe {
         width: 100%;
         display: block;
-        background: #fff; } }
+        background: #fff; }
+
+  .socialize {
+    padding: 20px 0; }
+    .socialize h5 {
+      margin-top: 5px; } }
 /*********************
 LARGE VIEWING SIZE
 This is for the larger monitors and possibly full screen viewers.

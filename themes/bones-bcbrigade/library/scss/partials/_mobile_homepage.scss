@@ -9,7 +9,7 @@
 
 .media {
 	background: #4E535B;
-	padding: 20px 0;
+	padding: 20px 10px;
 
 	h2 {
 		color: #fff;
@@ -23,7 +23,6 @@
 	}
 
 	.video-wrap {
-		padding: 5px;
 		margin-bottom: 10px;
 
 		.video-js {
@@ -90,6 +89,10 @@
 .shop {
 	background: #fff url(../images/bg/bedge-grunge.png);
 
+	.wrap {
+		padding: 0 10px;
+	}
+
 	.product-wrap {
 		margin-bottom: 0;
 	}
@@ -115,7 +118,7 @@
 
 .socialize {
 	background: #151004 url(../images/bg/purty-wood.png) fixed top center repeat;
-	padding: 20px 0;
+	padding: 20px 10px;
 
 	h2 {
 		color: #fff;
@@ -135,6 +138,7 @@
 	h5 {
 		text-align: center;
 		color: #fff;
+		margin-top: 0;
 	}
 
 	img {
@@ -148,11 +152,17 @@
 .news_announcements {
 	background: #020101 url(../images/bg/bedge-grunge.png);
 	color: #fff;
+	padding: 10px 10px;
 
 	h2 {
 		color: #fff;
 		text-shadow: none;
 	}
+
+	p {
+		font-size: 0.8em;
+		padding-right: 10px;
+	}	
 
 	.news-story {
 		position: relative;

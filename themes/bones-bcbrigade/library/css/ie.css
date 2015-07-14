@@ -508,10 +508,14 @@ Stylesheet: Homepage Stylesheet
 
 .news_announcements {
   background: #020101 url(../images/bg/bedge-grunge.png);
-  color: #fff; }
+  color: #fff;
+  padding: 0; }
   .news_announcements h2 {
     color: #fff;
     text-shadow: none; }
+  .news_announcements p {
+    font-size: .9em;
+    padding-right: 0px; }
   .news_announcements .news-story {
     position: relative;
     width: 100%;
@@ -551,7 +555,7 @@ Stylesheet: Homepage Stylesheet
 
 .media {
   background: #151004 url(../images/bg/purty-wood.png) fixed top center repeat;
-  padding: 20px 0; }
+  padding: 20px 0px; }
   .media h2 {
     color: #fff;
     text-shadow: none;
@@ -560,8 +564,7 @@ Stylesheet: Homepage Stylesheet
       border-top: solid 1px #fff;
       border-bottom: solid 1px #fff; }
   .media .video-wrap {
-    padding: 5px;
-    margin-bottom: 10px; }
+    padding: 5px; }
     .media .video-wrap .video-js {
       border: solid 3px #fff;
       background: #fff; }
@@ -571,6 +574,11 @@ Stylesheet: Homepage Stylesheet
       width: 100%;
       display: block;
       background: #fff; }
+
+.socialize {
+  padding: 20px 0; }
+  .socialize h5 {
+    margin-top: 5px; }
 
 /*
 you can call the larger styles if you want, but there's really no need

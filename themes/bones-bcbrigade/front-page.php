@@ -126,7 +126,7 @@
 					</div>
 				</div>	
 				<div class="m-all d-all see-all">
-					<a href="#" class="button cta m-all">See All Videos</a>	
+					<a href="/videos" class="button cta m-all">See All Videos</a>	
 				</div>
 			</div>
 		</section>	
