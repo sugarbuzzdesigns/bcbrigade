@@ -1902,6 +1902,7 @@ section {
     position: absolute;
     top: 50%;
     left: 50%;
+    -webkit-transform: translate(-50%, -50%);
     transform: translate(-50%, -50%); }
     .gate div a {
       background-color: #A55252;
@@ -2072,9 +2073,6 @@ and more scalable.
       text-decoration: none;
       padding: 0.75em;
       text-transform: uppercase;
-      -webkit-transition: all 0.5s;
-      -moz-transition: all 0.5s;
-      -o-transition: all 0.5s;
       transition: all 0.5s;
       /*
       remember this is for mobile ONLY, so there's no need

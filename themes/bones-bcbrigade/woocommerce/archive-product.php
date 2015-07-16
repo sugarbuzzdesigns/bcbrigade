@@ -34,7 +34,7 @@ get_header( 'shop' ); ?>
 			if($current_user->membership_level->ID != 1){ ?>
 				<section class="wrap">
 					<div id="special-offer">
-						<a id="eagle-member-offer" href="">
+						<a id="eagle-member-offer" href="#">
 							<img src="http://staging.bcbrigade.com/wp-content/uploads/2015/06/eagle-chair.jpg" alt="">
 						</a>
 						<div class="info">
