@@ -232,9 +232,11 @@
 		{			
 			if($this->type == "text")
 			{
-				$r = '<input type="text" id="' . $this->id . '" name="' . $this->name . '" value="' . esc_attr($value) . '" ';
+				$r = '<input type="text" id="' . $this->id . '" name="' . $this->name . '" value="' . esc_attr($value) . '"';
 				if(!empty($this->size))
 					$r .= 'size="' . $this->size . '" ';
+				if(!empty($this->placeholder))
+					$r .= 'placeholder="' . $this->placeholder . '" ';				
 				if(!empty($this->class))
 					$r .= 'class="' . $this->class . '" ';
 				if(!empty($this->readonly))

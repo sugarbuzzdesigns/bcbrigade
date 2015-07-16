@@ -30,7 +30,8 @@ get_header( 'shop' ); ?>
 		<div>	
 
 		<?php if ( is_user_logged_in() ) {
-			if($current_user->membership_level->ID != 3){ ?>
+			echo '<p>' . $current_user->membership_level->ID .'<p>';
+			if($current_user->membership_level->ID != 1){ ?>
 				<section class="wrap">
 					<div id="special-offer">
 						<a id="eagle-member-offer" href="">
