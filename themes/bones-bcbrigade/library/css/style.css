@@ -1088,17 +1088,12 @@ them however you see fit.
   text-align: center;
   line-height: 32px;
   margin: 0;
-  -webkit-border-radius: 20px;
   border-radius: 20px;
   background: #a1c094;
-  background: -webkit-gradient(linear, left top, left bottom, from(#a1c094), to(#85ad74));
-  background: -webkit-linear-gradient(#a1c094, #85ad74);
   background: -moz-linear-gradient(center top, #a1c094 0%, #85ad74 100%);
   background: -moz-gradient(center top, #a1c094 0%, #85ad74 100%);
   text-shadow: 0 -1px 0 #85ad74;
   color: #ffffff;
-  -webkit-box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.3), inset 0 -1px 0 rgba(0, 0, 0, 0.2), 0 1px 2px rgba(0, 0, 0, 0.2);
-  -moz-box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.3), inset 0 -1px 0 rgba(0, 0, 0, 0.2), 0 1px 2px rgba(0, 0, 0, 0.2);
   box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.3), inset 0 -1px 0 rgba(0, 0, 0, 0.2), 0 1px 2px rgba(0, 0, 0, 0.2); }
 
 .woocommerce ul.products li.product .button {
@@ -1237,8 +1232,6 @@ li.playing a {
   overflow: hidden;
   font-family: monospace;
   font-size: 12px;
-  -webkit-box-shadow: 1px 1px 8px rgba(0, 0, 0, 0.3);
-  -moz-box-shadow: 1px 1px 8px rgba(0, 0, 0, 0.3);
   -o-box-shadow: 1px 1px 8px rgba(0, 0, 0, 0.3);
   box-shadow: 1px 1px 8px rgba(0, 0, 0, 0.3); }
 
@@ -1348,6 +1341,7 @@ li.playing a {
   position: absolute;
   left: 55%;
   top: 50%;
+  -webkit-transform: translate(-50%, -50%);
   transform: translate(-50%, -50%); }
 
 .audiojs .play-pause .pause,
@@ -1359,6 +1353,7 @@ li.playing a {
   position: absolute;
   top: 50%;
   left: 8px;
+  -webkit-transform: translateY(-50%);
   transform: translateY(-50%); }
 
 .audiojs .prev.disabled,
