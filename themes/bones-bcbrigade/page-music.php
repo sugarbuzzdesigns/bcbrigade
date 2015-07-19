@@ -21,7 +21,7 @@
 						<h3>Lyrics</h3>
 						<p class="verse">
 							<span>Spent half my life just wishin</span>
-							<span>Afraid of the chance I'd been givin</span>
+							<span>Afraid of the chance I'd been given</span>
 							<span>Thought I should ask for forgiveness</span>
 							<span>For wanting more</span>						
 						</p>	

@@ -22,6 +22,7 @@ body {
 	color: $text-color;
 	background-color: #fff;
   	-webkit-font-smoothing: antialiased;
+  	padding-top: 48px;
 }
 
 section {
@@ -121,6 +122,11 @@ a, a:visited {
 	margin: 10px 0;
 	font-weight: bold;
 	text-shadow: 0 0 1px rgba(0, 0, 0, 0.5);	
+
+	&:hover {
+		color: darken(#fff, 10%);
+		background: darken(#688684, 10%);
+	}
 }
 
 /******************************************************************
@@ -203,7 +209,22 @@ HEADER STYLES
 		font-size: 1.6em;
 		padding: 10px 8px;
 		cursor: pointer;
+		display: inline-block;
+		vertical-align: middle;		
 	}	
+
+	nav {
+		h1 {
+			display: inline-block;
+			vertical-align: middle;
+			margin: 0px;
+			color: rgb(255, 255, 255);
+			text-transform: uppercase;
+			font-weight: bold;
+			font-size: 1.5em;
+			text-align: right;			
+		}
+	}
 }
 
 #menu-main-menu {
@@ -970,6 +991,11 @@ STORE STYLES
 
 #products-wrap {
 	background: #fff url(../images/bg/bedge-grunge.png);	
+}
+
+// Mobile music page style
+.audiojs .info {
+	padding-bottom: 20px;
 }
 
 

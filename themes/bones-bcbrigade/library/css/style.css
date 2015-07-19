@@ -1337,10 +1337,11 @@ li.playing a {
   width: 60px;
   border-radius: 50%; }
 
-.audiojs .play-pause p {
+.audiojs .play-pause .fa-play {
   position: absolute;
   left: 55%;
   top: 50%;
+  display: block;
   -webkit-transform: translate(-50%, -50%);
   transform: translate(-50%, -50%); }
 
@@ -1873,7 +1874,8 @@ body {
   line-height: 1.5;
   color: #434343;
   background-color: #fff;
-  -webkit-font-smoothing: antialiased; }
+  -webkit-font-smoothing: antialiased;
+  padding-top: 48px; }
 
 section {
   position: relative; }
@@ -1948,6 +1950,9 @@ a, a:visited {
   margin: 10px 0;
   font-weight: bold;
   text-shadow: 0 0 1px rgba(0, 0, 0, 0.5); }
+  .button.cta:hover {
+    color: #e6e6e6;
+    background: #526968; }
 
 /******************************************************************
 H1, H2, H3, H4, H5 STYLES
@@ -2013,7 +2018,18 @@ HEADER STYLES
     color: #fff;
     font-size: 1.6em;
     padding: 10px 8px;
-    cursor: pointer; }
+    cursor: pointer;
+    display: inline-block;
+    vertical-align: middle; }
+  .header nav h1 {
+    display: inline-block;
+    vertical-align: middle;
+    margin: 0px;
+    color: white;
+    text-transform: uppercase;
+    font-weight: bold;
+    font-size: 1.5em;
+    text-align: right; }
 
 #menu-main-menu {
   display: none; }
@@ -2531,9 +2547,11 @@ view.
     border-radius: 50%; }
 
 .news_announcements {
-  background: #020101 url(../images/bg/bedge-grunge.png);
+  background: #342E24 url(../images/bg/bedge-grunge.png);
   color: #fff;
-  padding: 10px 10px; }
+  padding: 1em 10px;
+  box-shadow: inset 0px 0px 33px rgba(0, 0, 0, 0.4);
+  text-align: center; }
   .news_announcements h2 {
     color: #fff;
     text-shadow: none; }
@@ -2547,7 +2565,10 @@ view.
     background-color: rgba(255, 255, 255, 0.8);
     overflow: auto;
     color: #222;
-    margin-bottom: 1em; }
+    margin-bottom: 1em;
+    border: solid 4px #fff;
+    box-shadow: 0px 3px 3px rgba(0, 0, 0, 0.5);
+    text-align: left; }
     .news_announcements .news-story h4 {
       margin: 0; }
     .news_announcements .news-story p:last-child {
@@ -2559,10 +2580,13 @@ view.
     .news_announcements .news-story .news-content {
       width: 65%;
       float: left; }
+  .news_announcements .announcements .button {
+    margin-top: 15px; }
   .news_announcements .announcement {
     overflow: visible;
     position: relative;
-    margin-bottom: 10px; }
+    margin-bottom: 10px;
+    text-align: left; }
     .news_announcements .announcement .inner {
       background-color: rgba(255, 255, 255, 0.8);
       color: #222;
@@ -2576,6 +2600,8 @@ view.
       background: #688684;
       font-weight: bold;
       padding: 5px 10px; }
+  .news_announcements .announcement-content {
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.4); }
 
 .membership_levels {
   background: #fff url(../images/bg/bedge-grunge.png);
@@ -2696,6 +2722,9 @@ STORE STYLES
 
 #products-wrap {
   background: #fff url(../images/bg/bedge-grunge.png); }
+
+.audiojs .info {
+  padding-bottom: 20px; }
 
 /*********************
 LARGER MOBILE DEVICES
@@ -2828,6 +2857,8 @@ you can add resource intensive styles.
     left: auto; }
     .header .open-menu {
       display: none; }
+    .header nav h1 {
+      display: none; }
 
   #menu-main-menu {
     display: block; }
@@ -2959,6 +2990,12 @@ you can add resource intensive styles.
   /* recent-comments widget */
   /* search widget */
   /* text widget */
+  /*********************
+  Music PAGE STYLES
+  *********************/
+  .audiojs .info {
+    padding-bottom: 0; }
+
   /*********************
   VIDEO JS STYLES
   *********************/
@@ -3130,9 +3167,7 @@ you can add resource intensive styles.
       box-shadow: 2px 2px 2px rgba(0, 0, 0, 0.5); }
 
   .news_announcements {
-    background: #020101 url(../images/bg/bedge-grunge.png);
-    color: #fff;
-    padding: 0; }
+    padding: 1em 0; }
     .news_announcements h2 {
       color: #fff;
       text-shadow: none; }

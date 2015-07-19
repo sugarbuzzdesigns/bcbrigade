@@ -56,6 +56,12 @@ HEADER STYLES
 		display: none;
 	}
 
+	nav {
+		h1 {
+			display: none;
+		}
+	}
+
 }
 
 #menu-main-menu {
@@ -335,6 +341,13 @@ SIDEBARS & ASIDES
 	.widget_text {}
 	.textwidget p {}
 
+
+/*********************
+Music PAGE STYLES
+*********************/	
+.audiojs .info {
+	padding-bottom: 0;
+}
 
 /*********************
 VIDEO JS STYLES

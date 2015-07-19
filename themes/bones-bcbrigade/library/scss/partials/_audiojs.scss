@@ -123,10 +123,11 @@ li.playing a { color: #000; }
 	width: 60px;
 	border-radius: 50%;
 }
-.audiojs .play-pause p {
+.audiojs .play-pause .fa-play {
 	position: absolute;	
 	left: 55%;
 	top: 50%;
+	display: block;
 	-webkit-transform: translate(-50%, -50%);
 	        transform: translate(-50%, -50%);
 }

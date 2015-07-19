@@ -141,7 +141,7 @@ function loadGravatars() {
 
     bindEvents: function(){
       $('.open-menu').click(function(){
-        var menu = $(this).next();
+        var menu = $('#menu-main-menu');
 
         menu.slideToggle();
       });

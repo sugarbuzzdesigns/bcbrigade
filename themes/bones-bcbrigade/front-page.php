@@ -37,7 +37,7 @@
 
 		<section class="cf news_announcements">
 			<div class="wrap">
-				<div class="d-1of2">
+				<div class="d-1of2 news">
 					<h2>News</h2>
 					<?php 
 						$news_id_obj = get_category_by_slug( 'news' ); 
@@ -56,9 +56,9 @@
 							<?php the_content(); ?>
 						</div>
 					</div>
-					<?php endwhile; wp_reset_postdata(); endif; ?>					
+					<?php endwhile; wp_reset_postdata(); endif; ?>
 				</div>
-				<div class="d-1of2">
+				<div class="d-1of2 announcements">
 					<h2>Announcements</h2>
 					<div class="grid">
 					<?php 
@@ -85,7 +85,7 @@
 							</div>
 						</div>
 
-					<?php endwhile; wp_reset_postdata(); endif; ?>					
+					<?php endwhile; wp_reset_postdata(); endif; ?>
 					</div>		
 
 					<script>
@@ -99,6 +99,7 @@
 					})(jQuery)
 					</script>					
 				</div>
+				<a href="/news-announcements" class="button cta m-all">See All News & Announcements</a>
 			</div>
 		</section>		
 
