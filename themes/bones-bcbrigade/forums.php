@@ -2,12 +2,13 @@
 
 			<div id="content">
 
+				<section id="hero" class="cf">
+					<div class="wrap">
+						<img src="<?php bloginfo('template_directory'); ?>/library/images/heros/forum-hero.jpg" />
+					</div>
+				</section>
+
 				<div id="inner-content" class="wrap cf">
-					<section id="hero" class="cf">
-						<div class="wrap">
-							<img src="<?php bloginfo('template_directory'); ?>/library/images/heros/forum-hero.jpg" />
-						</div>
-					</section>
 
 						<div id="main" class="m-all t-all d-all cf" role="main">
 

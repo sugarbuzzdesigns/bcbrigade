@@ -1912,7 +1912,7 @@ section {
       border-radius: 5px;
       text-decoration: none;
       font-weight: bold; }
-      .gate div a:hover {
+      .gate div a:hover, .gate div a:active, .gate div a:focus {
         color: #e6e6e6;
         background-color: #834141; }
 
@@ -2744,6 +2744,31 @@ STORE STYLES
 
 .audiojs .info {
   padding-bottom: 20px; }
+
+/*********************
+Profile Page
+*********************/
+.page-profile .field {
+  background: transparent;
+  width: 100%;
+  overflow: auto; }
+.page-profile label {
+  display: block;
+  float: left;
+  vertical-align: top;
+  width: 20%;
+  text-align: right;
+  padding-right: 10px; }
+.page-profile input {
+  margin-bottom: 0;
+  display: block;
+  float: left;
+  vertical-align: top;
+  width: 80%; }
+.page-profile input[type=text] {
+  background-color: #F8F9FA; }
+.page-profile textarea {
+  padding-top: 8px; }
 
 /*********************
 LARGER MOBILE DEVICES
