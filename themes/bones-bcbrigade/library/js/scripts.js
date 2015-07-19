@@ -190,7 +190,7 @@ function loadGravatars() {
     },
 
     loadVideos: function(){
-      $('.watch .video-js').each(function(i, elm){
+      $('.video-js').each(function(i, elm){
         var videoId = 'video-' + (i+1),
             poster = $(elm).data('poster') ? $(elm).data('poster') : null;
         

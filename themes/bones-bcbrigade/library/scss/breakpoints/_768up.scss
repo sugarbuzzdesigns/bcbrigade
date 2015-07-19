@@ -71,33 +71,34 @@ HEADER STYLES
 /*********************
 HR STYLES
 *********************/
-h2 {
-	text-align: center;
-    width: 80%;
-	display: block;
-    margin: 0 auto 10px;
-    opacity: 0.9;	
-    color: $text-color;	
-
-	hr {
+.home {
+	h2 {
+		text-align: center;
+	    width: 80%;
 		display: block;
-		width: 25%;
-		height: 5px;
-		border-left: none;
-		border-right: none;
-		border-top: solid 1px #868686;
-		border-bottom: solid 1px #868686;
-		margin: 22px 0 0 0;	
-		float: left;		
+	    margin: 0 auto 10px;
+	    opacity: 0.9;	
+	    color: $text-color;	
 
-		&.hr-right {
-			float: right;
+		hr {
+			display: block;
+			width: 25%;
+			height: 5px;
+			border-left: none;
+			border-right: none;
 			border-top: solid 1px #868686;
-			border-bottom: solid 1px #868686;			
-		}
-	}
-}	
+			border-bottom: solid 1px #868686;
+			margin: 22px 0 0 0;	
+			float: left;		
 
+			&.hr-right {
+				float: right;
+				border-top: solid 1px #868686;
+				border-bottom: solid 1px #868686;			
+			}
+		}
+	}	
+}	
 
 /******************************************************************
 H1, H2, H3, H4, H5 STYLES
@@ -343,7 +344,7 @@ SIDEBARS & ASIDES
 
 
 /*********************
-Music PAGE STYLES
+Music PAGE:  STYLES
 *********************/	
 .audiojs .info {
 	padding-bottom: 0;

@@ -29,8 +29,14 @@ section {
 	position: relative;
 }
 
+.home {
+	#hero {
+		background: #151004 url(../images/bg/purty-wood.png) fixed;	
+	}
+}
+
 #hero {
-	background: #151004 url(../images/bg/purty-wood.png) fixed;
+	background: transparent;
 
 	img {
 		width: 100%;
@@ -921,10 +927,34 @@ VIDEO JS STYLES
 *********************/
 .video-wrap {
 	margin-bottom: 20px;
+	padding: 0 10px 0 0;
+
+	&:last-child {
+		padding: 0 0 0 10px;		
+	}
 }
 
 .video-js {
     width: 100% !important;
+}
+
+.page-videos {
+	#inner-content {
+		padding-bottom: 0;
+	}
+}
+
+.page-videos {
+	h2 {
+		text-transform: none;
+		text-align: left;
+		font-size: 1.2em;
+		background-color: #2B2726;
+		margin: 0;
+		text-shadow: none;
+		color: #fff;
+		padding: 5px 10px;
+	}
 }
 
 /*********************

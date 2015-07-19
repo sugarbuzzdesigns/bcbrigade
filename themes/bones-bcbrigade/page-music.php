@@ -1,18 +1,18 @@
 <?php get_header(); ?>
 <div id="content">
+	<section id="hero" class="cf">
+		<div class="wrap">
+			<img src="<?php bloginfo('template_directory'); ?>/library/images/heros/music-hero.jpg" />
+		</div>
+	</section>	
 	<div id="inner-content" class="wrap cf">
-		<section id="hero" class="cf">
-			<div class="wrap">
-				<img src="<?php bloginfo('template_directory'); ?>/library/images/heros/music-hero.jpg" />
-			</div>
-		</section>	
 		<div class="entry-content entry">
 			<div id="wrapper" class="d-1of2">
 				<audio preload></audio>
 				<ol class="playlist">
 					<li><a href="#" data-src="<?php bloginfo('template_directory'); ?>/library/audio/KeepWalkingOn_06.05.15.mp3">Keep Walking On</a></li>
-					<li class="coming-soon">Coming in July</li>
 					<li class="coming-soon">Coming in August</li>
+					<li class="coming-soon">Coming in September</li>
 				</ol>
 			</div>	
 			<div class="m-all t-all d-1of2 last-col song-extras">

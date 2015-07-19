@@ -1880,8 +1880,11 @@ body {
 section {
   position: relative; }
 
-#hero {
+.home #hero {
   background: #151004 url(../images/bg/purty-wood.png) fixed; }
+
+#hero {
+  background: transparent; }
   #hero img {
     width: 100%;
     display: block; }
@@ -2670,10 +2673,26 @@ view.
 VIDEO JS STYLES
 *********************/
 .video-wrap {
-  margin-bottom: 20px; }
+  margin-bottom: 20px;
+  padding: 0 10px 0 0; }
+  .video-wrap:last-child {
+    padding: 0 0 0 10px; }
 
 .video-js {
   width: 100% !important; }
+
+.page-videos #inner-content {
+  padding-bottom: 0; }
+
+.page-videos h2 {
+  text-transform: none;
+  text-align: left;
+  font-size: 1.2em;
+  background-color: #2B2726;
+  margin: 0;
+  text-shadow: none;
+  color: #fff;
+  padding: 5px 10px; }
 
 /*********************
 FORUM STYLES
@@ -2866,14 +2885,14 @@ you can add resource intensive styles.
   /*********************
   HR STYLES
   *********************/
-  h2 {
+  .home h2 {
     text-align: center;
     width: 80%;
     display: block;
     margin: 0 auto 10px;
     opacity: 0.9;
     color: #434343; }
-    h2 hr {
+    .home h2 hr {
       display: block;
       width: 25%;
       height: 5px;
@@ -2883,7 +2902,7 @@ you can add resource intensive styles.
       border-bottom: solid 1px #868686;
       margin: 22px 0 0 0;
       float: left; }
-      h2 hr.hr-right {
+      .home h2 hr.hr-right {
         float: right;
         border-top: solid 1px #868686;
         border-bottom: solid 1px #868686; }
@@ -2991,7 +3010,7 @@ you can add resource intensive styles.
   /* search widget */
   /* text widget */
   /*********************
-  Music PAGE STYLES
+  Music PAGE:  STYLES
   *********************/
   .audiojs .info {
     padding-bottom: 0; }
