@@ -2748,6 +2748,34 @@ STORE STYLES
 /*********************
 Profile Page
 *********************/
+.page-profile img {
+  border: solid 5px #fff;
+  margin-bottom: 20px;
+  display: block; }
+.page-profile .profile-section {
+  padding: 1.5em;
+  background: rgba(148, 136, 111, 0.2);
+  margin-bottom: 20px; }
+  .page-profile .profile-section h3 {
+    margin: 0 0 20px 0;
+    background-color: #665e51;
+    color: #fff;
+    padding: 5px 12px;
+    border-radius: 3px; }
+  .page-profile .profile-section .field {
+    padding-right: 0; }
+  .page-profile .profile-section .form-textarea.field {
+    margin-bottom: 0; }
+  .page-profile .profile-section textarea {
+    margin-bottom: 0; }
+.page-profile .profile-info {
+  padding: 1.5em 1.5em 0; }
+  .page-profile .profile-info p {
+    margin: 0 0 5px 0; }
+.page-profile .membership-info .membership-summary {
+  width: 40%; }
+  .page-profile .membership-info .membership-summary img {
+    width: 100%; }
 .page-profile .field {
   background: transparent;
   width: 100%;
@@ -2755,7 +2783,8 @@ Profile Page
 .page-profile label {
   display: block;
   float: left;
-  vertical-align: top;
+  vertical-align: middle;
+  line-height: normal;
   width: 20%;
   text-align: right;
   padding-right: 10px; }
@@ -2765,6 +2794,12 @@ Profile Page
   float: left;
   vertical-align: top;
   width: 80%; }
+.page-profile .form-submit {
+  padding: 0; }
+  .page-profile .form-submit input[type=submit] {
+    width: auto;
+    border: none;
+    padding: 10px 20px; }
 .page-profile input[type=text] {
   background-color: #F8F9FA; }
 .page-profile textarea {

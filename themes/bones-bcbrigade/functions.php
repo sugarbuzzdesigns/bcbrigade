@@ -293,4 +293,191 @@ function custom_pre_get_posts_query( $q ) {
 // $text = new PMProRH_Field("company", "text", array("size"=>40, "class"=>"company", "profile"=>true, "required"=>true));
 // pmprorh_add_registration_field("after_username", $text);
 
+
+/*
+  IMPORTANT NOTE !!!: There is a newer version of this code that accounts for memberships of different periods (annual, monthly, quarterly, etc).
+  You can find that code here: https://gist.github.com/strangerstudios/6242052
+  We'll leave this here for educational purposes.
+
+  Prorated payments. When a member chooses to upgrade, he should be charged a pro-rated amount for the new membership level immediately, and the payment date should stay the same. Assumes monthly subscriptions. Assumes initial payments are equal to billing amount.
+
+  Add this code to your active theme's functions.php or include this in a custom plugin.
+*/
+function my_pmpro_checkout_level($level)
+{
+  //does the user have a level already?
+  if(pmpro_hasMembershipLevel())
+  {
+    //get current level
+    global $current_user;
+    $clevel = $current_user->membership_level;
+    
+    //get the difference in amount
+    $diff = $level->billing_amount - $clevel->billing_amount;
+            
+    //only prorate if the difference is positive (upgrading)
+    if($diff > 0)
+    {
+      //what day is it?
+      $now = time();
+      $today = intval(date("j", $now));
+      
+      //get their payment date
+      $morder = new MemberOrder();
+      $morder->getLastMemberOrder();
+            
+      $payment_day = intval(date("j", $morder->timestamp));
+            
+      //how many days in that month?
+      $days_in_month = date("t", $morder->timestamp);
+      $extra_days = $days_in_month - 30;        //either 1 for months with 31 days or -2 for Feb
+      
+      /*
+        how many days are left in this payment period
+      */
+      if(date("Y-d-m") == date("Y-d-m", $morder->timestamp))
+      {
+        //if user just checked out this very day, days left is equal to days in month
+        $days_left = $days_in_month;
+      }
+      else
+      {
+        //we need to do math
+        $days_left = $payment_day - $today + $extra_days;
+        if($days_left < 0) $days_left = 30 + $days_left;  //if negative, we need to "flip it"
+      }
+      
+      //get % left
+      $per_left = $days_left / $days_in_month;      //as a % (decimal)
+      
+      //how many days have passed
+      $days_passed = $days_in_month - $days_left;
+      $per_passed = $days_passed / $days_in_month;    //as a % (decimal)
+      
+      /*
+        Now figure out how to adjust the price.
+        (a) What they should pay for new level = $level->billing_amount * $per_left.
+        (b) What they should have paid for current level = $clevel->billing_amount * $per_passed.
+        What they need to pay = (a) + (b) - (what they already paid)
+      */
+      $new_level_cost = $level->billing_amount * $per_left;
+      $old_level_cost = $clevel->billing_amount * $per_passed;
+      
+      $level->initial_payment = round($new_level_cost + $old_level_cost - $morder->total, 2);
+      
+      //just in case we have a negative payment
+      if($level->initial_payment < 0)
+        $level->initial_payment = 0;            
+    }
+    else
+    {
+      //let's just zero out the initial payment for downgrades (or you could figure out how to do a credit)
+      $level->initial_payment = 0;
+    }   
+  }
+    
+  return $level;
+}
+add_filter("pmpro_checkout_level", "my_pmpro_checkout_level");
+
+/*
+  If checking out for the same level, keep your old startdate.
+  Updated from what's in paid-memberships-pro/includes/filters.php to run if the user has ANY level
+*/
+function my_pmpro_checkout_start_date_keep_startdate($startdate, $user_id, $level)
+{       
+  if(pmpro_hasMembershipLevel())  //<-- the line that was changed
+  {
+    global $wpdb;
+    $sqlQuery = "SELECT startdate FROM $wpdb->pmpro_memberships_users WHERE user_id = '" . $wpdb->escape($user_id) . "' AND membership_id = '" . $wpdb->escape($level->id) . "' AND status = 'active' ORDER BY id DESC LIMIT 1";    
+    $old_startdate = $wpdb->get_var($sqlQuery);
+    
+    if(!empty($old_startdate))
+      $startdate = "'" . $old_startdate . "'";    
+  }
+  
+  return $startdate;
+}
+remove_filter("pmpro_checkout_start_date", "pmpro_checkout_start_date_keep_startdate", 10, 3);  //remove the default PMPro filter
+add_filter("pmpro_checkout_start_date", "my_pmpro_checkout_start_date_keep_startdate", 10, 3);  //our filter works with ANY level
+
+
+
+
+
+
+// pmpro field helpers
+function get_state_abbrevs(){
+  $region_abbrevs_names = array(
+    'AL'=>'ALABAMA',
+    'AK'=>'ALASKA',
+    'AZ'=>'ARIZONA',
+    'AR'=>'ARKANSAS',
+    'CA'=>'CALIFORNIA',
+    'CO'=>'COLORADO',
+    'CT'=>'CONNECTICUT',
+    'DE'=>'DELAWARE',
+    'DC'=>'DISTRICT OF COLUMBIA',
+    'FL'=>'FLORIDA',
+    'GA'=>'GEORGIA',
+    'GU'=>'GUAM GU',
+    'HI'=>'HAWAII',
+    'ID'=>'IDAHO',
+    'IL'=>'ILLINOIS',
+    'IN'=>'INDIANA',
+    'IA'=>'IOWA',
+    'KS'=>'KANSAS',
+    'KY'=>'KENTUCKY',
+    'LA'=>'LOUISIANA',
+    'ME'=>'MAINE',
+    'MD'=>'MARYLAND',
+    'MA'=>'MASSACHUSETTS',
+    'MI'=>'MICHIGAN',
+    'MN'=>'MINNESOTA',
+    'MS'=>'MISSISSIPPI',
+    'MO'=>'MISSOURI',
+    'MT'=>'MONTANA',
+    'NE'=>'NEBRASKA',
+    'NV'=>'NEVADA',
+    'NH'=>'NEW HAMPSHIRE',
+    'NJ'=>'NEW JERSEY',
+    'NM'=>'NEW MEXICO',
+    'NY'=>'NEW YORK',
+    'NC'=>'NORTH CAROLINA',
+    'ND'=>'NORTH DAKOTA',
+    'OH'=>'OHIO',
+    'OK'=>'OKLAHOMA',
+    'OR'=>'OREGON',
+    'PW'=>'PALAU',
+    'PA'=>'PENNSYLVANIA',
+    'PR'=>'PUERTO RICO',
+    'RI'=>'RHODE ISLAND',
+    'SC'=>'SOUTH CAROLINA',
+    'SD'=>'SOUTH DAKOTA',
+    'TN'=>'TENNESSEE',
+    'TX'=>'TEXAS',
+    'UT'=>'UTAH',
+    'VT'=>'VERMONT',
+    'VI'=>'VIRGIN ISLANDS',
+    'VA'=>'VIRGINIA',
+    'WA'=>'WASHINGTON',
+    'WV'=>'WEST VIRGINIA',
+    'WI'=>'WISCONSIN',
+    'WY'=>'WYOMING',
+    'UK'=>'UNITED KINGDOM'
+  );
+
+  return $region_abbrevs_names;
+}
+
+function populate_dropdown($items, $selected = NULL){
+  foreach ($items as $key => $item) {
+    if($selected == $key){
+      echo '<option value="'. $key .'" selected>' . $item . '</option>';
+    } else {
+      echo '<option value="'. $key .'">' . $item . '</option>';
+    }
+  }
+}
+
 /* DON'T DELETE THIS CLOSING TAG */ ?>
