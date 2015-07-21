@@ -214,6 +214,8 @@ HEADER STYLES
     display: none; }
   .header nav h1 {
     display: none; }
+  .header .cart-contents span {
+    display: inline-block; }
 
 #menu-main-menu {
   display: block;
@@ -393,6 +395,12 @@ Music PAGE:  STYLES
 *********************/
 .audiojs .info {
   padding-bottom: 0; }
+
+/*********************
+Profile Page
+*********************/
+#profile-link span {
+  display: inline-block; }
 
 /*********************
 VIDEO JS STYLES

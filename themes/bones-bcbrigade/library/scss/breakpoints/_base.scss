@@ -221,6 +221,7 @@ HEADER STYLES
 		span {
 			margin-left: 5px;
 			font-size: 15px;
+			display: none;
 		}
 
 		&:hover {
@@ -1058,6 +1059,7 @@ Profile Page
 		font-size: 12px;
 		display: inline-block;
 		vertical-align: middle;
+		display: none;
 	}
 
 	&:hover {
