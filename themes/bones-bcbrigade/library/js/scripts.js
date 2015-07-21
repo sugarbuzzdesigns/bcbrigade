@@ -136,7 +136,7 @@ function loadGravatars() {
         this.gateContent();
       }
 
-      $("#Birthday").mask("99/99/9999",{placeholder:"mm/dd/yyyy"});
+      $("#Birthday, #birthday").mask("99/99/9999",{placeholder:"mm/dd/yyyy"});
     },
 
     bindEvents: function(){

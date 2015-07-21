@@ -480,4 +480,5 @@ function populate_dropdown($items, $selected = NULL){
   }
 }
 
+add_filter( 'loop_shop_per_page', create_function( '$cols', 'return 16;' ), 20 );
 /* DON'T DELETE THIS CLOSING TAG */ ?>
