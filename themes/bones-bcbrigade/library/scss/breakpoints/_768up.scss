@@ -417,8 +417,125 @@ Music PAGE:  STYLES
 Profile Page
 *********************/
 #profile-link {
-	span {
+	display: inline-block;
+	float: right;
+	color: #fff;
+	font-size: 21px;
+	margin-top: 7px;
+	text-decoration: none;
+
+	i {
 		display: inline-block;
+		vertical-align: middle;		
+		margin-right: 10px;
+	}
+
+	span {
+		text-transform: uppercase;
+		font-size: 12px;
+		display: inline-block;
+		vertical-align: middle;
+		display: none;
+	}
+
+	&:hover {
+		color: darken(#fff, 20%);
+	}
+}
+
+.page-profile {
+	img {
+		border: solid 5px #fff;
+		margin-bottom: 20px;
+		display: block;
+	}
+
+	.profile-section {
+		padding: 1.5em;
+		background: rgba(148, 136, 111, 0.2);
+		margin-bottom: 20px;
+
+		h3 {
+			margin: 0 0 20px 0;
+			background-color: rgb(102, 94, 81);
+			color: #fff;
+			padding: 5px 12px;
+			border-radius: 3px;
+		}
+
+		.field {
+			padding-right: 0;
+		}		
+
+		.form-textarea.field {
+			margin-bottom: 0;
+		}
+
+		textarea {
+			margin-bottom: 0;
+		}		
+	}
+
+	.profile-info {
+		padding: 1.5em 1.5em 0;
+
+		p {
+			margin: 0 0 5px 0;
+		}
+	}
+
+	.membership-info {
+
+		.membership-summary {
+			width: 40%;
+
+			img {
+				width: 100%;
+			}
+		}
+	}
+
+	.field {
+		background: transparent;
+		width: 100%;
+		overflow: auto;
+	}
+
+	label {
+		display: block;
+		float: left;
+		vertical-align: middle;	
+		line-height: normal;
+		width: 20%;	
+		text-align: right;
+		padding-right: 10px;
+		margin-bottom: 0;
+	}
+
+	input {
+		margin-bottom: 0;
+		display: block;
+		float: left;
+		vertical-align: top;
+		width: 80%;
+	}
+
+	.form-submit {
+		padding: 0;
+
+		input[type=submit] {
+			width: auto;
+			border: none;
+			padding: 10px 20px;
+		}
+	}	
+
+	input[type=text] {
+		background-color: #F8F9FA;
+	}
+
+	textarea {
+		padding-top: 8px;
 	}
 }
 

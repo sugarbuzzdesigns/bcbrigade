@@ -7,7 +7,7 @@
  */
 
 /* Get user info. */
-global $current_user, $wp_roles;
+global $current_user, $wp_roles, $pmpro_levels;
 
 /* Load the registration file. */
 $error = array();    
@@ -147,7 +147,13 @@ if ( 'POST' == $_SERVER['REQUEST_METHOD'] && !empty( $_POST['action'] ) && $_POS
 											<div class="membership-info profile-section">
 												<h3><?php _e("Membership Info", "pmpro"); ?></h3>
 
-												<?php var_dump(get_user_meta($current_user->ID)); ?>					                    
+												<?php //var_dump(get_user_meta($current_user->ID)); ?>
+												<p><?php echo $level = $current_user->membership_level->name; ?></p>
+												<?php $slug = strtolower(str_replace(" ", "_", $level)); ?>
+												<img src="<?php bloginfo('template_directory'); ?>/library/images/membership_levels/<?php echo $slug; ?>.jpg" alt="">
+												<div class="membership-info">
+													<?php echo $current_user->membership_level->description; ?>
+												</div>
 											</div>
 						                    <div class="form-submit field">
 						                        <?php echo $referer; ?>

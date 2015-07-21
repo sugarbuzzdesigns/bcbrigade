@@ -1123,16 +1123,17 @@ Profile Page
 		background: transparent;
 		width: 100%;
 		overflow: auto;
+		padding: 0;
 	}
 
 	label {
 		display: block;
-		float: left;
 		vertical-align: middle;	
 		line-height: normal;
-		width: 20%;	
-		text-align: right;
+		text-align: left;
 		padding-right: 10px;
+		margin-bottom: 5px;
+		width: 100%;
 	}
 
 	input {
@@ -1140,7 +1141,7 @@ Profile Page
 		display: block;
 		float: left;
 		vertical-align: top;
-		width: 80%;
+		width: 100%;
 	}
 
 	.form-submit {
