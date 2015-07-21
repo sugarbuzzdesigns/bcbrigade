@@ -2704,31 +2704,25 @@ FORUM STYLES
 STORE STYLES
 *********************/
 #special-offer {
-  margin-bottom: 1.5em;
+  margin-bottom: 0;
   background: #fff url(../images/bg/bedge-grunge.png);
   padding: 1.5em;
   overflow: auto; }
-  #special-offer #eagle-member-offer {
-    float: left; }
   #special-offer small {
     display: block;
-    width: 50%;
     margin-bottom: 1.5em; }
-  #special-offer .info {
-    float: left;
-    width: 75%;
-    padding-left: 1.5em; }
-    #special-offer .info h2 {
-      text-align: left;
-      line-height: normal;
-      margin: 0; }
+  #special-offer .info h2 {
+    text-align: left;
+    line-height: normal;
+    margin: 0; }
 
 #eagle-member-offer {
   display: block;
-  position: relative;
-  width: 22.05%; }
+  position: relative; }
   #eagle-member-offer img {
-    display: block; }
+    display: block;
+    border: solid 5px #D8D5D0;
+    margin-bottom: 15px; }
   #eagle-member-offer span {
     position: absolute;
     top: 10px;
@@ -3069,6 +3063,48 @@ you can add resource intensive styles.
   /* recent-comments widget */
   /* search widget */
   /* text widget */
+  /*********************
+  STORE STYLES
+  *********************/
+  #special-offer {
+    margin-bottom: 1.5em;
+    background: #fff url(../images/bg/bedge-grunge.png);
+    padding: 1.5em;
+    overflow: auto; }
+    #special-offer #eagle-member-offer {
+      float: left; }
+    #special-offer small {
+      display: block;
+      width: 50%;
+      margin-bottom: 1.5em; }
+    #special-offer .info {
+      float: left;
+      width: 75%;
+      padding-left: 1.5em; }
+      #special-offer .info h2 {
+        text-align: left;
+        line-height: normal;
+        margin: 0; }
+
+  #eagle-member-offer {
+    display: block;
+    position: relative;
+    width: 22.05%; }
+    #eagle-member-offer img {
+      display: block; }
+    #eagle-member-offer span {
+      position: absolute;
+      top: 10px;
+      left: 0;
+      background: #688684;
+      color: #fff;
+      display: inline-block;
+      padding: 10px;
+      border-radius: 0 5px 5px 0; }
+
+  #products-wrap {
+    background: #fff url(../images/bg/bedge-grunge.png); }
+
   /*********************
   Music PAGE:  STYLES
   *********************/

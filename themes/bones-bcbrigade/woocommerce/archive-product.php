@@ -19,28 +19,20 @@ get_header( 'shop' ); ?>
 	<div id="hero" class="wrap">
 		<img src="<?php bloginfo('template_directory'); ?>/library/images/heros/store-hero.jpg" />
 	</div>
-
-	<?php if(wp_is_mobile()){ ?>
-	
-		<div class="mobile-breadcrumb">
-			<p>Mobile Store</p>
-		</div>
-
-	<?php } ?>	
 		<div>	
 
 		<?php if ( is_user_logged_in() ) {
 			if($current_user->membership_level->ID != 1){ ?>
 				<section class="wrap">
 					<div id="special-offer">
-						<a id="eagle-member-offer" href="#">
+						<a id="eagle-member-offer" href="/membership-account/membership-checkout/?level=1">
 							<img src="http://staging.bcbrigade.com/wp-content/uploads/2015/06/eagle-chair.jpg" alt="">
 						</a>
 						<div class="info">
 							<h2>SPECIAL OFFER</h2>
 							<p>Upgrade your membership to <strong>Brigade Eagle Member</strong> and receive this special gift.</p>
-							<small>** Your chair will be shipped to the address you signed up with. Please update your <a href="#">profile</a> if you need to make changes to your shipping address.</small>
-							<a class="button cta" href="#">UPGRADE NOW!</a>
+							<small>** Your chair will be shipped to the address you signed up with. Please update your <a href="/profile">profile</a> if you need to make changes to your shipping address.</small>
+							<a class="button cta" href="/membership-account/membership-checkout/?level=1">UPGRADE NOW!</a>
 						</div>		
 					</div>	
 				</section>		
