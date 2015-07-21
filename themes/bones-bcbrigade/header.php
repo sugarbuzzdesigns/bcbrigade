@@ -78,6 +78,11 @@
     					'fallback_cb' => ''                             // fallback function (if there is one)
 						)); ?>
 
+					<?php if(is_user_logged_in()){ ?>
+						<a id="profile-link" href="/profile"><i class="fa fa-user"></i><span>Profile</span></a>
+					<?php } ?>	
+
+					<?php show_woo_cart(); ?>
 					</nav>
 
 				</div>

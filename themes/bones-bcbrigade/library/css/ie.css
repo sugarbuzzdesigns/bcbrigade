@@ -216,7 +216,8 @@ HEADER STYLES
     display: none; }
 
 #menu-main-menu {
-  display: block; }
+  display: block;
+  float: left; }
 
 /*********************
 HR STYLES
@@ -398,6 +399,12 @@ VIDEO JS STYLES
 *********************/
 .video-js {
   padding: 0 0 56.25% 0; }
+
+.video-wrap {
+  margin-bottom: 20px;
+  padding: 0 10px 0 0; }
+  .video-wrap:last-child {
+    padding: 0 0 0 10px; }
 
 /*********************
 FOOTER STYLES

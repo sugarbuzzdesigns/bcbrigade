@@ -2023,6 +2023,18 @@ HEADER STYLES
   top: 0;
   left: 0;
   width: 100%; }
+  .header .cart-contents {
+    float: right;
+    color: #fff;
+    text-decoration: none;
+    margin-top: 15px;
+    margin-right: 20px;
+    font-size: 20px; }
+    .header .cart-contents span {
+      margin-left: 5px;
+      font-size: 15px; }
+    .header .cart-contents:hover {
+      color: #cccccc; }
   .header .open-menu {
     color: #fff;
     font-size: 1.6em;
@@ -2679,10 +2691,7 @@ view.
 VIDEO JS STYLES
 *********************/
 .video-wrap {
-  margin-bottom: 20px;
-  padding: 0 10px 0 0; }
-  .video-wrap:last-child {
-    padding: 0 0 0 10px; }
+  margin-bottom: 20px; }
 
 .video-js {
   width: 100% !important; }
@@ -2748,6 +2757,24 @@ STORE STYLES
 /*********************
 Profile Page
 *********************/
+#profile-link {
+  float: right;
+  color: #fff;
+  font-size: 21px;
+  margin-top: 7px;
+  text-decoration: none; }
+  #profile-link i {
+    display: inline-block;
+    vertical-align: middle;
+    margin-right: 10px; }
+  #profile-link span {
+    text-transform: uppercase;
+    font-size: 12px;
+    display: inline-block;
+    vertical-align: middle; }
+  #profile-link:hover {
+    color: #cccccc; }
+
 .page-profile img {
   border: solid 5px #fff;
   margin-bottom: 20px;
@@ -2940,7 +2967,8 @@ you can add resource intensive styles.
       display: none; }
 
   #menu-main-menu {
-    display: block; }
+    display: block;
+    float: left; }
 
   /*********************
   HR STYLES
@@ -3122,6 +3150,12 @@ you can add resource intensive styles.
   *********************/
   .video-js {
     padding: 0 0 56.25% 0; }
+
+  .video-wrap {
+    margin-bottom: 20px;
+    padding: 0 10px 0 0; }
+    .video-wrap:last-child {
+      padding: 0 0 0 10px; }
 
   /*********************
   FOOTER STYLES

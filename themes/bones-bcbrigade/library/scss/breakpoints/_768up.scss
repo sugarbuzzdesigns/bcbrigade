@@ -66,6 +66,7 @@ HEADER STYLES
 
 #menu-main-menu {
 	display: block;
+	float: left;
 }
 
 /*********************
@@ -412,6 +413,15 @@ VIDEO JS STYLES
 
 .video-js {
     padding: 0 0 56.25% 0;
+}
+
+.video-wrap {
+	margin-bottom: 20px;
+	padding: 0 10px 0 0;
+
+	&:last-child {
+		padding: 0 0 0 10px;		
+	}
 }
 
 
