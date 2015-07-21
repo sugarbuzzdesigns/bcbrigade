@@ -101,7 +101,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 				<a href="#" class="button plus insert"><?php _e( 'Insert row', 'woocommerce' ); ?></a>
 				<a href="#" class="button minus remove_tax_rates"><?php _e( 'Remove selected row(s)', 'woocommerce' ); ?></a>
 
-				<div class="pagination">
+				<div class="pagination balls">
 					<?php
 						echo str_replace( 'page-numbers', 'page-numbers button', paginate_links( array(
 							'base'      => esc_url_raw( add_query_arg( 'p', '%#%', remove_query_arg( 'p' ) ) ),

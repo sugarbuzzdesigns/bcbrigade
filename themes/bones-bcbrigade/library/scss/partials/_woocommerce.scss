@@ -140,6 +140,14 @@ a.checkout-button.button.alt.wc-forward {
 	padding: 1em;
 }
 
+.woocommerce nav.woocommerce-pagination ul {
+	border: none;
+}
+
+.woocommerce nav.woocommerce-pagination ul li {
+	border: none;
+}
+
 // mobile styles
 @media only screen and (max-width: 481px) {
 	.woocommerce .woocommerce-error .button, .woocommerce .woocommerce-info .button, 

@@ -1168,6 +1168,12 @@ a.checkout-button.button.alt.wc-forward {
 .woocommerce div.product form.cart .variations td.label {
   padding: 1em; }
 
+.woocommerce nav.woocommerce-pagination ul {
+  border: none; }
+
+.woocommerce nav.woocommerce-pagination ul li {
+  border: none; }
+
 @media only screen and (max-width: 481px) {
   .woocommerce .woocommerce-error .button, .woocommerce .woocommerce-info .button,
   .woocommerce .woocommerce-message .button {
