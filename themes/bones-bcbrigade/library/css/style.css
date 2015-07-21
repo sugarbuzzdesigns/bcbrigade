@@ -3169,7 +3169,7 @@ you can add resource intensive styles.
       font-size: 12px;
       display: inline-block;
       vertical-align: middle;
-      display: none; }
+      display: inline-block; }
     #profile-link:hover {
       color: #cccccc; }
 
