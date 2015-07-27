@@ -11,13 +11,14 @@ sidebars, comments, ect.
 // LOAD BONES CORE (if you remove this, the theme will break)
 require_once( 'library/bones.php' );
 
+// Additinal registration field via PMPro Registration Helper
 require_once( 'library/pmpro-fields.php' );
 
 // USE THIS TEMPLATE TO CREATE CUSTOM POST TYPES EASILY
 require_once( 'library/custom-post-type.php' );
 
 // CUSTOMIZE THE WORDPRESS ADMIN (off by default)
-// require_once( 'library/admin.php' );
+require_once( 'library/admin.php' );
 
 /*********************
 LAUNCH BONES

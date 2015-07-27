@@ -100,7 +100,8 @@ a {
  * Address `outline` inconsistency between Chrome and other browsers.
  */
 a:focus {
-  outline: thin dotted; }
+  outline: 0;
+  opacity: 0.8; }
 
 /**
  * Improve readability when focused and also mouse hovered in all browsers.

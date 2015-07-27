@@ -80,7 +80,10 @@
 
 					<?php if(is_user_logged_in()){ ?>
 						<a id="profile-link" href="/profile"><i class="fa fa-user"></i><span>Profile</span></a>
-					<?php } ?>	
+						<a href="<?php echo wp_logout_url(); ?>">Logout</a>
+					<?php } else { ?>	
+						<a id="profile-link" href="/login"><i class="fa fa-user"></i><span>Login</span></a>
+					<?php } ?>
 
 					<?php show_woo_cart(); ?>
 					</nav>
