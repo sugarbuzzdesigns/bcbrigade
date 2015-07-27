@@ -17,7 +17,7 @@ get_header( 'shop' ); ?>
 <div id="content">
 
 	<div id="hero" class="wrap">
-		<img src="<?php bloginfo('template_directory'); ?>/library/images/heros/store-hero.jpg" />
+		<img src="<?php bloginfo('template_directory'); ?>/library/images/heros/shop-hero.jpg" />
 	</div>
 		<div>	
 
