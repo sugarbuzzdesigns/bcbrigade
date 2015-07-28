@@ -5,7 +5,7 @@
 			get_header('pre-release');
 		}
 	?>	
-	<div class="loggedInContent">
+	<div class="productionContent">
 		<?php global $pmpro_levels, $current_user; ?>
 			<section id="intro">
 				<div class="wrap">
@@ -188,7 +188,7 @@
 			</section>
 	</div>
 
-	<div class="loggedOutContent">
+	<div class="preReleaseContent">
 
 		<div class="row">
 			<div class="m-all t-all d-all" role="main">

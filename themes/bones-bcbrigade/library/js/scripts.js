@@ -130,6 +130,17 @@ var getUrlParameter = function getUrlParameter(sParam) {
     init: function(){
       this.is_mobile = BCB_JS_VARS.is_mobile === '1' ? true : false;
 
+      var loggedOut = getUrlParameter('loggedOut');
+      var testing = getUrlParameter('testing');
+
+      if(testing){
+        $('.productionContent').show();
+        console.log('show it');
+      } else if(typeof testing === 'undefined') {
+        $('.preReleaseContent').show();
+        console.log('hide it');
+      }      
+
       $('.bxslider').bxSlider();
       loadGravatars();
       this.checkIfLoggedIn();
@@ -137,9 +148,6 @@ var getUrlParameter = function getUrlParameter(sParam) {
       if(!this.is_mobile){
         this.loadVideos();
       }
-
-      var loggedOut = getUrlParameter('loggedOut');
-      var testing = getUrlParameter('testing');
       
       if(!$.cookie('intro-video-shown') === 'true' || !$.cookie('intro-video-shown')){
         if($('body').is('.home')){
@@ -148,18 +156,9 @@ var getUrlParameter = function getUrlParameter(sParam) {
 
       }
 
-      console.log(testing);
-
-      if(testing){
-        $('.loggedInContent').show();
-        console.log('show it');
-      } else if(typeof testing === 'undefined') {
-        $('.loggedOutContent').show();
-        console.log('hide it');
-      }
-
       if(!this.loggedIn){
         this.gateContent();
+        console.log('not logged in');
       } else if(this.loggedIn){
         console.log('logged in');
       }
@@ -210,6 +209,7 @@ var getUrlParameter = function getUrlParameter(sParam) {
     },
 
     gateContent: function(){
+      console.log('its gated');
       var gate = $('.gated');
       gate.append('<div class="gate"><div><a href="#join">JOIN THE BRIGADE</a></div></div>');
       // $('a', gate).click(function(e){
@@ -218,7 +218,7 @@ var getUrlParameter = function getUrlParameter(sParam) {
     },
 
     loadVideos: function(){
-      $('.video-js').each(function(i, elm){
+      $('.watch .video-js').each(function(i, elm){
         var videoId = 'video-' + (i+1),
             poster = $(elm).data('poster') ? $(elm).data('poster') : null;
         

@@ -1875,8 +1875,8 @@ and will be used across all viewports.
 /**************************
 JUST FOR TESTING
 ***************************/
-.loggedInContent,
-.loggedOutContent {
+.productionContent,
+.preReleaseContent {
   display: none; }
 
 /*********************
