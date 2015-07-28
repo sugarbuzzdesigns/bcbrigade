@@ -19,8 +19,8 @@ You'll have to load your own images and mess
 with the width and height.
 */
 .login h1 a {
-  background: url(../images/brigade-bagde-clean-login.png) no-repeat top center;
-  background-size: 100% 100%;
+  background: url(../images/brigade-bagde-clean-login.png) no-repeat top center !important;
+  background-size: 100% 100% !important;
   /* make sure to replace this! */
   width: 180px;
   height: 160px;
