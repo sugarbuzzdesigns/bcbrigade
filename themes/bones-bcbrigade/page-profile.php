@@ -188,7 +188,7 @@ if ( 'POST' == $_SERVER['REQUEST_METHOD'] && !empty( $_POST['action'] ) && $_POS
 						</div>
 
 				</div>
-
+			<?php var_dump($woocommerce->customer); ?>
 			</div>
 
 <?php get_footer(); ?>

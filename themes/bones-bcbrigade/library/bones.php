@@ -86,6 +86,12 @@ function rw_title( $title, $sep, $seplocation ) {
 
 } // end better title
 
+add_action('wp_logout','go_home');
+function go_home(){
+  wp_redirect( home_url() );
+  exit();
+}
+
 // remove WP version from RSS
 function bones_rss_version() { return ''; }
 

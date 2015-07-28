@@ -18,18 +18,25 @@ This is the Wordpress logo in the admin area.
 You'll have to load your own images and mess
 with the width and height.
 */
+body.login {
+  background: url(../images/bg/wood-bg-dark.jpg) no-repeat center; }
+
+#login {
+  padding: 2% 0 0; }
+
 .login h1 a {
-  background: url(../images/brigade-bagde-clean-login.png) no-repeat top center !important;
+  background: url(../images/brigade_badge_grey.png) no-repeat top center !important;
   background-size: 100% 100% !important;
   /* make sure to replace this! */
-  width: 180px;
-  height: 160px;
+  width: 280px;
+  height: 260px;
   text-indent: -9999px;
   overflow: hidden;
-  padding-bottom: 15px;
+  margin: 0 auto;
   display: block; }
 
-form {
+.login form {
+  margin-top: 0;
   margin-left: 8px;
   padding: 26px 24px 46px;
   font-weight: normal;
@@ -53,20 +60,18 @@ body form .input {
   box-shadow: inset 1px 1px 2px rgba(200, 200, 200, 0.2); }
 
 .login .button-primary {
-  background: #65885F;
+  background: #797979;
   border: none;
-  box-shadow: none;
-}
+  box-shadow: none; }
 
 .login .button-primary:hover,
 .login .button-primary:active,
 .login .button-primary:focus {
-  background: #567351;
-  border-color: #567351;
+  background: #656565;
+  border-color: #656565;
   -webkit-box-shadow: inset 0 1px 0 rgba(30, 140, 190, 0.5);
   box-shadow: inset 0 1px 0 rgba(30, 140, 190, 0.5);
-  color: #fff;  
-}
+  color: #fff; }
 
 /*
 You'll have to override some of the default styles
@@ -80,3 +85,5 @@ retina login logo
   .login h1 a {
     background: url(../images/login-logo@2x.png) no-repeat top center;
     /* make sure to replace this! */ } }
+
+/*# sourceMappingURL=login.css.map */

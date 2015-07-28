@@ -129,21 +129,22 @@ var getUrlParameter = function getUrlParameter(sParam) {
   var BCB = {
     init: function(){
       this.is_mobile = BCB_JS_VARS.is_mobile === '1' ? true : false;
+      this.checkIfLoggedIn();
 
       var loggedOut = getUrlParameter('loggedOut');
       var testing = getUrlParameter('testing');
 
-      if(testing){
+      console.log(this.loggedIn);
+
+      if(testing || this.loggedIn){
+        console.log('prod stff');
         $('.productionContent').show();
-        console.log('show it');
-      } else if(typeof testing === 'undefined') {
+      } else if(typeof testing === 'undefined' && !this.loggedIn) {
         $('.preReleaseContent').show();
-        console.log('hide it');
       }      
 
       $('.bxslider').bxSlider();
       loadGravatars();
-      this.checkIfLoggedIn();
       this.bindEvents();
       if(!this.is_mobile){
         this.loadVideos();
