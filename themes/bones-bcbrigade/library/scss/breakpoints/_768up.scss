@@ -417,12 +417,6 @@ Music PAGE:  STYLES
 Profile Page
 *********************/
 #profile-link {
-	display: inline-block;
-	float: right;
-	color: #fff;
-	font-size: 21px;
-	margin-top: 7px;
-	text-decoration: none;
 
 	i {
 		display: inline-block;
@@ -433,7 +427,6 @@ Profile Page
 	span {
 		text-transform: uppercase;
 		font-size: 12px;
-		display: inline-block;
 		vertical-align: middle;
 		display: inline-block;
 	}

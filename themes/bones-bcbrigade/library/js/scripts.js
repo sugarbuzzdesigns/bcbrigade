@@ -139,6 +139,7 @@ var getUrlParameter = function getUrlParameter(sParam) {
       }
 
       var loggedOut = getUrlParameter('loggedOut');
+      var testing = getUrlParameter('testing');
       
       if(!$.cookie('intro-video-shown') === 'true' || !$.cookie('intro-video-shown')){
         if($('body').is('.home')){
@@ -147,7 +148,17 @@ var getUrlParameter = function getUrlParameter(sParam) {
 
       }
 
-      if(loggedOut || !this.loggedIn){
+      console.log(testing);
+
+      if(testing){
+        $('.loggedInContent').show();
+        console.log('show it');
+      } else if(typeof testing === 'undefined') {
+        $('.loggedOutContent').show();
+        console.log('hide it');
+      }
+
+      if(!this.loggedIn){
         this.gateContent();
       } else if(this.loggedIn){
         console.log('logged in');
@@ -200,7 +211,7 @@ var getUrlParameter = function getUrlParameter(sParam) {
 
     gateContent: function(){
       var gate = $('.gated');
-      gate.append('<div class="gate"><div><a href="/membership-account/membership-levels/">JOIN THE BRIGADE</a></div></div>');
+      gate.append('<div class="gate"><div><a href="#join">JOIN THE BRIGADE</a></div></div>');
       // $('a', gate).click(function(e){
       //   e.preventDefault();
       // });

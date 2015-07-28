@@ -399,25 +399,17 @@ Music PAGE:  STYLES
 /*********************
 Profile Page
 *********************/
-#profile-link {
+#profile-link i {
   display: inline-block;
-  float: right;
-  color: #fff;
-  font-size: 21px;
-  margin-top: 7px;
-  text-decoration: none; }
-  #profile-link i {
-    display: inline-block;
-    vertical-align: middle;
-    margin-right: 10px; }
-  #profile-link span {
-    text-transform: uppercase;
-    font-size: 12px;
-    display: inline-block;
-    vertical-align: middle;
-    display: inline-block; }
-  #profile-link:hover {
-    color: #cccccc; }
+  vertical-align: middle;
+  margin-right: 10px; }
+#profile-link span {
+  text-transform: uppercase;
+  font-size: 12px;
+  vertical-align: middle;
+  display: inline-block; }
+#profile-link:hover {
+  color: #cccccc; }
 
 .page-profile img {
   border: solid 5px #fff;
