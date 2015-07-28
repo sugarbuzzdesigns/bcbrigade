@@ -22,7 +22,7 @@
 				<?php if ( !wp_is_mobile() ) { ?>
 					<img src="<?php bloginfo('template_directory'); ?>/library/images/heros/home-hero.jpg" />
 				<?php } else { ?>	
-					<img src="<?php bloginfo('template_directory'); ?>/library/images/brigade-logo-distressed.png" />
+					<img src="<?php bloginfo('template_directory'); ?>/library/images/brigade_badge_grey.png" />
 				<?php } ?>
 			</div>
 		</section>	
