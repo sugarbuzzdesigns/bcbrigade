@@ -1909,6 +1909,8 @@ section {
     position: absolute;
     top: 50%;
     left: 50%;
+    width: 100%;
+    text-align: center;
     -webkit-transform: translate(-50%, -50%);
     transform: translate(-50%, -50%); }
     .gate div a {
@@ -2447,6 +2449,9 @@ override these styles for the desktop
 view.
 */
 /* end .footer-links */
+/**************************
+HOMEPAGE STYLES
+***************************/
 #intro {
   display: none; }
 
@@ -3280,13 +3285,9 @@ you can add resource intensive styles.
   .wrap {
     width: 1100px; }
 
-  /******************************************************************
-  Site Name:
-  Author:
-  
-  Stylesheet: Homepage Stylesheet
-  
-  ******************************************************************/
+  /**************************
+  HOMEPAGE
+  ***************************/
   .home .d-1of3 {
     padding-right: 0;
     padding: 0 5px; }
