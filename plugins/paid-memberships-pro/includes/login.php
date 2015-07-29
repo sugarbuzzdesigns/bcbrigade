@@ -55,7 +55,7 @@ add_filter('wp_signup_location', 'pmpro_wp_signup_location');
 //redirect from default login pages to PMPro
 function pmpro_login_head()
 {		
-	$login_redirect = apply_filters("pmpro_login_redirect", true);
+	$login_redirect = apply_filters("pmpro_login_redirect", __return_false);
 	
 	if((pmpro_is_login_page() || is_page("login") ||
 		class_exists("Theme_My_Login") && defined('Theme_My_Login::version') && version_compare(Theme_My_Login::version, "6.3") >= 0 && (Theme_My_Login::is_tml_page("register") || Theme_My_Login::is_tml_page("login"))
