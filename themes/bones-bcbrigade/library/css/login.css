@@ -19,7 +19,7 @@ You'll have to load your own images and mess
 with the width and height.
 */
 body.login {
-  background: url(../images/bg/wood-bg-dark.jpg) no-repeat center; }
+  background: url(../images/bg/wood-bg-dark.jpg) center; }
 
 #login {
   padding: 2% 0 0; }
