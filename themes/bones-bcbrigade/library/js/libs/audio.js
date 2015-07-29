@@ -57,7 +57,7 @@
       // The default markup and classes for creating the player:
       createPlayer: {
         markup: '\
-          <div class="d-1of2"><img class="poster" src="https://pbs.twimg.com/profile_images/607343983824498688/y7QPMso-.jpg" /></div> \
+          <div class="d-1of2"><img class="poster" src="" /></div> \
           <div class="d-1of2 info"> \
             <h2></h2> \
             <div class="navigation"> \
@@ -74,7 +74,7 @@
             <em class="played">00:00</em>/<strong class="duration">00:00</strong> \
           </div> \
           <ul><li class="active" data-info-toggle="lyrics">Lyrics</li><li data-info-toggle="about">About</li></ul> \
-          <a href="/product/keep-walking-on-mp3/" class="button cta buy-song">BUY</a> \
+          <a href="#" class="button cta buy-song">BUY</a> \
           <div class="error-message"></div></div> \
           <div class="scrubber"> \
           <div class="progress"></div> \

@@ -5,7 +5,7 @@
 			<img src="<?php bloginfo('template_directory'); ?>/library/images/heros/videos-hero.jpg" />
 		</div>
 	</section>	
-	<div id="inner-content" class="wrap cf">		
+	<div id="inner-content" class="wrap cf watch">		
 		<div class="entry-content entry">
 			<div class="video-wrap m-all d-1of2">
 				<h2 class="video-title">Welcome to BC Brigade</h2>

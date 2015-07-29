@@ -10,7 +10,7 @@
 			<div id="wrapper" class="d-1of2">
 				<audio preload></audio>
 				<ol class="playlist">
-					<li><a href="#" data-src="<?php bloginfo('template_directory'); ?>/library/audio/KeepWalkingOn_06.05.15.mp3">Keep Walking On</a></li>
+					<li><a href="#" data-buy-link="/product/keep-walking-on-mp3/" data-poster="<?php bloginfo('template_directory'); ?>/library/images/music/posters/keep-walking-on-icon_500x500.jpg" data-src="<?php bloginfo('template_directory'); ?>/library/audio/Keep_Walking_On.mp3">Keep Walking On</a></li>
 					<li class="coming-soon">Coming in August</li>
 					<li class="coming-soon">Coming in September</li>
 				</ol>
@@ -103,6 +103,12 @@
 		$('ol li').first().addClass('playing');
 		audio.load(first);
 		var trackTitle = $('ol a').first().text();
+		var buySongLink = $('ol a').first().data('buy-link');
+		var trackPoster = $('ol a').first().data('poster');
+
+		$('.buy-song').attr('href', buySongLink);
+		$('.poster').attr('src', trackPoster);
+
 		$('.audiojs h2').text(trackTitle);
 
 		// Load in a track on click

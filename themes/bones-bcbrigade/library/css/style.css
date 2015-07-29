@@ -1175,6 +1175,9 @@ a.checkout-button.button.alt.wc-forward {
 .woocommerce nav.woocommerce-pagination ul li {
   border: none; }
 
+.product_meta {
+  display: none; }
+
 @media only screen and (max-width: 481px) {
   .woocommerce .woocommerce-error .button, .woocommerce .woocommerce-info .button,
   .woocommerce .woocommerce-message .button {
@@ -2637,6 +2640,14 @@ HOMEPAGE STYLES
       padding: 5px 10px; }
   .news_announcements .announcement-content {
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.4); }
+
+.page-news-announcements .news_announcements {
+  padding: 0;
+  overflow: auto;
+  background: transparent;
+  box-shadow: none; }
+  .page-news-announcements .news_announcements h2 {
+    color: #333; }
 
 .membership_levels {
   background: #fff url(../images/bg/bedge-grunge.png);

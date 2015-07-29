@@ -148,6 +148,10 @@ a.checkout-button.button.alt.wc-forward {
 	border: none;
 }
 
+.product_meta {
+	display: none;
+}
+
 // mobile styles
 @media only screen and (max-width: 481px) {
 	.woocommerce .woocommerce-error .button, .woocommerce .woocommerce-info .button, 

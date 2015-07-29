@@ -163,6 +163,9 @@ if ( 'POST' == $_SERVER['REQUEST_METHOD'] && !empty( $_POST['action'] ) && $_POS
 												<?php //var_dump(get_user_meta($current_user->ID)); ?>
 												<p><?php echo $level = $current_user->membership_level->name; ?></p>
 												<?php $slug = strtolower(str_replace(" ", "_", $level)); ?>
+												<?php if($current_user->membership_level->ID != 1){ ?>
+													<!-- <a class="button cta" href="/membership-account/membership-checkout/?level=1">UPGRADE NOW!</a> -->
+												<?php } ?>
 												<img src="<?php bloginfo('template_directory'); ?>/library/images/membership_levels/<?php echo $slug; ?>.jpg" alt="">
 												<div class="membership-info">
 													<?php echo $current_user->membership_level->description; ?>
@@ -188,7 +191,7 @@ if ( 'POST' == $_SERVER['REQUEST_METHOD'] && !empty( $_POST['action'] ) && $_POS
 						</div>
 
 				</div>
-			<?php var_dump($woocommerce->customer); ?>
+			<?php //var_dump($woocommerce->customer); ?>
 			</div>
 
 <?php get_footer(); ?>

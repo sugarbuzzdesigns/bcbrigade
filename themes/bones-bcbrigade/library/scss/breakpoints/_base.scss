@@ -1236,6 +1236,19 @@ HOMEPAGE STYLES
 	}
 }
 
+.page-news-announcements {
+	.news_announcements { 
+		padding: 0;
+		overflow: auto;
+		background: transparent;
+		box-shadow: none;
+
+		h2 {
+			color: #333;
+		}
+	}
+}
+
 // Homepage membership buttons
 .membership_levels {
 	background: #fff url(../images/bg/bedge-grunge.png);
