@@ -157,7 +157,7 @@
 							wp_reset_postdata();
 						?>	
 						<div class="m-all d-all see-all">
-							<a class="see-all-products button cta m-all" href="#">See All Products</a>
+							<a class="see-all-products button cta m-all" href="/shop">See All Products</a>
 						</div>			
 					</div>			
 				</div>
