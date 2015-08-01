@@ -167,19 +167,19 @@
 				<div class="wrap">
 					<h2><hr>Socialize<hr></h2>
 					<div class="d-1of3">
-						<a href="">
+						<a href="https://twitter.com/officialbcb">
 							<img src="<?php bloginfo('template_directory'); ?>/library/images/social/homepage/social-twitter.png" alt="">
 						</a>
 						<h5>Follow BC on Twitter</h5>				
 					</div>
 					<div class="d-1of3">
-						<a href="">
+						<a href="http://instagram.com/officialbcb">
 							<img src="<?php bloginfo('template_directory'); ?>/library/images/social/homepage/social-instagram.png" alt="">
 						</a>
 						<h5>Follow BC on Instagram</h5>				
 					</div>
 					<div class="d-1of3">
-						<a href="">
+						<a href="https://www.facebook.com/officialbriancollinsband">
 							<img src="<?php bloginfo('template_directory'); ?>/library/images/social/homepage/social-fb.png" alt="">
 						</a>
 						<h5>Follow BC on Facebook</h5>				
