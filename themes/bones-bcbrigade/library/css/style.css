@@ -3022,8 +3022,7 @@ you can add resource intensive styles.
     width: 80%;
     display: block;
     margin: 0 auto 10px;
-    opacity: 0.9;
-    color: #434343; }
+    opacity: 0.9; }
     .home h2 hr {
       display: block;
       width: 25%;
