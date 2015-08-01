@@ -1003,7 +1003,7 @@ class WC_Product {
 	 */
 	public function get_price_html_from_to( $from, $to ) {
 		if($from === $to){
-			$price = $from;
+			$price = wc_price( $from );
 		} else {
 			$price = '<del>' . ( ( is_numeric( $from ) ) ? wc_price( $from ) : $from ) . '</del> <ins>' . ( ( is_numeric( $to ) ) ? wc_price( $to ) : $to ) . '</ins>';
 		}
