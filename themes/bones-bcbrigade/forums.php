@@ -42,7 +42,13 @@
 									?>
 								</section> <?php // end article section ?>
 
-								<?php comments_template(); ?>
+								<footer>
+									<p class="bully-notice"><strong>** Bullying and or harassment, of any kind, of other forum members will not be tolerated on the BC Brigade Forums. For more information on forum terms and rules, please visit our <a href="/terms-and-rules">forum terms and rules page</a>.</strong></p>
+									<div class="sub-footer">
+										<a href="/privacy-policy" target="_blank">Privacy Policy</a>
+										<a href="/terms-and-rules" target="_blank">Terms and Rules</a>
+									</div>	
+								</footer>
 
 							</article>
 

@@ -2137,17 +2137,13 @@ and more scalable.
 /*********************
 POSTS & CONTENT STYLES
 *********************/
-.hentry {
-  border-radius: 3px;
-  border: 1px solid #ccc; }
-  .hentry header {
-    border-bottom: 1px solid #f8f9fa;
-    padding: 0 1.5em 1.5em 0; }
-  .hentry footer {
-    padding: 1.5em;
-    border-top: 1px solid #f8f9fa; }
-    .hentry footer p {
-      margin: 0; }
+.hentry header {
+  border-bottom: 1px solid #f8f9fa;
+  padding: 0 1.5em 1.5em 0; }
+.hentry footer {
+  padding: 1.5em; }
+  .hentry footer p {
+    margin: 0; }
 
 /* end .hentry */
 .single-title,
@@ -2737,7 +2733,21 @@ VIDEO JS STYLES
 /*********************
 FORUM STYLES
 *********************/
-.forum article {
+.bbpress #inner-content {
+  padding-bottom: 0; }
+  .bbpress #inner-content footer {
+    background-color: rgba(0, 0, 0, 0.1);
+    border: none; }
+    .bbpress #inner-content footer .sub-footer {
+      overflow: auto;
+      padding-top: 20px; }
+      .bbpress #inner-content footer .sub-footer a {
+        float: right;
+        color: #333;
+        font-size: 0.8em;
+        text-decoration: none;
+        margin-left: 20px; }
+.bbpress article {
   background: #fff url(../images/bg/bedge-grunge.png); }
 
 /*********************
@@ -2874,6 +2884,9 @@ Profile Page
 .page-profile textarea {
   padding-top: 8px; }
 
+/**************************
+Terms and Rules
+***************************/
 /*********************
 LARGER MOBILE DEVICES
 This is for devices like the Galaxy Note or something that's

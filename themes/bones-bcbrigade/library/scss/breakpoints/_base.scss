@@ -391,9 +391,6 @@ POSTS & CONTENT STYLES
 }
 
 		.hentry {
-			border-radius: 3px;
-			border: 1px solid $border-color;
-
 			header {
 				border-bottom: 1px solid $light-gray;
 				padding: 0 1.5em 1.5em 0;
@@ -401,7 +398,6 @@ POSTS & CONTENT STYLES
 
 			footer {
 				padding: 1.5em;
-				border-top: 1px solid $light-gray;
 
 				p {
 					margin: 0;
@@ -1380,7 +1376,28 @@ VIDEO JS STYLES
 /*********************
 FORUM STYLES
 *********************/
-.forum {
+.bbpress {
+	#inner-content {
+		padding-bottom: 0;
+
+		footer {
+			background-color: rgba(0,0,0,0.1);
+			border: none;
+
+			.sub-footer {
+				overflow: auto;
+				padding-top: 20px;
+
+				a {
+					float: right;
+					color: #333;
+					font-size: 0.8em;
+					text-decoration: none;
+					margin-left: 20px;
+				}
+			}
+		}
+	}
 	article {
 		background: #fff url(../images/bg/bedge-grunge.png);
 	}
@@ -1582,4 +1599,12 @@ Profile Page
 	textarea {
 		padding-top: 8px;
 	}
+}
+
+
+/**************************
+Terms and Rules
+***************************/		
+.page-terms-and-rules {
+
 }
