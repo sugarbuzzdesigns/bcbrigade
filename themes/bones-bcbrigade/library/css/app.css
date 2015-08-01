@@ -52,6 +52,9 @@ body {
     position: relative;
     cursor: auto;
 }
+#mc_embed_signup .mc-field-group input {
+    line-height: normal;
+}
 a:hover {
     cursor: pointer;
 }
