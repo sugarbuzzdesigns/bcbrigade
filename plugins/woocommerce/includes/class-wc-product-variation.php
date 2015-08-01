@@ -304,6 +304,7 @@ class WC_Product_Variation extends WC_Product {
 	 * @return string containing the formatted price
 	 */
 	public function get_price_html( $price = '' ) {
+		echo 'wc-product-variation';
 
 		$display_price         = $this->get_display_price();
 		$display_regular_price = $this->get_display_price( $this->get_regular_price() );

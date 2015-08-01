@@ -951,7 +951,9 @@ class WC_Product {
 
 			} else {
 
-				$price .= wc_price( $display_price ) . $this->get_price_suffix();
+				$price .= $this->get_price_html_from_to( $display_regular_price, $display_price ) . $this->get_price_suffix();
+
+				$price .= $this->get_price_suffix();
 
 				$price = apply_filters( 'woocommerce_price_html', $price, $this );
 

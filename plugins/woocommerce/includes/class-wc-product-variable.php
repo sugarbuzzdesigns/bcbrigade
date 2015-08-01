@@ -327,7 +327,8 @@ class WC_Product_Variable extends WC_Product {
 			}
 		}
 
-		return apply_filters( 'woocommerce_get_price_html', $price, $this );
+		return $price;
+		// return apply_filters( 'woocommerce_get_price_html', $price, $this );
 	}
 
     /**
