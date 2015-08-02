@@ -55,8 +55,6 @@
 					<?php echo wpautop(pmpro_getLevelCost($pmpro_level)); ?>
 					<?php echo wpautop(pmpro_getLevelExpiration($pmpro_level)); ?>
 				</div>
-
-				<div><small>** Please allow 6-8 weeks for delivery of personalized membership card.</small></div>
 				
 				<?php do_action("pmpro_checkout_after_level_cost"); ?>				
 				
