@@ -8,6 +8,7 @@
 
 /* Get user info. */
 global $current_user, $wp_roles, $pmpro_levels;
+get_currentuserinfo();
 
 /* Load the registration file. */
 $error = array();    
@@ -71,7 +72,14 @@ if ( 'POST' == $_SERVER['REQUEST_METHOD'] && !empty( $_POST['action'] ) && $_POS
 				<div id="inner-content" class="wrap cf">
 						<div class="left-sidebar m-all t-1of3 d-2of7">
 							<div class="profile-info">
-								<?php echo get_avatar( $current_user->ID, 200 ); ?> 
+								<?php
+									if(example_has_gravatar($current_user->user_email)){
+										echo get_avatar( $current_user->ID, 200 );
+									} else { ?>
+										<p class="gravatar-instructions">Your profile uses a <a href="https://en.gravatar.com/" target="_blank">Gravatar</a> image that is associated with your email. <a href="https://en.gravatar.com/" target="_blank">Click here</a> to set up an account and set your gravatar image.</p><?php
+										echo get_avatar( $current_user->ID, 200 ); 
+									} ?>
+								<?php  ?> 
 								<p><strong>Username:</strong> <?php the_author_meta( 'user_login', $current_user->ID ); ?></p>
 								<p><strong>First Name:</strong> <?php the_author_meta( 'first_name', $current_user->ID ); ?></p>
 								<p><strong>Last Name:</strong> <?php the_author_meta( 'last_name', $current_user->ID ); ?></p>

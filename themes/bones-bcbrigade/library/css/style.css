@@ -2800,6 +2800,11 @@ STORE STYLES
 /*********************
 Profile Page
 *********************/
+.gravatar-instructions {
+  font-size: 12px;
+  background-color: #fff;
+  padding: 5px; }
+
 #logout-link {
   float: right;
   color: #fff;

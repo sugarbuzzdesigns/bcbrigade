@@ -8,9 +8,8 @@ function pmpro_membership_level_profile_fields($user)
 	global $current_user;
 
 	$membership_level_capability = apply_filters("pmpro_edit_member_capability", "manage_options");
-	if(!current_user_can($membership_level_capability)) {
+	if(!current_user_can($membership_level_capability))
 		return false;
-	}
 
 	global $wpdb;
 	/*$user->membership_level = $wpdb->get_row("SELECT l.id AS ID, l.name AS name
@@ -25,24 +24,124 @@ function pmpro_membership_level_profile_fields($user)
 	if(!$levels)
 		return "";
 ?>
-	<div class="membership-info profile-section">
-	<h3><?php _e("Membership Info", "pmpro"); ?></h3>
-	<?php
+<h3><?php _e("Membership Level", "pmpro"); ?></h3>
+<table class="form-table">
+    <?php
 		$show_membership_level = true;
 		$show_membership_level = apply_filters("pmpro_profile_show_membership_level", $show_membership_level, $user);
-		if($show_membership_level) { 
-			$mem_name = pmpro_getMembershipLevelForUser($user->ID)->name;
-			$slug = strtolower(str_replace(" ", "_", $mem_name)); ?> 
+		if($show_membership_level)
+		{
+		?>
+		<tr>
+			<th><label for="membership_level"><?php _e("Current Level", "pmpro"); ?></label></th>
+			<td>
+				<select name="membership_level">
+					<option value="" <?php if(empty($user->membership_level->ID)) { ?>selected="selected"<?php } ?>>-- <?php _e("None", "pmpro");?> --</option>
+				<?php
+					foreach($levels as $level)
+					{
+				?>
+					<option value="<?php echo $level->id?>" <?php selected($level->id, (isset($user->membership_level->ID) ? $user->membership_level->ID : 0 )); ?>><?php echo $level->name?></option>
+				<?php
+					}
+				?>
+				</select>
+                <span id="current_level_cost">
+                <?php
+                $membership_values = pmpro_getMembershipLevelForUser($user->ID);
+                if(empty($membership_values) || pmpro_isLevelFree($membership_values))
+                { ?>
+                    <?php _e("Not paying.", "pmpro"); ?>
+                <?php }
+                else
+                {
+                    //we tweak the initial payment here so the text here effectively shows the recurring amount
+                    $membership_values->initial_payment = $membership_values->billing_amount;
+                    echo pmpro_getLevelCost($membership_values, true, true);
+                }
+                ?>
+                </span>
+                <p id="cancel_description" class="description hidden"><?php _e("This will not change the subscription at the gateway unless the 'Cancel' checkbox is selected below.", "pmpro"); ?></p>
+            </td>
+		</tr>
+		<?php
+		}
+		
+		$show_expiration = true;
+		$show_expiration = apply_filters("pmpro_profile_show_expiration", $show_expiration, $user);
+		if($show_expiration)
+		{					
+			//is there an end date?
+			$user->membership_level = pmpro_getMembershipLevelForUser($user->ID);
+			$end_date = !empty($user->membership_level->enddate);
 			
-			<div class="membership-summary">
-				<p><?php echo $mem_name; ?></p>
-				<img src="<?php bloginfo('template_directory'); ?>/library/images/membership_levels/<?php echo $slug; ?>.jpg" alt="">
-			</div>
-			<div class="membership-details">
-
-			</div>
-	<?php } ?>
-	</div>
+			//some vars for the dates
+			$current_day = date("j");			
+			if($end_date)
+				$selected_expires_day = date("j", $user->membership_level->enddate);
+			else
+				$selected_expires_day = $current_day;
+				
+			$current_month = date("M");			
+			if($end_date)
+				$selected_expires_month = date("m", $user->membership_level->enddate);
+			else
+				$selected_expires_month = date("m");
+				
+			$current_year = date("Y");									
+			if($end_date)
+				$selected_expires_year = date("Y", $user->membership_level->enddate);
+			else
+				$selected_expires_year = (int)$current_year + 1;
+		?>
+		<tr>
+			<th><label for="expiration"><?php _e("Expires", "pmpro"); ?></label></th>
+			<td>
+				<select id="expires" name="expires">
+					<option value="0" <?php if(!$end_date) { ?>selected="selected"<?php } ?>><?php _e("No", "pmpro");?></option>
+					<option value="1" <?php if($end_date) { ?>selected="selected"<?php } ?>><?php _e("Yes", "pmpro");?></option>
+				</select>
+				<span id="expires_date" <?php if(!$end_date) { ?>style="display: none;"<?php } ?>>
+					on
+					<select name="expires_month">
+						<?php																
+							for($i = 1; $i < 13; $i++)
+							{
+							?>
+							<option value="<?php echo $i?>" <?php if($i == $selected_expires_month) { ?>selected="selected"<?php } ?>><?php echo date("M", strtotime($i . "/1/" . $current_year, current_time("timestamp")))?></option>
+							<?php
+							}
+						?>
+					</select>
+					<input name="expires_day" type="text" size="2" value="<?php echo $selected_expires_day?>" />
+					<input name="expires_year" type="text" size="4" value="<?php echo $selected_expires_year?>" />
+				</span>
+				<script>
+					jQuery('#expires').change(function() {
+						if(jQuery(this).val() == 1)
+							jQuery('#expires_date').show();
+						else
+							jQuery('#expires_date').hide();
+					});
+				</script>
+			</td>
+		</tr>
+        <tr class="more_level_options">
+            <th></th>
+            <td>
+                <label for="send_admin_change_email"><input value="1" id="send_admin_change_email" name="send_admin_change_email" type="checkbox"> Send the user an email about this change.</label>
+            </td>
+        </tr>
+        <tr class="more_level_options">
+            <th></th>
+            <td>
+                <label for="cancel_subscription"><input value="1" id="cancel_subscription" name="cancel_subscription" type="checkbox"> Cancel this user's subscription at the gateway.</label>
+            </td>
+        </tr>
+		<?php
+		}
+		?>
+</table>
     <script>
         jQuery(document).ready(function() {
             //vars for fields

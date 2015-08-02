@@ -482,4 +482,26 @@ function populate_dropdown($items, $selected = NULL){
 }
 
 add_filter( 'loop_shop_per_page', create_function( '$cols', 'return 16;' ), 20 );
+
+
+/**
+ * Checks to see if the specified email address has a Gravatar image.
+ *
+ * @param $email_address  The email of the address of the user to check
+ * @return                Whether or not the user has a gravatar
+ * @since 1.0
+ */
+function example_has_gravatar( $email_address ) {
+
+  // Build the Gravatar URL by hasing the email address
+  $url = 'http://www.gravatar.com/avatar/' . md5( strtolower( trim ( $email_address ) ) ) . '?d=404';
+
+  // Now check the headers...
+  $headers = @get_headers( $url );
+
+  // If 200 is found, the user has a Gravatar; otherwise, they don't.
+  return preg_match( '|200|', $headers[0] ) ? true : false;
+
+} // end example_has_gravatar
+
 /* DON'T DELETE THIS CLOSING TAG */ ?>
