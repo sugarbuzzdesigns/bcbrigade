@@ -2603,7 +2603,13 @@ HOMEPAGE STYLES
     text-shadow: none; }
   .news_announcements p {
     font-size: 0.8em;
-    padding-right: 10px; }
+    padding-right: 10px;
+    -ms-word-break: break-word;
+    word-break: break-word;
+    word-break: break-word;
+    -webkit-hyphens: auto;
+    -moz-hyphens: auto;
+    hyphens: auto; }
   .news_announcements .news-story {
     position: relative;
     width: 100%;

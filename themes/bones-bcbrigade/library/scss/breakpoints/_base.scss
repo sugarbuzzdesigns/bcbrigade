@@ -1163,6 +1163,12 @@ HOMEPAGE STYLES
 	p {
 		font-size: 0.8em;
 		padding-right: 10px;
+	    -ms-word-break: break-word;
+	    word-break: break-word;
+	    word-break: break-word;
+	    -webkit-hyphens: auto;
+	    -moz-hyphens: auto;
+	    hyphens: auto;			
 	}	
 
 	.news-story {
