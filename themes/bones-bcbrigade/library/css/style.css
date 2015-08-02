@@ -1476,6 +1476,7 @@ li.playing a {
   .entry-content .song p {
     margin: 0 0 2.3em; }
     .entry-content .song p span {
+      font-size: 13px;
       display: block;
       margin-bottom: 0.5em;
       -ms-word-break: keep-all;
