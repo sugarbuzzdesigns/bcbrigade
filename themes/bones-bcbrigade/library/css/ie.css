@@ -477,7 +477,7 @@ VIDEO JS STYLES
 .video-wrap {
   margin-bottom: 20px;
   padding: 0 10px 0 0; }
-  .video-wrap:last-child {
+  .video-wrap:nth-child(2) {
     padding: 0 0 0 10px; }
 
 /*********************

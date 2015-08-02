@@ -2721,7 +2721,9 @@ VIDEO JS STYLES
 .page-videos #inner-content {
   padding-bottom: 0; }
 
-.page-videos h2 {
+.watch .video-wrap h2 {
+  width: 100%;
+  margin: 0;
   text-transform: none;
   text-align: left;
   font-size: 1.2em;
@@ -2730,6 +2732,11 @@ VIDEO JS STYLES
   text-shadow: none;
   color: #fff;
   padding: 5px 10px; }
+
+.home .watch .video-wrap h2 {
+  color: #333;
+  opacity: 0.8;
+  background-color: #fff; }
 
 /*********************
 FORUM STYLES
@@ -3284,7 +3291,7 @@ you can add resource intensive styles.
   .video-wrap {
     margin-bottom: 20px;
     padding: 0 10px 0 0; }
-    .video-wrap:last-child {
+    .video-wrap:nth-child(2) {
       padding: 0 0 0 10px; }
 
   /*********************

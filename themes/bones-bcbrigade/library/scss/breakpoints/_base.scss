@@ -1360,8 +1360,10 @@ VIDEO JS STYLES
 	}
 }
 
-.page-videos {
+.watch .video-wrap {
 	h2 {
+		width: 100%;
+		margin: 0;
 		text-transform: none;
 		text-align: left;
 		font-size: 1.2em;
@@ -1370,6 +1372,14 @@ VIDEO JS STYLES
 		text-shadow: none;
 		color: #fff;
 		padding: 5px 10px;
+	}
+}
+
+.home .watch .video-wrap {
+	h2 {
+		color: #333;
+		opacity: 0.8;
+		background-color: #fff;
 	}
 }
 
