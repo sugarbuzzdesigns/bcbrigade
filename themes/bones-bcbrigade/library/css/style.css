@@ -1613,6 +1613,7 @@ select,
 textarea,
 .field {
   line-height: 40px;
+  min-height: 38px;
   padding: 0 12px;
   margin-bottom: 14px;
   font-size: 1em;
