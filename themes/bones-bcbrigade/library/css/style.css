@@ -1897,11 +1897,7 @@ body {
   background-color: #fff;
   -webkit-font-smoothing: antialiased;
   padding-top: 48px;
-  -ms-word-break: keep-all;
-  word-break: keep-all;
-  -ms-word-break: keep-all;
-  word-break: keep-all;
-  word-break: break-word;
+  word-break: normal;
   -webkit-hyphens: auto;
   -moz-hyphens: auto;
   hyphens: auto; }
@@ -2605,8 +2601,7 @@ HOMEPAGE STYLES
     font-size: 0.8em;
     padding-right: 10px;
     -ms-word-break: break-word;
-    word-break: break-word;
-    word-break: break-word;
+    word-break: normal;
     -webkit-hyphens: auto;
     -moz-hyphens: auto;
     hyphens: auto; }
