@@ -1477,7 +1477,9 @@ li.playing a {
     margin: 0 0 2.3em; }
     .entry-content .song p span {
       display: block;
-      margin-bottom: 0.5em; }
+      margin-bottom: 0.5em;
+      -ms-word-break: keep-all;
+      word-break: keep-all; }
 
 /*********************
 IMPORTING MODULES
@@ -1893,7 +1895,9 @@ body {
   color: #434343;
   background-color: #fff;
   -webkit-font-smoothing: antialiased;
-  padding-top: 48px; }
+  padding-top: 48px;
+  -ms-word-break: keep-all;
+  word-break: keep-all; }
 
 section {
   position: relative; }
