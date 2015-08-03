@@ -1472,7 +1472,9 @@ li.playing a {
     display: block; }
   .entry-content .song .about p {
     line-height: 25px;
-    margin-top: -2px; }
+    margin-top: -2px;
+    -ms-word-break: keep-all;
+    word-break: keep-all; }
   .entry-content .song p {
     margin: 0 0 2.3em; }
     .entry-content .song p span {
@@ -2169,7 +2171,9 @@ POSTS & CONTENT STYLES
 .entry-content {
   padding: 1.5em 1.5em 0; }
   .entry-content p {
-    margin: 0 0 1.5em; }
+    margin: 0 0 1.5em;
+    -ms-word-break: keep-all;
+    word-break: keep-all; }
   .entry-content table {
     width: 100%;
     border: 1px solid #D1CCC3;

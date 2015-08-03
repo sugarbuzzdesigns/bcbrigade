@@ -280,6 +280,8 @@ li.playing a { color: #000; }
 		p {
 			line-height: 25px;
 			margin-top: -2px;
+		  	-ms-word-break: keep-all;
+		  		word-break: keep-all;			
 		}
 	}
 

@@ -431,6 +431,8 @@ POSTS & CONTENT STYLES
 
 			p {
 				margin: 0 0 1.5em;
+		  		-ms-word-break: keep-all;
+		  			word-break: keep-all;					
 			}
 
 			table {
