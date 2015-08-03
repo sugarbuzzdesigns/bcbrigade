@@ -17,9 +17,10 @@
     					'fallback_cb' => 'bones_footer_links_fallback'  // fallback function
 						)); ?>
 					</nav>
-
-					<p class="source-org copyright">&copy; <?php echo date('Y'); ?> <?php bloginfo( 'name' ); ?>.</p>
-
+					
+						<p class="source-org copyright">&copy; <?php echo date('Y'); ?> <?php bloginfo( 'name' ); ?>.</p>
+						<p class="powered-by"><a href="https://www.facebook.com/sugarbuzzdesigns">Powered by Sugarbuzz Designs</a></p>
+						<p class="contact"><a target="_blank" href="mailto:info@bcbrigade.com">Contact</a></p>
 				</div>
 
 			</footer>

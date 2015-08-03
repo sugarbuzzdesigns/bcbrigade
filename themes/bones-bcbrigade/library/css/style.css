@@ -2448,6 +2448,17 @@ FOOTER STYLES
   clear: both;
   background: #323944 url(http://www.transparenttextures.com/patterns/soft-wallpaper.png);
   color: #f8f9fa; }
+  .footer .source-org.copyright {
+    margin-bottom: 0; }
+  .footer .powered-by {
+    font-size: 10px;
+    margin: 0 0 20px 0; }
+    .footer .powered-by a {
+      color: #fff;
+      text-decoration: none; }
+  .footer .contact a {
+    color: #fff;
+    text-decoration: none; }
 
 #inner-footer {
   background: transparent;

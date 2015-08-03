@@ -922,6 +922,27 @@ FOOTER STYLES
 	clear: both;
 	background: #323944 url(http://www.transparenttextures.com/patterns/soft-wallpaper.png);
 	color: $light-gray;
+
+	.source-org.copyright {
+		margin-bottom: 0;
+	}
+
+	.powered-by {
+		font-size: 10px;
+		margin: 0 0 20px 0;
+
+		a {
+			color: #fff;
+			text-decoration: none;			
+		}
+	}
+
+	.contact {
+		a {
+			color: #fff;
+			text-decoration: none;
+		}
+	}
 }
 
 #inner-footer {
