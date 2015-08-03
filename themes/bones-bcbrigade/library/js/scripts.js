@@ -131,17 +131,17 @@ var getUrlParameter = function getUrlParameter(sParam) {
       this.is_mobile = BCB_JS_VARS.is_mobile === '1' ? true : false;
       this.checkIfLoggedIn();
 
-      var loggedOut = getUrlParameter('loggedOut');
-      var testing = getUrlParameter('testing');
+      // var loggedOut = getUrlParameter('loggedOut');
+      // var testing = getUrlParameter('testing');
 
-      console.log(this.loggedIn);
+      // console.log(this.loggedIn);
 
-      if(testing || this.loggedIn){
-        console.log('prod stff');
-        $('.productionContent').show();
-      } else if(typeof testing === 'undefined' && !this.loggedIn) {
-        $('.preReleaseContent').show();
-      }      
+      // if(testing || this.loggedIn){
+      //   console.log('prod stff');
+      //   $('.productionContent').show();
+      // } else if(typeof testing === 'undefined' && !this.loggedIn) {
+      //   $('.preReleaseContent').show();
+      // }      
 
       $('.bxslider').bxSlider();
       loadGravatars();

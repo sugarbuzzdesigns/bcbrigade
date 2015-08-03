@@ -1884,10 +1884,6 @@ and will be used across all viewports.
 /**************************
 JUST FOR TESTING
 ***************************/
-.productionContent,
-.preReleaseContent {
-  display: none; }
-
 /*********************
 GENERAL STYLES
 *********************/
