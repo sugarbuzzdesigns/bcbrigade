@@ -77,14 +77,14 @@
 	        				'link_after' => '',                             // after each link
 	        				'depth' => 0,                                   // limit the depth of the nav
 	    					'fallback_cb' => ''                             // fallback function (if there is one)
-							)); 
+							));
 							} ?>
 
 					<?php if(is_user_logged_in()){ ?>
 						<a id="logout-link" href="<?php echo wp_logout_url(); ?>">Logout</a>
 						<a id="profile-link" href="/profile"><i class="fa fa-user"></i><span>Profile</span></a>
 						<?php show_woo_cart(); ?>
-					<?php } else { ?>	
+					<?php } else { ?>
 						<a id="login-link" href="/login"><i class="fa fa-user"></i><span>Login</span></a>
 					<?php } ?>
 					</nav>
