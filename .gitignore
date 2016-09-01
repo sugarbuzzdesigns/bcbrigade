@@ -10,3 +10,6 @@ error_log
 /wc-logs
 /uploads
 /plugins/wordpress-importer/
+.mov
+.mp4
+.ogg
