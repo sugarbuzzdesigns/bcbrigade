@@ -7,7 +7,7 @@
 	
 	class PMProGateway_paypalstandard extends PMProGateway
 	{
-		function PMProGateway_paypalstandard($gateway = NULL)
+		function __construct($gateway = NULL)
 		{
 			$this->gateway = $gateway;
 			return $this->gateway;
@@ -196,12 +196,10 @@
 			
 			//show our submit buttons
 			?>
-			<?php if($gateway == "paypal" || $gateway == "paypalexpress" || $gateway == "paypalstandard") { ?>
 			<span id="pmpro_paypalexpress_checkout" <?php if(($gateway != "paypalexpress" && $gateway != "paypalstandard") || !$pmpro_requirebilling) { ?>style="display: none;"<?php } ?>>
 				<input type="hidden" name="submit-checkout" value="1" />		
 				<input type="image" value="<?php _e('Check Out with PayPal', 'pmpro');?> &raquo;" src="<?php echo apply_filters("pmpro_paypal_button_image", "https://www.paypal.com/en_US/i/btn/btn_xpressCheckout.gif");?>" />
 			</span>
-			<?php } ?>
 			
 			<span id="pmpro_submit_span" <?php if(($gateway == "paypalexpress" || $gateway == "paypalstandard") && $pmpro_requirebilling) { ?>style="display: none;"<?php } ?>>
 				<input type="hidden" name="submit-checkout" value="1" />		
@@ -492,44 +490,30 @@
 			
 			$version = urlencode('72.0');
 		
-			// setting the curl parameters.
-			$ch = curl_init();
-			curl_setopt($ch, CURLOPT_URL, $API_Endpoint);
-			curl_setopt($ch, CURLOPT_VERBOSE, 1);
-		
-			// turning off the server and peer verification(TrustManager Concept).
-			curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, FALSE);
-			curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, FALSE);
-		
-			curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-			curl_setopt($ch, CURLOPT_POST, 1);
-		
 			// NVPRequest for submitting to server
 			$nvpreq = "METHOD=" . urlencode($methodName_) . "&VERSION=" . urlencode($version) . "&PWD=" . urlencode($API_Password) . "&USER=" . urlencode($API_UserName) . "&SIGNATURE=" . urlencode($API_Signature) . "&bn=" . urlencode(PAYPAL_BN_CODE) . $nvpStr_;
 						
-			// setting the nvpreq as POST FIELD to curl
-			curl_setopt($ch, CURLOPT_POSTFIELDS, $nvpreq);
-		
-			// getting response from server
-			$httpResponse = curl_exec($ch);
-		
-			if(!$httpResponse) {
-				exit("$methodName_ failed: ".curl_error($ch).'('.curl_errno($ch).')');
-			}
-		
-			// Extract the RefundTransaction response details
-			$httpResponseAr = explode("&", $httpResponse);
-		
-			$httpParsedResponseAr = array();
-			foreach ($httpResponseAr as $i => $value) {
-				$tmpAr = explode("=", $value);
-				if(sizeof($tmpAr) > 1) {
-					$httpParsedResponseAr[$tmpAr[0]] = $tmpAr[1];
+			//post to PayPal
+			$response = wp_remote_post( $API_Endpoint, array(
+					'timeout' => 60,
+					'sslverify' => FALSE,
+					'httpversion' => '1.1',
+					'body' => $nvpreq
+			    )
+			);
+
+			if ( is_wp_error( $response ) ) {
+			   $error_message = $response->get_error_message();
+			   die( "{$methodName_} failed: $error_message" );
+			} else {
+				//extract the response details
+				$httpParsedResponseAr = array();
+				parse_str(wp_remote_retrieve_body($response), $httpParsedResponseAr);
+
+				//check for valid response
+				if((0 == sizeof($httpParsedResponseAr)) || !array_key_exists('ACK', $httpParsedResponseAr)) {
+					exit("Invalid HTTP Response for POST request($nvpreq) to $API_Endpoint.");
 				}
-			}
-		
-			if((0 == sizeof($httpParsedResponseAr)) || !array_key_exists('ACK', $httpParsedResponseAr)) {
-				exit("Invalid HTTP Response for POST request($nvpreq) to $API_Endpoint.");
 			}
 		
 			return $httpParsedResponseAr;

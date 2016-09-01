@@ -2,15 +2,15 @@
 /*
 Plugin Name: Paid Memberships Pro - Register Helper Add On
 Plugin URI: http://www.paidmembershipspro.com/pmpro-register-helper/
-Description: Shortcodes and other functions to help customize your registration forms.
-Version: 1.0
+Description: Custom fields, shortcodes, and other functions to help customize your Paid Memberships Pro checkout process.
+Version: 1.3.3
 Author: Stranger Studios
 Author URI: http://www.strangerstudios.com
 */
 
 define('PMPRORH_DIR', dirname(__FILE__) );
 define('PMPRORH_URL', WP_PLUGIN_URL . "/pmpro-register-helper");
-define('PMPRORH_VERSION', '1.0');
+define('PMPRORH_VERSION', '1.3.3');
 
 /*
 	options - just defaults for now, will be in settings eventually
@@ -23,6 +23,11 @@ global $pmprorh_options;
 //$pmprorh_options["use_email_for_login"] = true;
 //$pmprorh_options["directory_page"] = "/directory/";
 //$pmprorh_options["profile_page"] = "/profile/";
+
+/*
+	Includes
+*/
+require_once(PMPRORH_DIR . "/shortcodes/pmpro_signup.php");			//[pmpro_signup ...] shortcode
 
 /*
 	Loading Modules
@@ -47,7 +52,7 @@ if(!empty($pmprorh_options) && !empty($pmprorh_options['modules']))
 			require_once($custom_file);	
 		}
 		else
-			require_once(dirname(__FILE__) . "/modules/".$value.".php");
+			require_once(PMPRORH_DIR . "/modules/".$value.".php");
 	}
 }
 	
@@ -77,7 +82,7 @@ global $pmprorh_registration_fields, $pmprorh_checkout_boxes;
 $pmprorh_registration_fields = array();
 $cb = new stdClass();
 $cb->name = "checkout_boxes";
-$cb->label = "More Information";
+$cb->label = apply_filters("pmprorh_section_header", "More Information");
 $cb->order = 0;
 $pmprorh_checkout_boxes = array("checkout_boxes" => $cb);
 
@@ -207,7 +212,7 @@ function pmprorh_default_register_form()
 	{
 		foreach($pmprorh_registration_fields["register_form"] as $field)
 		{					
-			if(pmprorh_checkFieldForLevel($field))
+			if(pmprorh_checkFieldForLevel($field) && $field->profile !== "only" && $field->profile !== "only_admin" && $field->profile_only != true )
 				$field->displayAtCheckout();		
 		}
 	}
@@ -223,7 +228,7 @@ function pmprorh_register_form_after_email()
 	{		
 		foreach($pmprorh_registration_fields["pmprorh_after_email"] as $field)
 		{			
-			if(pmprorh_checkFieldForLevel($field))
+			if(pmprorh_checkFieldForLevel($field) && $field->profile !== "only" && $field->profile !== "only_admin")
 				$field->displayAtCheckout();		
 		}
 	}
@@ -239,7 +244,7 @@ function pmprorh_register_form_after_password()
 	{
 		foreach($pmprorh_registration_fields["pmprorh_after_password"] as $field)
 		{			
-			if(pmprorh_checkFieldForLevel($field))
+			if(pmprorh_checkFieldForLevel($field) && $field->profile !== "only" && $field->profile !== "only_admin")
 				$field->displayAtCheckout();		
 		}
 	}
@@ -255,7 +260,7 @@ function pmprorh_register_form()
 	{
 		foreach($pmprorh_registration_fields["pmprorh_register_form"] as $field)
 		{			
-			if(pmprorh_checkFieldForLevel($field))
+			if(pmprorh_checkFieldForLevel($field) && $field->profile !== "only" && $field->profile !== "only_admin")
 				$field->displayAtCheckout();		
 		}
 	}
@@ -274,7 +279,7 @@ function pmprorh_pmpro_checkout_after_username()
 	{
 		foreach($pmprorh_registration_fields["after_username"] as $field)
 		{						
-			if(pmprorh_checkFieldForLevel($field))
+			if(pmprorh_checkFieldForLevel($field) && $field->profile !== "only" && $field->profile !== "only_admin")
 				$field->displayAtCheckout();		
 		}
 	}
@@ -290,7 +295,7 @@ function pmprorh_pmpro_checkout_after_password()
 	{
 		foreach($pmprorh_registration_fields["after_password"] as $field)
 		{			
-			if(pmprorh_checkFieldForLevel($field))
+			if(pmprorh_checkFieldForLevel($field) && $field->profile !== "only" && $field->profile !== "only_admin")
 				$field->displayAtCheckout();		
 		}
 	}
@@ -306,7 +311,7 @@ function pmprorh_pmpro_checkout_after_email()
 	{
 		foreach($pmprorh_registration_fields["after_email"] as $field)
 		{			
-			if(pmprorh_checkFieldForLevel($field))
+			if(pmprorh_checkFieldForLevel($field) && isset($field->profile) && $field->profile !== "only" && $field->profile !== "only_admin")
 				$field->displayAtCheckout();		
 		}
 	}
@@ -322,7 +327,7 @@ function pmprorh_pmpro_checkout_after_captcha()
 	{
 		foreach($pmprorh_registration_fields["after_captcha"] as $field)
 		{			
-			if(pmprorh_checkFieldForLevel($field))
+			if(pmprorh_checkFieldForLevel($field) && $field->profile !== "only" && $field->profile !== "only_admin")
 				$field->displayAtCheckout();		
 		}
 	}
@@ -340,33 +345,26 @@ function pmprorh_pmpro_checkout_boxes()
 		$n = 0;		
 		if(!empty($pmprorh_registration_fields[$cb->name]))
 			foreach($pmprorh_registration_fields[$cb->name] as $field)				
-				if(pmprorh_checkFieldForLevel($field) && (!isset($field->profile) || (isset($field->profile) && $field->profile !== "only" && $field->profile !== "only_admin")))
-					$n++;
+				if(pmprorh_checkFieldForLevel($field) && (!isset($field->profile) || (isset($field->profile) && $field->profile !== "only" && $field->profile !== "only_admin")))		$n++;
 
 		if($n > 0)
 		{
 			?>
-			<table id="pmpro_checkout_box-<?php echo $cb->name; ?>" class="pmpro_checkout" width="100%" cellpadding="0" cellspacing="0" border="0">
-			<thead>
-				<tr>
-					<th>
-						<?php echo $cb->label;?>
-					</th>						
-				</tr>
-			</thead>
-			<tbody>  
-				<tr><td>
+			<div id="pmpro_checkout_box-<?php echo $cb->name; ?>" class="pmpro_checkout">
+				<h2>	
+					<span class="pmpro_thead-name"><?php echo $cb->label;?></span>
+				</h2>
+				<div class="pmpro_checkout-fields">
 				<?php if(!empty($cb->description)) {  ?><div class="pmpro_checkout_decription"><?php echo $cb->description; ?></div><?php } ?>
 				<?php
 				foreach($pmprorh_registration_fields[$cb->name] as $field)
 				{			
-					if(pmprorh_checkFieldForLevel($field))
+					if(pmprorh_checkFieldForLevel($field) && (!isset($field->profile) || (isset($field->profile) && $field->profile !== "only" && $field->profile !== "only_admin")))
 						$field->displayAtCheckout();		
 				}
 				?>
-				</td></tr>
-			</tbody>
-			</table>
+				</div> <!-- end pmpro_checkout-fields -->
+			</div> <!-- end pmpro_checkout_box-name -->
 			<?php
 		}
 	}
@@ -382,7 +380,7 @@ function pmprorh_pmpro_checkout_after_pricing_fields()
 	{
 		foreach($pmprorh_registration_fields["after_pricing_fields"] as $field)
 		{			
-			if(pmprorh_checkFieldForLevel($field))
+			if(pmprorh_checkFieldForLevel($field) && $field->profile !== "only" && $field->profile !== "only_admin")
 				$field->displayAtCheckout();		
 		}
 	}
@@ -398,7 +396,7 @@ function pmprorh_pmpro_checkout_after_billing_fields()
 	{
 		foreach($pmprorh_registration_fields["after_billing_fields"] as $field)
 		{			
-			if(pmprorh_checkFieldForLevel($field))
+			if(pmprorh_checkFieldForLevel($field) && $field->profile !== "only" && $field->profile !== "only_admin")
 				$field->displayAtCheckout();		
 		}
 	}
@@ -414,7 +412,7 @@ function pmprorh_pmpro_checkout_before_submit_button()
 	{
 		foreach($pmprorh_registration_fields["before_submit_button"] as $field)
 		{			
-			if(pmprorh_checkFieldForLevel($field))
+			if(pmprorh_checkFieldForLevel($field) && $field->profile !== "only" && $field->profile !== "only_admin")
 				$field->displayAtCheckout();		
 		}
 	}
@@ -439,6 +437,9 @@ function pmprorh_pmpro_after_checkout($user_id)
 			{
 				if(!pmprorh_checkFieldForLevel($field))
 					continue;
+				
+				if(!empty($field->profile) && ($field->profile === "only" || $field->profile === "only_admin"))
+					continue;	//wasn't shown at checkout
 				
 				//assume no value
 				$value = NULL;
@@ -482,7 +483,7 @@ function pmprorh_pmpro_after_checkout($user_id)
 					if(!empty($field->save_function))
 						call_user_func($field->save_function, $user_id, $field->name, $value);
 					else
-						update_user_meta($user_id, $field->name, $value);
+						update_user_meta($user_id, $field->meta_key, $value);
 				}
 			}			
 		}
@@ -520,7 +521,10 @@ function pmprorh_rf_pmpro_registration_checks($okay)
 				//if the field is not for this level, skip it
 				if(!pmprorh_checkFieldForLevel($field))
 					continue;
-					
+				
+				if(!empty($field->profile) && ($field->profile === "only" || $field->profile === "only_admin"))
+					continue;	//wasn't shown at checkout
+				
 				if(isset($_REQUEST[$field->name]))
 					$value = $_REQUEST[$field->name];
 				elseif(isset($_FILES[$field->name]))
@@ -654,14 +658,17 @@ function pmprorh_rf_show_extra_profile_fields($user, $withlocations = false)
 	$profile_fields = pmprorh_getProfileFields($user->ID, $withlocations);
 	
 	//show the fields
-	//show the fields
 	if(!empty($profile_fields) && $withlocations)
 	{			
 		foreach($profile_fields as $where => $fields)
 		{						
 			$box = pmprorh_getCheckoutBoxByName($where);			
-			?>
-			<h3><?php echo $box->label;?></h3>
+			
+			if ( !empty($box->label) ) 
+			{ ?>
+				<h3><?php echo $box->label; ?></h3><?php
+			} ?>
+			
 			<table class="form-table">
 			<?php
 			//cycle through groups			
@@ -740,11 +747,44 @@ function pmprorh_pmpro_add_member_fields($user)
     <?php
     }
 }
-add_action( 'pmpro_add_member_fields', 'pmprorh_pmpro_add_member_fields' );
+add_action( 'pmpro_add_member_fields', 'pmprorh_pmpro_add_member_fields', 10, 1 );
 
-function pmprorh_pmpro_add_member_added()
+function pmprorh_pmpro_add_member_added( $uid = null, $user = null )
 {
-    $user_id = get_user_by('login', $_REQUEST['user_login'])->ID;
+	/**
+	 * BUG: Incorrectly assumed that the user_login $_REQUEST[] variable exists
+	 *
+	 * @since 1.3
+	 */
+	if ( ! is_null( $user ) ) {
+		$user_id = $user->ID;
+	}
+
+	if ( ! is_null( $uid ) && is_null( $user ) ) {
+		$user_id = $uid;
+	}
+
+	if (is_null($uid) && is_null($user)) {
+
+		$user_login = isset( $_REQUEST['user_login'] ) ? $_REQUEST['user_login'] : null;
+
+		if (!is_null($user_login)) {
+			$user_id = get_user_by('login', $_REQUEST['user_login'])->ID;
+		}
+
+	}
+	
+	// check whether the user login variable contains something useful
+	if (is_null($user_id)) {
+
+		global $pmpro_msgt;
+		global $pmpro_msg;
+
+		$pmpro_msg = __("Unable to add/update PMPro Register Helper registration fields for this member", "pmprorh");
+		$pmpro_msgt = "pmpro_error";
+
+		return false;
+	}
 
     global $pmprorh_registration_fields;
 
@@ -782,7 +822,7 @@ function pmprorh_pmpro_add_member_added()
                 if(!empty($field->save_function))
                     call_user_func($field->save_function, $user_id, $field->name, $_POST[$field->name]);
                 else
-                    update_user_meta($user_id, $field->name, $_POST[$field->name]);
+                    update_user_meta($user_id, $field->meta_key, $_POST[$field->name]);
             }
             elseif(!empty($_POST[$field->name . "_checkbox"]) && $field->type == 'checkbox')	//handle unchecked checkboxes
             {
@@ -790,13 +830,13 @@ function pmprorh_pmpro_add_member_added()
                 if(!empty($field->save_function))
                     call_user_func($field->save_function, $user_id, $field->name, 0);
                 else
-                    update_user_meta($user_id, $field->name, 0);
+                    update_user_meta($user_id, $field->meta_key, 0);
             }
         }
     }
 
 }
-add_action( 'pmpro_add_member_added', 'pmprorh_pmpro_add_member_added' );
+add_action( 'pmpro_add_member_added', 'pmprorh_pmpro_add_member_added', 10, 2 );
 
 /*
 	Get RH fields which are set to showup in the Members List CSV Export.	
@@ -901,7 +941,7 @@ function pmprorh_rf_save_extra_profile_fields( $user_id )
 				if(!empty($field->save_function))
 					call_user_func($field->save_function, $user_id, $field->name, $_POST[$field->name]);
 				else
-					update_user_meta($user_id, $field->name, $_POST[$field->name]);				
+					update_user_meta($user_id, $field->meta_key, $_POST[$field->name]);				
 			}
 			elseif(!empty($_POST[$field->name . "_checkbox"]) && $field->type == 'checkbox')	//handle unchecked checkboxes
 			{
@@ -909,119 +949,13 @@ function pmprorh_rf_save_extra_profile_fields( $user_id )
 				if(!empty($field->save_function))
 					call_user_func($field->save_function, $user_id, $field->name, 0);
 				else
-					update_user_meta($user_id, $field->name, 0);		
+					update_user_meta($user_id, $field->meta_key, 0);		
 			}				
 		}
 	}
 }
 add_action( 'personal_options_update', 'pmprorh_rf_save_extra_profile_fields' );
 add_action( 'edit_user_profile_update', 'pmprorh_rf_save_extra_profile_fields' );
-
-/*
-	This shortcode will show a signup form. It will only show user account fields.
-	If the level is not free, the user will have to enter the billing information on the checkout page.	
-*/
-function pmprorh_signup_shortcode($atts, $content=null, $code="")
-{
-	// $atts    ::= array of attributes
-	// $content ::= text within enclosing form of shortcode element
-	// $code    ::= the shortcode found, when == callback name
-	// examples: [pmpro_signup level="3" short="1" intro="0" button="Signup Now"]
-
-	extract(shortcode_atts(array(
-		'level' => NULL,		
-		'short' => NULL,
-		'intro' => true,
-		'button' => "Signup &raquo;"
-	), $atts));
-	
-	//turn 0's into falses
-	if($short === "0" || $short === "false" || $short === "no")
-		$short = false;
-	else
-		$short = true;
-	
-	if($intro === "0" || $intro === "false" || $intro === "no")
-		$intro = false;
-	else
-		$intro = true;
-
-	global $current_user, $membership_levels;
-
-	ob_start();	
-	?>
-		<?php if(!empty($current_user->ID)) { ?>
-			<p>You are logged in as <?php echo $current_user->user_login; ?>.</p>
-		<?php } else { ?>
-		<form class="pmpro_form" action="<?php echo pmpro_url("checkout"); ?>" method="post">
-			<?php
-				if($intro)
-				{
-					echo wpautop("Register for " .pmpro_getLevel($level)->name. ".");
-				}
-			?>
-			
-			<input type="hidden" id="level" name="level" value="<?php echo $level; ?>" />	
-			<div>
-				<label for="username">Username</label>
-				<input id="username" name="username" type="text" class="input" size="30" value="" /> 
-			</div>
-			<?php do_action("pmpro_checkout_after_username");?>
-			<div>
-				<label for="password">Password</label>
-				<input id="password" name="password" type="password" class="input" size="30" value="" /> 
-			</div>
-			<?php if($short) { ?>
-				<input type="hidden" name="password2_copy" value="1" />
-			<?php } else { ?>
-				<div>
-					<label for="password2">Confirm Password</label>
-					<input id="password2" name="password2" type="password" class="input" size="30" value="" /> 
-				</div>			
-			<?php } ?>
-			<?php do_action("pmpro_checkout_after_password");?>
-			<div>
-				<label for="bemail">E-mail Address</label>
-				<input id="bemail" name="bemail" type="text" class="input" size="30" value="" /> 
-			</div>
-			<?php if($short) { ?>
-				<input type="hidden" name="bconfirmemail_copy" value="1" />
-			<?php } else { ?>
-				<div>
-					<label for="bconfirmemail">Confirm E-mail</label>
-					<input id="bconfirmemail" name="bconfirmemail" type="text" class="input" size="30" value="" /> 
-				</div>	         
-			<?php } ?>
-			<?php do_action("pmpro_checkout_after_email");?>
-			<div class="pmpro_hidden">
-				<label for="fullname">Full Name</label>
-				<input id="fullname" name="fullname" type="text" class="input" size="30" value="" /> <strong>LEAVE THIS BLANK</strong>
-			</div>
-			
-			<div class="pmpro_captcha">
-				<?php 																								
-					global $recaptcha, $recaptcha_publickey;										
-					if($recaptcha == 2 || ($recaptcha == 1 && pmpro_isLevelFree($pmpro_level))) 
-					{											
-						echo recaptcha_get_html($recaptcha_publickey, NULL, true);						
-					}								
-				?>								
-			</div>
-			
-			<div>
-				<span id="pmpro_submit_span" >
-					<input type="hidden" name="submit-checkout" value="1" />		
-					<input type="submit" class="pmpro_btn pmpro_btn-submit-checkout" value="<?php echo $button; ?>" />
-				</span>
-			</div>	
-		</form>
-		<?php } ?>
-	<?php
-	$temp_content = ob_get_contents();
-	ob_end_clean();
-	return $temp_content;
-}
-add_shortcode("pmpro_signup", "pmprorh_signup_shortcode");
 
 /*
 	This code can be used to restrict level signups by email address or username
@@ -1131,9 +1065,12 @@ function pmprorh_checkFieldForLevel($field, $scope = "default", $args = NULL)
 		else
 		{
 			//check against $_REQUEST
-			if(!empty($_REQUEST['level']))
+			global $pmpro_level;
+			if(!empty($pmpro_level) && !empty($pmpro_level->id))
 			{
-				if(in_array($_REQUEST['level'], $field->levels))
+				if(is_array($field->levels) && in_array($pmpro_level->id, $field->levels))
+					return true;
+				elseif(!is_array($field->levels) && ($pmpro_level->id == intval($field->levels)))
 					return true;
 				else
 					return false;
@@ -1202,8 +1139,11 @@ function pmproh_pmpro_checkout_confirm_email($show)
 function pmprorh_enqueue_select2()
 {
 	//should check for cases when this is needed instead of always including.
-	wp_enqueue_style('select2', plugins_url('css/select2.css', __FILE__), '', '3.1', 'screen');
-	wp_enqueue_script('select2', plugins_url('js/select2.js', __FILE__), array( 'jquery' ), '3.1' );
+	// only inlcude on frontend
+	if( !is_admin() ) {
+		wp_enqueue_style('select2', plugins_url('css/select2.css', __FILE__), '', '3.1', 'screen');
+		wp_enqueue_script('select2', plugins_url('js/select2.js', __FILE__), array( 'jquery' ), '3.1' );
+	}
 }
 add_action("init", "pmprorh_enqueue_select2");
 
@@ -1234,7 +1174,7 @@ function pmprorh_pmpro_email_filter($email)
 				{					
 					$email->body .= "- " . $field->label . ": ";
 				
-					$value = get_user_meta($user_id, $field->name, true);
+					$value = get_user_meta($user_id, $field->meta_key, true);
 					if($field->type == "file" && is_array($value) && !empty($value['fullurl']))
 						$email->body .= $value['fullurl'];
 					elseif(is_array($value))
@@ -1261,7 +1201,7 @@ function pmprorh_pmpro_members_list_csv_extra_columns($columns)
 	$csv_cols = pmprorh_getCSVFields();		
 	foreach($csv_cols as $key => $value)
 	{		
-		$columns[$value->name] = "pmprorh_csv_columns";
+		$columns[$value->meta_key] = "pmprorh_csv_columns";
 	}
 	
 	return $columns;

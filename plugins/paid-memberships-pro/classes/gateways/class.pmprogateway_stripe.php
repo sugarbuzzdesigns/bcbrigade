@@ -5,6 +5,10 @@
 	//load classes init method
 	add_action('init', array('PMProGateway_stripe', 'init'));
 
+	// loading plugin activation actions
+	add_action('activate_paid-memberships-pro', array('PMProGateway_stripe', 'pmpro_activation'));
+	add_action('deactivate_paid-memberships-pro', array('PMProGateway_stripe', 'pmpro_deactivation'));
+
 	/**
 	 * PMProGateway_stripe Class
 	 *
@@ -19,15 +23,38 @@
 		 *
 		 * @since 1.4
 		 */
-		function PMProGateway_stripe($gateway = NULL)
+		function __construct($gateway = NULL)
 		{
 			$this->gateway = $gateway;
 			$this->gateway_environment = pmpro_getOption("gateway_environment");
 
+			$this->dependencies();
+
 			$this->loadStripeLibrary();
 			Stripe::setApiKey(pmpro_getOption("stripe_secretkey"));
-
+			Stripe::setAPIVersion("2015-07-13");
+			
 			return $this->gateway;
+		}
+
+		/**
+		 * Warn if required extensions aren't loaded.
+		 *
+		 * @since 1.8.6.8.1
+		 */
+		public function dependencies()
+		{
+			global $msg, $msgt, $pmpro_stripe_error;
+
+			$modules = array('curl');
+
+			foreach($modules as $module){
+				if(!extension_loaded($module)){
+					$pmpro_stripe_error = true;
+					$msg = -1;
+					$msgt = sprintf(__("The %s gateway depends on the %s PHP extension. Please enable it, or ask your hosting provider to enable it", "pmpro"), $this->gateway, $module);
+				}
+			}
 		}
 
 		/**
@@ -66,13 +93,22 @@
 			$pmpro_stripe_lite = apply_filters("pmpro_stripe_lite", !pmpro_getOption("stripe_billingaddress"));	//default is oposite of the stripe_billingaddress setting
 
 			//updates cron
-			add_action('pmpro_activation', array('PMProGateway_stripe', 'pmpro_activation'));
-			add_action('pmpro_deactivation', array('PMProGateway_stripe', 'pmpro_deactivation'));
 			add_action('pmpro_cron_stripe_subscription_updates', array('PMProGateway_stripe', 'pmpro_cron_stripe_subscription_updates'));
 
+			/*
+				Filter pmpro_next_payment to get actual value
+				via the Stripe API. This is disabled by default
+				for performance reasons, but you can enable it
+				by copying this line into a custom plugin or
+				your active theme's functions.php and uncommenting
+				it there.
+			*/
+			//add_filter('pmpro_next_payment', array('PMProGateway_stripe', 'pmpro_next_payment'), 10, 3);
+			
 			//code to add at checkout if Stripe is the current gateway
-			$gateway = pmpro_getOption("gateway");
-			if($gateway == "stripe")
+			$default_gateway = pmpro_getOption('gateway');
+			$current_gateway = pmpro_getGateway();			
+			if(($default_gateway == "stripe" || $current_gateway == "stripe") && empty($_REQUEST['review']))	//$_REQUEST['review'] means the PayPal Express review page
 			{
 				add_action('pmpro_checkout_preheader', array('PMProGateway_stripe', 'pmpro_checkout_preheader'));
 				add_filter('pmpro_checkout_order', array('PMProGateway_stripe', 'pmpro_checkout_order'));
@@ -196,7 +232,9 @@
 		{
 			global $gateway, $pmpro_level;
 
-			if($gateway == "stripe" && !pmpro_isLevelFree($pmpro_level))
+			$default_gateway = pmpro_getOption("gateway");
+			
+			if(($gateway == "stripe" || $default_gateway == "stripe") && !pmpro_isLevelFree($pmpro_level))
 			{
 				//stripe js library
 				wp_enqueue_script("stripe", "https://js.stripe.com/v2/", array(), NULL);
@@ -207,10 +245,11 @@
 					global $pmpro_gateway, $pmpro_level, $pmpro_stripe_lite;
 				?>
 				<script type="text/javascript">
+					<!--
 					// this identifies your website in the createToken call below
 					Stripe.setPublishableKey('<?php echo pmpro_getOption("stripe_publishablekey"); ?>');
 
-					var pmpro_require_billing = true;
+					pmpro_require_billing = true;
 
 					jQuery(document).ready(function() {
 						jQuery("#pmpro_form, .pmpro_form").submit(function(event) {
@@ -220,8 +259,7 @@
 						{
 							//build array for creating token
 							var args = {
-								number: jQuery('#AccountNumber').val(),
-								cvc: jQuery('#CVV').val(),
+								number: jQuery('#AccountNumber').val(),								
 								exp_month: jQuery('#ExpirationMonth').val(),
 								exp_year: jQuery('#ExpirationYear').val()
 								<?php
@@ -240,6 +278,11 @@
 								?>
 							};
 
+							//add CVC if not blank
+							if(jQuery('#CVV').val().length)
+								args['cvc'] = jQuery('#CVV').val();
+
+							//add first and last name if not blank
 							if (jQuery('#bfirstname').length && jQuery('#blastname').length)
 								args['name'] = jQuery.trim(jQuery('#bfirstname').val() + ' ' + jQuery('#blastname').val());
 
@@ -272,7 +315,7 @@
 							// insert the token into the form so it gets submitted to the server
 							form$.append("<input type='hidden' name='stripeToken' value='" + token + "'/>");
 
-							console.log(response);
+							//console.log(response);
 
 							//insert fields for other card fields
 							if(jQuery('#CardType[name=CardType]').length)
@@ -287,6 +330,7 @@
 							form$.get(0).submit();
 						}
 					}
+					-->
 				</script>
 				<?php
 				}
@@ -345,7 +389,7 @@
 
 			if($gateway == "stripe")
 			{
-				if(!empty($morder) && !empty($morer->Gateway) && !empty($morder->Gateway->customer) && !empty($morder->Gateway->customer->id))
+				if(!empty($morder) && !empty($morder->Gateway) && !empty($morder->Gateway->customer) && !empty($morder->Gateway->customer->id))
 				{
 					update_user_meta($user_id, "pmpro_stripe_customerid", $morder->Gateway->customer->id);
 				}
@@ -384,7 +428,10 @@
 			<table id="pmpro_payment_information_fields" class="pmpro_checkout top1em" width="100%" cellpadding="0" cellspacing="0" border="0" <?php if(!$pmpro_requirebilling || apply_filters("pmpro_hide_payment_information_fields", false) ) { ?>style="display: none;"<?php } ?>>
 			<thead>
 				<tr>
-					<th><span class="pmpro_thead-msg"><?php printf(__('We Accept %s', 'pmpro'), $pmpro_accepted_credit_cards_string);?></span><?php _e('Payment Information', 'pmpro');?></th>
+					<th>
+						<span class="pmpro_thead-name"><?php _e('Payment Information', 'pmpro');?></span>
+						<span class="pmpro_thead-msg"><?php printf(__('We Accept %s', 'pmpro'), $pmpro_accepted_credit_cards_string);?></span>
+					</th>
 				</tr>
 			</thead>
 			<tbody>
@@ -419,6 +466,7 @@
 							?>
 							<input type="hidden" id="CardType" name="CardType" value="<?php echo esc_attr($CardType);?>" />
 							<script>
+								<!--
 								jQuery(document).ready(function() {
 										jQuery('#AccountNumber').validateCreditCard(function(result) {
 											var cardtypenames = {
@@ -440,6 +488,7 @@
 												jQuery('#CardType').val('Unknown Card Type');
 										});
 								});
+								-->
 							</script>
 							<?php
 							}
@@ -480,11 +529,11 @@
 						<?php
 							$pmpro_show_cvv = apply_filters("pmpro_show_cvv", true);
 							if($pmpro_show_cvv)
-							{
+							{							
 						?>
 						<div class="pmpro_payment-cvv">
-							<label for="CVV"><?php _ex('CVV', 'Credit card security code, CVV/CCV/CVV2', 'pmpro');?></label>
-							<input class="input" id="CVV" type="text" size="4" value="<?php if(!empty($_REQUEST['CVV'])) { echo esc_attr($_REQUEST['CVV']); }?>" class=" <?php echo pmpro_getClassForField("CVV");?>" />  <small>(<a href="javascript:void(0);" onclick="javascript:window.open('<?php echo pmpro_https_filter(PMPRO_URL)?>/pages/popup-cvv.html','cvv','toolbar=no, location=no, directories=no, status=no, menubar=no, scrollbars=yes, resizable=yes, width=600, height=475');"><?php _ex("what's this?", 'link to CVV help', 'pmpro');?></a>)</small>
+							<label for="CVV"><?php _e('CVV', 'pmpro');?></label>
+							<input class="input" id="CVV" type="text" size="4" value="<?php if(!empty($_REQUEST['CVV'])) { echo esc_attr($_REQUEST['CVV']); }?>" class=" <?php echo pmpro_getClassForField("CVV");?>" />  <small>(<a href="javascript:void(0);" onclick="javascript:window.open('<?php echo pmpro_https_filter(PMPRO_URL)?>/pages/popup-cvv.html','cvv','toolbar=no, location=no, directories=no, status=no, menubar=no, scrollbars=yes, resizable=yes, width=600, height=475');"><?php _e("what's this?", 'pmpro');?></a>)</small>
 						</div>
 						<?php
 							}
@@ -598,7 +647,7 @@
 									<option value="payment" <?php selected($update['when'], "payment");?>>After Next Payment</option>
 									<option value="date" <?php selected($update['when'], "date");?>>On Date</option>
 								</select>
-								<span class="updates_date" <?php if($uwhen != "date") { ?>style="display: none;"<?php } ?>>
+								<span class="updates_date" <?php if($update['when'] != "date") { ?>style="display: none;"<?php } ?>>
 									<select name="updates_date_month[]">
 										<?php
 											for($i = 1; $i < 13; $i++)
@@ -614,7 +663,7 @@
 									<input name="updates_date_day[]" type="text" size="2" value="<?php if(!empty($update['date_day'])) echo esc_attr($update['date_day']);?>" />
 									<input name="updates_date_year[]" type="text" size="4" value="<?php if(!empty($update['date_year'])) echo esc_attr($update['date_year']);?>" />
 								</span>
-								<span class="updates_billing" <?php if($uwhen == "no") { ?>style="display: none;"<?php } ?>>
+								<span class="updates_billing" <?php if($update['when'] == "now") { ?>style="display: none;"<?php } ?>>
 									<?php echo $pmpro_currency_symbol?><input name="updates_billing_amount[]" type="text" size="10" value="<?php echo esc_attr($update['billing_amount']);?>" />
 									<small><?php _e('per', 'pmpro');?></small>
 									<input name="updates_cycle_number[]" type="text" size="5" value="<?php echo esc_attr($update['cycle_number']);?>" />
@@ -640,6 +689,7 @@
 				</tr>
 			</table>
 			<script>
+				<!--
 				jQuery(document).ready(function() {
 					//function to update dropdowns/etc based on when field
 					function updateSubscriptionUpdateFields(when)
@@ -692,6 +742,7 @@
 					}
 					addUpdateEvents();
 				});
+			-->
 			</script>
 			<?php
 			}
@@ -843,7 +894,7 @@
 		 */
 		static function pmpro_activation()
 		{
-			wp_schedule_event(time(), 'daily', 'pmpro_cron_stripe_subscription_updates');
+			pmpro_maybe_schedule_event(time(), 'daily', 'pmpro_cron_stripe_subscription_updates');
 		}
 
 		/**
@@ -956,7 +1007,7 @@
 
 								//save order
 								$update_order->status = "success";
-								$update_order->save();
+								$update_order->saveOrder();
 
 								//remove update from list
 								unset($user_updates[$key]);
@@ -1035,8 +1086,13 @@
 		 */
 		function charge(&$order)
 		{
-			global $pmpro_currency;
-
+			global $pmpro_currency, $pmpro_currencies;
+			$currency_unit_multiplier = 100; //ie 100 cents per USD
+			
+			//account for zero-decimal currencies like the Japanese Yen
+			if(is_array($pmpro_currencies[$pmpro_currency]) && isset($pmpro_currencies[$pmpro_currency]['decimals']) && $pmpro_currencies[$pmpro_currency]['decimals'] == 0)
+				$currency_unit_multiplier = 1;
+			
 			//create a code for the order
 			if(empty($order->code))
 				$order->code = $order->getRandomCode();
@@ -1062,7 +1118,7 @@
 			try
 			{
 				$response = Stripe_Charge::create(array(
-				  "amount" => $amount * 100, # amount in cents, again
+				  "amount" => $amount * $currency_unit_multiplier, # amount in cents, again
 				  "currency" => strtolower($pmpro_currency),
 				  "customer" => $this->customer->id,
 				  "description" => "Order #" . $order->code . ", " . trim($order->FirstName . " " . $order->LastName) . " (" . $order->Email . ")"
@@ -1140,10 +1196,55 @@
 				{
 					$customer_id = get_user_meta($user_id, "pmpro_stripe_customerid", true);
 				}
+
+				//look up by transaction id
+				if(empty($customer_id) && !empty($user_id)) 
+				{
+					//user id from this order or the user's last stripe order
+					if(!empty($order->payment_transaction_id))
+						$payment_transaction_id = $order->payment_transaction_id;
+					else
+					{
+						//find the user's last stripe order
+						$last_order = new MemberOrder();						
+						$last_order->getLastMemberOrder($user_id, array('success', 'cancelled'), NULL, 'stripe', $order->Gateway->gateway_environment);
+						if(!empty($last_order->payment_transaction_id))
+							$payment_transaction_id = $last_order->payment_transaction_id;
+					}
+
+					//we have a transaction id to look up
+					if(!empty($payment_transaction_id))
+					{
+						if(strpos($payment_transaction_id, "ch_") !== false)
+						{
+							//charge, look it up
+							$charge = Stripe_Charge::retrieve($payment_transaction_id);
+							if(!empty($charge) && !empty($charge->customer))
+								$customer_id = $charge->customer;
+						} 
+						else if(strpos($payment_transaction_id, "in_") !== false)
+						{
+							//invoice look it up
+							$invoice = Stripe_Invoice::retrieve($payment_transaction_id);
+							if(!empty($invoice) && !empty($invoice->customer))
+								$customer_id = $invoice->customer;
+						}
+					}
+
+					//if we found it, save to user meta for future reference
+					if(!empty($customer_id))
+						update_user_meta($user_id, "pmpro_stripe_customerid", $customer_id);
+				}
 			}
 
 			//get name and email values from order in case we update
-			$name = trim($order->FirstName . " " . $order->LastName);
+			if(!empty($order->FirstName) && !empty($order->LastName))
+				$name = trim($order->FirstName . " " . $order->LastName);
+			elseif(!empty($order->FirstName))
+				$name = $order->FirstName;
+			elseif(!empty($order->LastName))
+				$name = $order->LastName;	
+
 			if(empty($name) && !empty($user->ID))
 			{
 				$name = trim($user->first_name . " " . $user->last_name);
@@ -1155,8 +1256,12 @@
 			elseif(empty($name))
 				$name = "No Name";
 
+			if(!empty($order->Email))
+				$email = $order->Email;
+			else
+				$email = "";
 			$email = $order->Email;
-			if(empty($email) && !empty($user->ID))
+			if(empty($email) && !empty($user->ID) && !empty($user->user_email))
 			{
 				$email = $user->user_email;
 			}
@@ -1257,7 +1362,7 @@
 				}
 				catch (Exception $e)
 				{
-					$order->error = __("Error creating plan with Stripe:", "pmpro") . $e->getMessage();
+					$order->error = __("Error getting subscription with Stripe:", "pmpro") . $e->getMessage();
 					$order->shorterror = $order->error;
 					return false;
 				}
@@ -1299,7 +1404,13 @@
 		 */
 		function subscribe(&$order, $checkout = true)
 		{
-			global $pmpro_currency;
+			global $pmpro_currency, $pmpro_currencies;
+			
+			$currency_unit_multiplier = 100; //ie 100 cents per USD
+			
+			//account for zero-decimal currencies like the Japanese Yen
+			if(is_array($pmpro_currencies[$pmpro_currency]) && isset($pmpro_currencies[$pmpro_currency]['decimals']) && $pmpro_currencies[$pmpro_currency]['decimals'] == 0)
+				$currency_unit_multiplier = 1;
 
 			//create a code for the order
 			if(empty($order->code))
@@ -1394,7 +1505,7 @@
 			try
 			{
                 $plan = array(
-                    "amount" => $amount * 100,
+                    "amount" => $amount * $currency_unit_multiplier,
                     "interval_count" => $order->BillingFrequency,
                     "interval" => strtolower($order->BillingPeriod),
                     "trial_period_days" => $trial_period_days,
@@ -1613,5 +1724,35 @@
 			{
 				return false;
 			}
+		}
+		
+		/**
+		 * Filter pmpro_next_payment to get date via API if possible
+		 *
+		 * @since 1.8.6
+		*/
+		static function pmpro_next_payment($timestamp, $user_id, $order_status)
+		{
+			//find the last order for this user
+			if(!empty($user_id))
+			{
+				//get last order
+				$order = new MemberOrder();
+				$order->getLastMemberOrder($user_id, $order_status);
+				
+				//check if this is a paypal express order with a subscription transaction id
+				if(!empty($order->id) && !empty($order->subscription_transaction_id) && $order->gateway == "stripe")
+				{
+					//get the subscription and return the current_period end or false
+					$subscription = $order->Gateway->getSubscription($order);					
+					
+					if(!empty($subscription->current_period_end))
+						return $subscription->current_period_end;
+					else
+						return false;
+				}
+			}
+						
+			return $timestamp;
 		}
 	}

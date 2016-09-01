@@ -35,7 +35,10 @@ function pmpro_cron_expire_memberships()
 			$euser = get_userdata($e->user_id);
 			$pmproemail->sendMembershipExpiredEmail($euser);
 
-			printf(__("Membership expired email sent to %s. ", "pmpro"), $euser->user_email);
+			if(current_user_can('manage_options'))
+				printf(__("Membership expired email sent to %s. ", "pmpro"), $euser->user_email);
+			else
+				echo ". ";
 		}
 	}
 }
@@ -54,17 +57,28 @@ function pmpro_cron_expiration_warnings()
 	$pmpro_email_days_before_expiration = apply_filters("pmpro_email_days_before_expiration", 7);
 
 	//look for memberships that are going to expire within one week (but we haven't emailed them within a week)
-	$sqlQuery = "SELECT mu.user_id, mu.membership_id, mu.startdate, mu.enddate
-	FROM $wpdb->pmpro_memberships_users mu
-	LEFT JOIN $wpdb->usermeta um ON um.user_id = mu.user_id
-	AND um.meta_key = 'pmpro_expiration_notice'
-	WHERE mu.status = 'active'
-	AND mu.enddate IS NOT NULL
-	AND mu.enddate <> ''
-	AND mu.enddate <> '0000-00-00 00:00:00'
-	AND DATE_SUB(mu.enddate, INTERVAL " . $pmpro_email_days_before_expiration . " Day) <= '" . $today . "'
-	AND (um.meta_value IS NULL OR DATE_ADD(um.meta_value, INTERVAL " . $pmpro_email_days_before_expiration . " Day) <= '" . $today . "')
-	ORDER BY mu.enddate";
+	$sqlQuery = $wpdb->prepare(
+		"SELECT mu.user_id, mu.membership_id, mu.startdate, mu.enddate
+		 FROM {$wpdb->pmpro_memberships_users} AS mu
+         	LEFT JOIN {$wpdb->usermeta} AS um ON um.user_id = mu.user_id AND um.meta_key = %s
+			INNER JOIN {$wpdb->users} AS u ON u.ID = mu.user_id AND (
+				mu.membership_id <> 0 OR
+				mu.membership_id <> NULL OR
+				mu.membership_id <> 'NULL'
+			)
+		 WHERE mu.status = 'active'
+      	 	AND mu.enddate IS NOT NULL
+			AND mu.enddate <> ''
+			AND mu.enddate <> '0000-00-00 00:00:00'
+			AND DATE_SUB(mu.enddate, INTERVAL %d Day) <= %s
+			AND (um.meta_value IS NULL OR DATE_ADD(um.meta_value, INTERVAL %d Day) <= %s)
+		ORDER BY mu.enddate",
+		"pmpro_expiration_notice",
+		$pmpro_email_days_before_expiration,
+		$today,
+		$pmpro_email_days_before_expiration,
+		$today
+	);
 
 	if(defined('PMPRO_CRON_LIMIT'))
 		$sqlQuery .= " LIMIT " . PMPRO_CRON_LIMIT;
@@ -81,7 +95,10 @@ function pmpro_cron_expiration_warnings()
 			$euser = get_userdata($e->user_id);
 			$pmproemail->sendMembershipExpiringEmail($euser);
 
-			printf(__("Membership expiring email sent to %s. ", "pmpro"), $euser->user_email);
+			if(current_user_can('manage_options'))
+				printf(__("Membership expiring email sent to %s. ", "pmpro"), $euser->user_email);
+			else
+				echo ". ";
 		}
 
 		//update user meta so we don't email them again
@@ -154,7 +171,10 @@ function pmpro_cron_credit_card_expiring_warnings()
 				$pmproemail = new PMProEmail();
 				$pmproemail->sendCreditCardExpiringEmail($euser,$last_order);
 
-				printf(__("Credit card expiring email sent to %s. ", "pmpro"), $euser->user_email);
+				if(current_user_can('manage_options'))
+					printf(__("Credit card expiring email sent to %s. ", "pmpro"), $euser->user_email);
+				else
+					echo ". ";
 			}
 
 			//update user meta so we don't email them again
@@ -207,7 +227,10 @@ function pmpro_cron_trial_ending_warnings()
 			$euser = get_userdata($e->user_id);
 			$pmproemail->sendTrialEndingEmail($euser);
 
-			printf(__("Trial ending email sent to %s. ", "pmpro"), $euser->user_email);
+			if(current_user_can('manage_options'))
+				printf(__("Trial ending email sent to %s. ", "pmpro"), $euser->user_email);
+			else
+				echo ". ";
 		}
 
 		//update user meta so we don't email them again

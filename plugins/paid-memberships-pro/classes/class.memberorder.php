@@ -4,7 +4,7 @@
 		/**
 		 * Constructor
 		 */
-		function MemberOrder($id = NULL)
+		function __construct($id = NULL)
 		{
 			//set up the gateway
 			$this->setGateway(pmpro_getOption("gateway"));
@@ -18,11 +18,57 @@
 					return $this->getMemberOrderByCode($id);
 			}
 			else
-				return true;	//blank constructor
+				return $this->getEmptyMemberOrder();	//blank constructor
 		}
 
 		/**
-		 * Retrieve a member ordr from the DB by ID
+		 * Returns an empty (but complete) order object.
+		 *
+		 * @return stdClass $order - a 'clean' order object
+		 *
+		 * @since: 1.8.6.8
+		 */
+		function getEmptyMemberOrder()
+		{
+
+			//defaults
+			$order = new stdClass();
+			$order->code = $this->getRandomCode();
+			$order->user_id = "";
+			$order->membership_id = "";
+			$order->subtotal = "";
+			$order->tax = "";
+			$order->couponamount = "";
+			$order->checkout_id = "";
+			$order->total = "";
+			$order->payment_type = "";
+			$order->cardtype = "";
+			$order->accountnumber = "";
+			$order->expirationmonth = "";
+			$order->expirationyear = "";
+			$order->status = "success";
+			$order->gateway = pmpro_getOption("gateway");
+			$order->gateway_environment = pmpro_getOption("gateway_environment");
+			$order->payment_transaction_id = "";
+			$order->subscription_transaction_id = "";
+			$order->affiliate_id = "";
+			$order->affiliate_subid = "";
+			$order->notes = "";
+
+			$order->billing = new stdClass();
+			$order->billing->name = "";
+			$order->billing->street = "";
+			$order->billing->city = "";
+			$order->billing->state = "";
+			$order->billing->zip = "";
+			$order->billing->country = "";
+			$order->billing->phone = "";
+
+			return $order;
+		}
+
+		/**
+		 * Retrieve a member order from the DB by ID
 		 */
 		function getMemberOrderByID($id)
 		{
@@ -71,6 +117,7 @@
 				$this->subtotal = $dbobj->subtotal;
 				$this->tax = $dbobj->tax;
 				$this->couponamount = $dbobj->couponamount;
+				$this->checkout_id = $dbobj->checkout_id;
 				$this->certificate_id = $dbobj->certificate_id;
 				$this->certificateamount = $dbobj->certificateamount;
 				$this->total = $dbobj->total;
@@ -143,7 +190,7 @@
 		 * @param id $membership_id Limit search to only orders for this membership level. Defaults to NULL to find orders for any level.
 		 *
 		 */
-		function getLastMemberOrder($user_id = NULL, $status = 'success', $membership_id = NULL)
+		function getLastMemberOrder($user_id = NULL, $status = 'success', $membership_id = NULL, $gateway = NULL, $gateway_environment = NULL)
 		{
 			global $current_user, $wpdb;
 			if(!$user_id)
@@ -161,6 +208,13 @@
 
 			if(!empty($membership_id))
 				$this->sqlQuery .= "AND membership_id = '" . $membership_id . "' ";
+			
+			if(!empty($gateway))
+				$this->sqlQuery .= "AND gateway = '" . esc_sql($gateway) . "' ";
+
+			if(!empty($gateway_environment))
+				$this->sqlQuery .= "AND gateway_environment = '" . esc_sql($gateway_environment) . "' ";
+
 			$this->sqlQuery .= "ORDER BY timestamp DESC LIMIT 1";
 
 			//get id
@@ -417,8 +471,10 @@
 			//calculate total
 			if(!empty($this->total))
 				$total = $this->total;
-			else
+			else {
 				$total = (float)$amount + (float)$tax;
+				$this->total = $total;
+			}
 
 			//these fix some warnings/notices
 			if(empty($this->billing))
@@ -457,6 +513,13 @@
 				$this->gateway = pmpro_getOption("gateway");
 			if(empty($this->gateway_environment))
 				$this->gateway_environment = pmpro_getOption("gateway_environment");
+
+			if(empty($this->datetime) && empty($this->timestamp))
+				$this->datetime = date("Y-m-d H:i:s", current_time("timestamp"));		//use current time
+			elseif(empty($this->datetime) && !empty($this->timestamp) && is_numeric($this->timestamp))
+				$this->datetime = date("Y-m-d H:i:s", $this->timestamp);	//get datetime from timestamp
+			elseif(empty($this->datetime) && !empty($this->timestamp))
+				$this->datetime = $this->timestamp;		//must have a datetime in it
 
 			if(empty($this->notes))
 				$this->notes = "";
@@ -497,6 +560,7 @@
 									`gateway_environment` = '" . $this->gateway_environment . "',
 									`payment_transaction_id` = '" . esc_sql($this->payment_transaction_id) . "',
 									`subscription_transaction_id` = '" . esc_sql($this->subscription_transaction_id) . "',
+									`timestamp` = '" . esc_sql($this->datetime) . "',
 									`affiliate_id` = '" . esc_sql($this->affiliate_id) . "',
 									`affiliate_subid` = '" . esc_sql($this->affiliate_subid) . "',
 									`notes` = '" . esc_sql($this->notes) . "'
@@ -523,7 +587,7 @@
 									   '" . esc_sql($this->billing->zip) . "',
 									   '" . esc_sql($this->billing->country) . "',
 									   '" . cleanPhone($this->billing->phone) . "',
-									   '" . $amount . "',
+									   '" . $this->subtotal . "',
 									   '" . $tax . "',
 									   '" . $this->couponamount. "',
 									   " . intval($this->certificate_id) . ",
@@ -539,7 +603,7 @@
 									   '" . $this->gateway_environment . "',
 									   '" . esc_sql($this->payment_transaction_id) . "',
 									   '" . esc_sql($this->subscription_transaction_id) . "',
-									   '" . current_time('mysql') . "',
+									   '" . esc_sql($this->datetime) . "',
 									   '" . esc_sql($this->affiliate_id) . "',
 									   '" . esc_sql($this->affiliate_subid) . "',
 									    '" . esc_sql($this->notes) . "'
@@ -649,7 +713,13 @@
 				}
 				else
 				{
-					//would have been cancelled by the gateway class
+					//Note: status would have been set to cancelled by the gateway class. So we don't have to update it here.
+					
+					//remove billing numbers in pmpro_memberships_users if the membership is still active
+					global $wpdb;
+					$sqlQuery = "UPDATE $wpdb->pmpro_memberships_users SET initial_payment = 0, billing_amount = 0, cycle_number = 0 WHERE user_id = '" . $this->user_id . "' AND membership_id = '" . $this->membership_id . "' AND status = 'active'";
+					$wpdb->query($sqlQuery);
+					
 					return $result;
 				}
 			}

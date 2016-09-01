@@ -23,22 +23,38 @@ function pmpro_report_login_widget()
 	$views = get_option("pmpro_views", array("today"=>0, "thisday"=>date("Y-m-d", $now), "alltime"=>0, "month"=>0, "thismonth"=>date("n", $now)));
 	$logins = get_option("pmpro_logins", array("today"=>0, "thisday"=>date("Y-m-d", $now), "alltime"=>0, "month"=>0, "thismonth"=>date("n", $now)));	
 ?>
-<div style="width: 33%; float: left;">
-	<p><?php _e('Visits Today', 'pmpro')?>: <?php echo $visits['today'];?></p>
-	<p><?php _e('Visits This Month', 'pmpro')?>: <?php echo $visits['month'];?></p>
-	<p><?php _e('Visits All Time', 'pmpro')?>: <?php echo $visits['alltime'];?></p>
-</div>
-<div style="width: 33%; float: left;">
-	<p><?php _e('Views Today', 'pmpro')?>: <?php echo $views['today'];?></p>
-	<p><?php _e('Views This Month', 'pmpro')?>: <?php echo $views['month'];?></p>
-	<p><?php _e('Views All Time', 'pmpro')?>: <?php echo $views['alltime'];?></p>
-</div>
-<div style="width: 33%; float: left;">
-	<p><?php _e('Logins Today', 'pmpro')?>: <?php echo $logins['today'];?></p>
-	<p><?php _e('Logins This Month', 'pmpro')?>: <?php echo $logins['month'];?></p>
-	<p><?php _e('Logins All Time', 'pmpro')?>: <?php echo $logins['alltime'];?></p>
-</div>
-<div class="clear"></div>
+<span id="pmpro_report_login">
+	<table class="wp-list-table widefat fixed striped">
+	<thead>
+		<tr>
+			<th scope="col">&nbsp;</th>
+			<th scope="col"><?php _e('Visits','pmpro'); ?></th>
+			<th scope="col"><?php _e('Views','pmpro'); ?></th>
+			<th scope="col"><?php _e('Logins','pmpro'); ?></th>
+		</tr>
+	</thead>
+	<tbody>
+		<tr>
+			<th scope="row"><?php _e('Today','pmpro'); ?></th>
+			<td><?php echo number_format_i18n($visits['today']); ?></td>
+			<td><?php echo number_format_i18n($views['today']); ?></td>
+			<td><?php echo number_format_i18n($logins['today']);?></td>
+		</tr>
+		<tr>
+			<th scope="row"><?php _e('This Month','pmpro'); ?></th>
+			<td><?php echo number_format_i18n($visits['month']); ?></td>
+			<td><?php echo number_format_i18n($views['month']); ?></td>
+			<td><?php echo number_format_i18n($logins['month']); ?></td>
+		</tr>
+		<tr>
+			<th scope="row"><?php _e('All Time','pmpro'); ?></th>
+			<td><?php echo number_format_i18n($visits['alltime']); ?></td>
+			<td><?php echo number_format_i18n($views['alltime']);?></td>
+			<td><?php echo number_format_i18n($logins['alltime']); ?></td>
+		</tr>
+	</tbody>
+	</table>	
+</span>
 <?php
 }
 
@@ -59,12 +75,12 @@ function pmpro_report_login_page()
 		$l = "";
 ?>
 	<form id="posts-filter" method="get" action="">	
-	<h2>
+	<h1>
 		<?php _e('Visits, Views, and Logins Report', 'pmpro');?>
-	</h2>		
+	</h1>		
 	<ul class="subsubsub">
 		<li>			
-			<?php _ex('Show', 'Dropdown label, e.g. Show All Users', 'pmpro')?> <select name="l" onchange="jQuery('#posts-filter').submit();">
+			<?php _e('Show', 'pmpro')?> <select name="l" onchange="jQuery('#posts-filter').submit();">
 				<option value="" <?php if(!$l) { ?>selected="selected"<?php } ?>><?php _e('All Users', 'pmpro')?></option>
 				<option value="all" <?php if($l == "all") { ?>selected="selected"<?php } ?>><?php _e('All Levels', 'pmpro')?></option>
 				<?php
@@ -80,7 +96,7 @@ function pmpro_report_login_page()
 		</li>
 	</ul>
 	<p class="search-box">
-		<label class="hidden" for="post-search-input"><?php _ex('Search', 'Search form label', 'pmpro')?> <?php if(empty($l)) echo "Users"; else echo "Members";?>:</label>
+		<label class="hidden" for="post-search-input"><?php _e('Search', 'pmpro')?> <?php if(empty($l)) echo "Users"; else echo "Members";?>:</label>
 		<input type="hidden" name="page" value="pmpro-reports" />		
 		<input type="hidden" name="report" value="login" />		
 		<input id="post-search-input" type="text" value="<?php echo esc_attr($s)?>" name="s"/>

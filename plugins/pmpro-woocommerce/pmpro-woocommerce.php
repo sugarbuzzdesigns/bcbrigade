@@ -3,7 +3,7 @@
 Plugin Name: Paid Memberships Pro - WooCommerce Add On
 Plugin URI: http://www.paidmembershipspro.com/pmpro-woocommerce/
 Description: Integrate WooCommerce with Paid Memberships Pro.
-Version: 1.2.9
+Version: 1.2.11
 Author: Stranger Studios
 Author URI: http://www.strangerstudios.com
 
@@ -12,9 +12,13 @@ General Idea:
 	1. Connect WooCommerce products to PMPro Membership Levels.
 	2. If a user purchases a certain product, give them the corresponding membership level.
 	3. If WooCommerce subscriptions are installed, and a subscription is cancelled, cancel the corresponding PMPro membership level.
-	
+
 	NOTE: You can still only have one level per user with PMPro.
 */
+
+// quitely exit if PMPro isn't active
+if (! defined('PMPRO_DIR') && ! function_exists('pmpro_init'))
+	return;
 
 include_once(dirname(__FILE__)) . '/css/style.css';
 
@@ -81,13 +85,13 @@ function pmprowoo_add_membership_from_order($order_id)
                     $pmpro_level = pmpro_getLevel($pmprowoo_product_levels[$item['product_id']]);
 
 					//if checking out for the same level they have, keep their old start date
-					$sqlQuery = "SELECT startdate FROM $wpdb->pmpro_memberships_users WHERE user_id = '" . esc_sql($user_id) . "' AND membership_id = '" . esc_sql($pmpro_level->id) . "' AND status = 'active' ORDER BY id DESC LIMIT 1";		
-					$old_startdate = $wpdb->get_var($sqlQuery);					
+					$sqlQuery = "SELECT startdate FROM $wpdb->pmpro_memberships_users WHERE user_id = '" . esc_sql($user_id) . "' AND membership_id = '" . esc_sql($pmpro_level->id) . "' AND status = 'active' ORDER BY id DESC LIMIT 1";
+					$old_startdate = $wpdb->get_var($sqlQuery);
 					if(!empty($old_startdate))
 						$startdate = "'" . $old_startdate . "'";
 					else
 						$startdate = "'" . current_time('mysql') . "'";
-					
+
                     //create custom level to mimic PMPro checkout
                     $custom_level = array(
                         'user_id' => $user_id,
@@ -107,10 +111,10 @@ function pmprowoo_add_membership_from_order($order_id)
 					//set enddate
 					if(!empty($pmpro_level->expiration_number))
 						$custom_level['enddate'] = date("Y-m-d", strtotime("+ " . $pmpro_level->expiration_number . " " . $pmpro_level->expiration_period, current_time('timestamp')));
-										
+
                     //let woocommerce handle everything but we can filter if we want to
                     pmpro_changeMembershipLevel(apply_filters('pmprowoo_checkout_level', $custom_level), $user_id);
-					
+
                     //only going to process the first membership product, so break the loop
                     break;
                 }
@@ -262,9 +266,9 @@ function pmprowoo_get_membership_price($price, $product)
 
     $product_ids = array_keys($pmprowoo_product_levels); // membership product levels
     $items = $woocommerce->cart->cart_contents; // items in the cart
-	
+
     //ignore membership products and subscriptions if we are set that way
-    if((!$pmprowoo_discounts_on_subscriptions && ($product->product_type == "subscription" || $product->product_type == "variable-subscription")) || in_array($product->id, array_keys($pmprowoo_product_levels), false))
+    if(!$pmprowoo_discounts_on_subscriptions && ($product->product_type == "subscription" || $product->product_type == "variable-subscription" || in_array($product->id, array_keys($pmprowoo_product_levels), false)))
         return $price;
 
     // Search for any membership level products. IF found, use first one as the cart membership level.
@@ -275,7 +279,7 @@ function pmprowoo_get_membership_price($price, $product)
             break;
         }
     }
-	
+
     // use cart membership level price if set, otherwise use current member level
     if (isset($cart_membership_level)) {
         $level_price = '_level_' . $cart_membership_level . '_price';
@@ -294,7 +298,7 @@ function pmprowoo_get_membership_price($price, $product)
             $discount_price =  get_post_meta($product->id, $level_price, true);
 
         // apply discounts if there are any for this level
-        if(isset($level_id)) {
+        if(isset($level_id) && $product->id != 267) {
             $discount_price  = $discount_price - ( $discount_price * $pmprowoo_member_discounts[$level_id]);
         }
     }
@@ -304,7 +308,7 @@ function pmprowoo_get_membership_price($price, $product)
 
 
 // only change price if this is on the front end
-if (!is_admin() || defined('DOING_AJAX')) {    
+if (!is_admin() || defined('DOING_AJAX')) {
 	add_filter("woocommerce_get_price", "pmprowoo_get_membership_price", 10, 2);
 }
 
@@ -409,7 +413,7 @@ function pmprowoo_add_membership_discount() {
 
     global $pmprowoo_member_discounts;
     $level_id = intval($_REQUEST['edit']);
-    if($level_id > 0)
+    if($level_id > 0 && !empty($pmprowoo_member_discounts) && !empty($pmprowoo_member_discounts[$level_id]))
         $membership_discount = $pmprowoo_member_discounts[$level_id] * 100; //convert back to %
     else
         $membership_discount = '';
@@ -468,13 +472,13 @@ add_filter('pmpro_custom_advanced_settings', 'pmprowoo_custom_settings');
 function pmprowoo_woocommerce_after_checkout_registration_form()
 {
 	global $woocommerce, $pmprowoo_product_levels;
-	
-	// grab items from the cart	
+
+	// grab items from the cart
 	$items = $woocommerce->cart->cart_contents;
-	
+
 	//membership product ids
     $product_ids = array_keys($pmprowoo_product_levels);
-	
+
 	// Search for any membership level products. IF found, use first one as the cart membership level.
     foreach($items as $item)
     {
@@ -483,13 +487,13 @@ function pmprowoo_woocommerce_after_checkout_registration_form()
             break;
         }
     }
-	
+
 	if(!empty($cart_membership_level))
 	{
 ?>
-<script>	
+<script>
 	jQuery('#createaccount').prop('checked', true);
-	jQuery('#createaccount').parent().hide();	
+	jQuery('#createaccount').parent().hide();
 </script>
 <?php
 	}
@@ -500,14 +504,14 @@ add_action('woocommerce_after_checkout_registration_form', 'pmprowoo_woocommerce
 	When the Woo Commerce Billing Address fields are updated, update the equivalent PMPro Fields
 */
 function pmprowoo_update_user_meta($meta_id, $object_id, $meta_key, $meta_value)
-{	
+{
 	//tracks updates that are made
-	global $pmprowoo_updated_user_meta;	
+	global $pmprowoo_updated_user_meta;
 	if(empty($pmprowoo_updated_user_meta))
 		$pmprowoo_updated_user_meta = array();
 	if(empty($pmprowoo_updated_user_meta[$object_id]))
 		$pmprowoo_updated_user_meta[$object_id] = array();
-	
+
 	//array of user meta to mirror
 	$um = array(
 		"billing_first_name" => "pmpro_bfirstname",
@@ -530,15 +534,15 @@ function pmprowoo_update_user_meta($meta_id, $object_id, $meta_key, $meta_value)
 		"pmpro_bcountry" => "billing_country",
 		"pmpro_bphone" => "billing_phone",
 		"pmpro_bemail" => "billing_email"
-	);		
-		
+	);
+
 	//check if this user meta is to be mirrored
 	foreach($um as $left => $right)
 	{
 		if($meta_key == $left && !in_array($left, $pmprowoo_updated_user_meta[$object_id]))
-		{			
+		{
 			$pmprowoo_updated_user_meta[$object_id][] = $left;
-			update_user_meta($object_id, $right, $meta_value);			
+			update_user_meta($object_id, $right, $meta_value);
 		}
 	}
 }
@@ -553,14 +557,14 @@ add_action('add_user_meta', 'pmprowoo_add_user_meta', 10, 3);
 
 /*
 	apply end date extension filter to woo commerce checkouts as well
-	
+
 	$level_array is a custom_level array for the pmpro_changeMembershipLevel call
 	$level_obj in the function is an object with the stored values for the level
 */
 function pmprowoo_checkout_level_extend_memberships($level_array)
 {
 	$level_obj = pmpro_getLevel($level_array['membership_id']);
-	
+
 	//does this level expire? are they an existing user of this level?
 	if(!empty($level_obj) && !empty($level_obj->expiration_number) && pmpro_hasMembershipLevel($level_obj->id, $level_array['user_id']))
 	{
@@ -568,17 +572,17 @@ function pmprowoo_checkout_level_extend_memberships($level_array)
 		$user = get_userdata($level_array['user_id']);
 		$user->membership_level = pmpro_getMembershipLevelForUser($user->ID);
 		$expiration_date = $user->membership_level->enddate;
-		
+
 		//calculate days left
 		$todays_date = current_time('timestamp');
 		$time_left = $expiration_date - $todays_date;
-		
+
 		//time left?
 		if($time_left > 0)
 		{
 			//convert to days and add to the expiration date (assumes expiration was 1 year)
 			$days_left = floor($time_left/(60*60*24));
-			
+
 			//figure out days based on period
 			if($level_obj->expiration_period == "Day")
 				$total_days = $days_left + $level_obj->expiration_number;
@@ -588,12 +592,12 @@ function pmprowoo_checkout_level_extend_memberships($level_array)
 				$total_days = $days_left + $level_obj->expiration_number * 30;
 			elseif($level_obj->expiration_period == "Year")
 				$total_days = $days_left + $level_obj->expiration_number * 365;
-			
+
 			//update the end date
 			$level_array['enddate'] = date("Y-m-d", strtotime("+ $total_days Days", $todays_date));
 		}
 	}
-		
+
 	return $level_array;
 }
 add_filter('pmprowoo_checkout_level', 'pmprowoo_checkout_level_extend_memberships');

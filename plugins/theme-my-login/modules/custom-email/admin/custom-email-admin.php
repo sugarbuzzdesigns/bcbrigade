@@ -44,14 +44,12 @@ class Theme_My_Login_Custom_Email_Admin extends Theme_My_Login_Abstract {
 	 * @access protected
 	 */
 	protected function load() {
-		add_action( 'tml_uninstall_custom-email/custom-email.php', array( &$this, 'uninstall' ) );
+		add_action( 'tml_uninstall_custom-email/custom-email.php', array( $this, 'uninstall' ) );
 
-		add_action( 'admin_menu', array( &$this, 'admin_menu' ) );
-		add_action( 'admin_init', array( &$this, 'admin_init' ) );
+		add_action( 'admin_menu', array( $this, 'admin_menu' ) );
+		add_action( 'admin_init', array( $this, 'admin_init' ) );
 
-		add_action( 'load-tml_page_theme_my_login_email', array( &$this, 'load_settings_page' ) );
-
-		add_action( 'user_register', array( &$this, 'user_register' ) );
+		add_action( 'load-tml_page_theme_my_login_email', array( $this, 'load_settings_page' ) );
 	}
 
 	/**
@@ -93,20 +91,20 @@ class Theme_My_Login_Custom_Email_Admin extends Theme_My_Login_Abstract {
 			__( 'E-mail', 'theme-my-login' ),
 			'manage_options',
 			$this->options_key,
-			array( &$this, 'settings_page' )
+			array( $this, 'settings_page' )
 		);
 
-		add_meta_box( 'new_user',       __( 'New User',          'theme-my-login' ), array( &$this, 'new_user_meta_box' ),       'tml_page_' . $this->options_key, 'normal' );
-		add_meta_box( 'new_user_admin', __( 'New User Admin',    'theme-my-login' ), array( &$this, 'new_user_admin_meta_box' ), 'tml_page_' . $this->options_key, 'normal' );
-		add_meta_box( 'retrieve_pass',  __( 'Retrieve Password', 'theme-my-login' ), array( &$this, 'retrieve_pass_meta_box' ),  'tml_page_' . $this->options_key, 'normal' );
-		add_meta_box( 'reset_pass',     __( 'Reset Password',    'theme-my-login' ), array( &$this, 'reset_pass_meta_box' ),     'tml_page_' . $this->options_key, 'normal' );
+		add_meta_box( 'new_user',       __( 'New User',          'theme-my-login' ), array( $this, 'new_user_meta_box' ),       'tml_page_' . $this->options_key, 'normal' );
+		add_meta_box( 'new_user_admin', __( 'New User Admin',    'theme-my-login' ), array( $this, 'new_user_admin_meta_box' ), 'tml_page_' . $this->options_key, 'normal' );
+		add_meta_box( 'retrieve_pass',  __( 'Retrieve Password', 'theme-my-login' ), array( $this, 'retrieve_pass_meta_box' ),  'tml_page_' . $this->options_key, 'normal' );
+		add_meta_box( 'reset_pass',     __( 'Reset Password',    'theme-my-login' ), array( $this, 'reset_pass_meta_box' ),     'tml_page_' . $this->options_key, 'normal' );
 
 		// Check for User Moderation module
 		if ( class_exists( 'Theme_My_Login_User_Moderation' ) ) {
-			add_meta_box( 'user_activation',     __( 'User Activation',     'theme-my-login' ), array( &$this, 'user_activation_meta_box' ),     'tml_page_' . $this->options_key, 'normal' );
-			add_meta_box( 'user_approval',       __( 'User Approval',       'theme-my-login' ), array( &$this, 'user_approval_meta_box' ),       'tml_page_' . $this->options_key, 'normal' );
-			add_meta_box( 'user_approval_admin', __( 'User Approval Admin', 'theme-my-login'),  array( &$this, 'user_approval_admin_meta_box' ), 'tml_page_' . $this->options_key, 'normal' );
-			add_meta_box( 'user_denial',         __( 'User Denial',         'theme-my-login' ), array( &$this, 'user_denial_meta_box' ),         'tml_page_' . $this->options_key, 'normal' );
+			add_meta_box( 'user_activation',     __( 'User Activation',     'theme-my-login' ), array( $this, 'user_activation_meta_box' ),     'tml_page_' . $this->options_key, 'normal' );
+			add_meta_box( 'user_approval',       __( 'User Approval',       'theme-my-login' ), array( $this, 'user_approval_meta_box' ),       'tml_page_' . $this->options_key, 'normal' );
+			add_meta_box( 'user_approval_admin', __( 'User Approval Admin', 'theme-my-login'),  array( $this, 'user_approval_admin_meta_box' ), 'tml_page_' . $this->options_key, 'normal' );
+			add_meta_box( 'user_denial',         __( 'User Denial',         'theme-my-login' ), array( $this, 'user_denial_meta_box' ),         'tml_page_' . $this->options_key, 'normal' );
 		}
 	}
 
@@ -119,7 +117,7 @@ class Theme_My_Login_Custom_Email_Admin extends Theme_My_Login_Abstract {
 	 * @access public
 	 */
 	public function admin_init() {
-		register_setting( $this->options_key, $this->options_key, array( &$this, 'save_settings' ) );
+		register_setting( $this->options_key, $this->options_key, array( $this, 'save_settings' ) );
 	}
 
 	/**
@@ -131,7 +129,7 @@ class Theme_My_Login_Custom_Email_Admin extends Theme_My_Login_Abstract {
 	 * @access public
 	 */
 	public function load_settings_page() {
-		wp_enqueue_script( 'tml-custom-email-admin', plugins_url( 'theme-my-login/modules/custom-email/admin/js/custom-email-admin.js' ), array( 'postbox' ) );
+		wp_enqueue_script( 'tml-custom-email-admin', plugins_url( 'js/custom-email-admin.js', __FILE__ ), array( 'postbox' ) );
 	}
 
 	/**
@@ -146,8 +144,7 @@ class Theme_My_Login_Custom_Email_Admin extends Theme_My_Login_Abstract {
 		global $current_screen;
 		?>
 		<div class="wrap">
-			<?php screen_icon( 'options-general' ); ?>
-			<h2><?php echo esc_html_e( 'Theme My Login Custom E-mail Settings', 'theme-my-login' ); ?></h2>
+			<h2><?php esc_html_e( 'Theme My Login Custom E-mail Settings', 'theme-my-login' ); ?></h2>
 			<?php settings_errors(); ?>
 
 			<form method="post" action="options.php">
@@ -177,7 +174,7 @@ class Theme_My_Login_Custom_Email_Admin extends Theme_My_Login_Abstract {
 		?>
 		<p class="description">
 			<?php _e( 'This e-mail will be sent to a new user upon registration.', 'theme-my-login' ); ?>
-			<?php _e( 'Please be sure to include the variable %user_pass% if using default passwords or else the user will not know their password!', 'theme-my-login' ); ?>
+			<?php _e( 'Please be sure to include the variable %reseturl% or else the user will not be able to recover their password!', 'theme-my-login' ); ?>
 			<?php _e( 'If any field is left empty, the default will be used instead.', 'theme-my-login' ); ?>
 		</p>
 		<table class="form-table">
@@ -205,7 +202,7 @@ class Theme_My_Login_Custom_Email_Admin extends Theme_My_Login_Abstract {
 			<tr valign="top">
 				<th scope="row"><label for="<?php echo $this->options_key; ?>_new_user_message"><?php _e( 'Message', 'theme-my-login' ); ?></label></th>
 				<td>
-					<p class="description"><?php _e( 'Available Variables', 'theme-my-login' ); ?>: %blogname%, %siteurl%, %user_login%, %user_email%, %user_pass%, %user_ip%</p>
+					<p class="description"><?php _e( 'Available Variables', 'theme-my-login' ); ?>: %blogname%, %siteurl%, %reseturl%, %user_login%, %user_email%, %user_ip%</p>
 					<textarea name="<?php echo $this->options_key; ?>[new_user][message]" id="<?php echo $this->options_key; ?>_new_user_message" class="large-text" rows="10"><?php echo $this->get_option( array( 'new_user', 'message' ) ); ?></textarea></p>
 				</td>
 			</tr>
@@ -436,7 +433,7 @@ class Theme_My_Login_Custom_Email_Admin extends Theme_My_Login_Abstract {
 		?>
 		<p class="description">
 			<?php _e( 'This e-mail will be sent to a new user upon admin approval when "Admin Approval" is checked for "User Moderation".', 'theme-my-login' ); ?>
-			<?php _e( 'Please be sure to include the variable %user_pass% if using default passwords or else the user will not know their password!', 'theme-my-login' ); ?>
+			<?php _e( 'Please be sure to include the variable %reseturl% or else the user will not be able to recover their password!', 'theme-my-login' ); ?>
 			<?php _e( 'If any field is left empty, the default will be used instead.', 'theme-my-login' ); ?>
 		</p>
 		<table class="form-table">
@@ -464,7 +461,7 @@ class Theme_My_Login_Custom_Email_Admin extends Theme_My_Login_Abstract {
 			<tr valign="top">
 				<th scope="row"><label for="<?php echo $this->options_key; ?>_user_approval_message"><?php _e( 'Message', 'theme-my-login' ); ?></label></th>
 				<td>
-					<p class="description"><?php _e( 'Available Variables', 'theme-my-login' ); ?>: %blogname%, %siteurl%, %loginurl%, %user_login%, %user_email%, %user_pass%</p>
+					<p class="description"><?php _e( 'Available Variables', 'theme-my-login' ); ?>: %blogname%, %siteurl%, %reseturl%, %loginurl%, %user_login%, %user_email%</p>
 					<textarea name="<?php echo $this->options_key; ?>[user_approval][message]" id="<?php echo $this->options_key; ?>_user_approval_message" class="large-text" rows="10"><?php echo $this->get_option( array( 'user_approval', 'message' ) ); ?></textarea></td>
 				</td>
 			</tr>
@@ -573,23 +570,15 @@ class Theme_My_Login_Custom_Email_Admin extends Theme_My_Login_Abstract {
 					<textarea name="<?php echo $this->options_key; ?>[user_denial][message]" id="<?php echo $this->options_key; ?>_user_denial_message" class="large-text" rows="10"><?php echo $this->get_option( array( 'user_denial', 'message' ) ); ?></textarea>
 				</td>
 			</tr>
+			<tr valign="top">
+				<th scope="row">&nbsp;</th>
+				<td>
+					<input name="<?php echo $this->options_key; ?>[user_denial][disable]" type="checkbox" id="<?php echo $this->options_key; ?>_user_denial_disable" value="1"<?php checked( 1, $this->get_option( array( 'user_denial', 'disable' ) ) ); ?> />
+					<label for="<?php echo $this->options_key; ?>_user_denial_disable"><?php _e( 'Disable Notification', 'theme-my-login' ); ?></label>
+				</td>
+			</tr>
 		</table>
 		<?php
-	}
-
-	public function user_register( $user_id ) {
-		$screen = get_current_screen();
-
-		if ( 'user' == $screen->base && 'add' == $screen->action ) {
-			do_action( 'tml_new_user_registered', $user_id, isset( $_POST['send_password'] ) ? $_POST['pass1'] : '' );
-
-			if ( current_user_can( 'list_users' ) )
-				$redirect = 'users.php?update=add&id=' . $user_id;
-			else
-				$redirect = add_query_arg( 'update', 'add', 'user-new.php' );
-			wp_redirect( $redirect );
-			exit;
-		}
 	}
 
 	/**
@@ -604,11 +593,13 @@ class Theme_My_Login_Custom_Email_Admin extends Theme_My_Login_Abstract {
 	 * @return string|array Sanitized settings
 	 */
 	public function save_settings( $settings ) {
-		$settings['new_user']['admin_disable']   = ! empty( $settings['new_user']['admin_disable']   );
-		$settings['reset_pass']['admin_disable'] = ! empty( $settings['reset_pass']['admin_disable'] );
+		$settings['new_user']['admin_disable'] = isset( $settings['new_user']['admin_disable'] ) ? (bool) $settings['new_user']['admin_disable'] : false;
+		$settings['reset_pass']['admin_disable'] = isset( $settings['reset_pass']['admin_disable'] ) ? (bool) $settings['reset_pass']['admin_disable'] : false;
 
-		if ( class_exists( 'Theme_My_Login_User_Moderation' ) )
-			$settings['user_approval']['admin_disable'] = isset( $settings['user_approval']['admin_disable'] );
+		if ( class_exists( 'Theme_My_Login_User_Moderation' ) ) {
+			$settings['user_approval']['admin_disable'] = isset( $settings['user_approval']['admin_disable'] ) ? (bool) $settings['user_approval']['admin_disable'] : false;
+			$settings['user_denial']['disable'] = isset( $settings['user_denial']['disable'] ) ? (bool) $settings['user_denial']['admin_disable'] : false;
+		}
 
 		$settings = Theme_My_Login_Common::array_merge_recursive( $this->get_options(), $settings );
 

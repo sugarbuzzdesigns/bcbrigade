@@ -6,7 +6,7 @@
 	$logstr = "";
 
 	//in case the file is loaded directly
-	if(!defined("WP_USE_THEMES"))
+	if(!defined("ABSPATH"))
 	{
 		define('WP_USE_THEMES', false);
 		require_once(dirname(__FILE__) . '/../../../../wp-load.php');
@@ -55,6 +55,9 @@
 			{
 				//should we check for a dupe x_trans_id?
 
+				//get the user's membership level info
+				$user->membership_level = pmpro_getMembershipLevelForUser($user_id);
+
 				//alright. create a new order/invoice
 				$morder = new MemberOrder();
 				$morder->user_id = $old_order->user_id;
@@ -94,12 +97,17 @@
 				$morder->ExpirationDate_YdashM = $morder->expirationyear . "-" . $morder->expirationmonth;
 
 				//save
+				$morder->status = "success";
 				$morder->saveOrder();
 				$morder->getMemberOrderByID($morder->id);
 
 				//email the user their invoice
 				$pmproemail = new PMProEmail();
 				$pmproemail->sendInvoiceEmail($user, $morder);
+
+				//hook for successful subscription payments
+				do_action("pmpro_subscription_payment_completed", $morder);
+
 			}
 		}
 		elseif($fields['x_response_code'] == 2 || $fields['x_response_code'] == 3)

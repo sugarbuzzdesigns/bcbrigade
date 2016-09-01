@@ -35,31 +35,40 @@ function pmpro_report_sales_widget()
 	global $wpdb;
 ?>
 <style>
-	#pmpro_report_sales div {text-align: center;}
-	#pmpro_report_sales em {display: block; font-style: normal; font-size: 2em; margin: 5px;}	
+	#pmpro_report_sales tbody td:last-child {text-align: right; }
 </style>
-<span id="#pmpro_report_sales">
-	<div style="width: 25%; float: left;">	
-		<em><?php echo pmpro_getSales("all time");?></em>	
-		<label>All Time</label>
-		<em><?php echo pmpro_formatPrice(pmpro_getRevenue("all time"));?></em>		
-	</div>
-	<div style="width: 25%; float: left;">	
-		<em><?php echo pmpro_getSales("this year");?></em>
-		<label>This Year</label>
-		<em><?php echo pmpro_formatPrice(pmpro_getRevenue("this year"));?></em>		
-	</div>
-	<div style="width: 25%; float: left;">	
-		<em><?php echo pmpro_getSales("this month");?></em>
-		<label>This Month</label>
-		<em><?php echo pmpro_formatPrice(pmpro_getRevenue("this month"));?></em>		
-	</div>
-	<div style="width: 25%; float: left;">
-		<em><?php echo pmpro_getSales("today");?></em>
-		<label>Today</label>
-		<em><?php echo pmpro_formatPrice(pmpro_getRevenue("today"));?></em>		
-	</div>	
-	<div class="clear"></div>
+<span id="pmpro_report_sales">
+	<table class="wp-list-table widefat fixed striped">
+	<thead>
+		<tr>
+			<th scope="col">&nbsp;</th>
+			<th scope="col"><?php _e('Sales','pmpro'); ?></th>
+			<th scope="col"><?php _e('Revenue','pmpro'); ?></th>
+		</tr>
+	</thead>
+	<tbody>
+		<tr>
+			<th scope="row"><?php _e('Today','pmpro'); ?></th>
+			<td><?php echo number_format_i18n(pmpro_getSales("today")); ?></td>
+			<td><?php echo pmpro_formatPrice(pmpro_getRevenue("today"));?></td>
+		</tr>
+		<tr>
+			<th scope="row"><?php _e('This Month','pmpro'); ?></th>
+			<td><?php echo number_format_i18n(pmpro_getSales("this month")); ?></td>
+			<td><?php echo pmpro_formatPrice(pmpro_getRevenue("this month"));?></td>
+		</tr>
+		<tr>
+			<th scope="row"><?php _e('This Year','pmpro'); ?></th>
+			<td><?php echo number_format_i18n(pmpro_getSales("this year")); ?></td>
+			<td><?php echo pmpro_formatPrice(pmpro_getRevenue("this year"));?></td>
+		</tr>
+		<tr>
+			<th scope="row"><?php _e('All Time','pmpro'); ?></th>
+			<td><?php echo number_format_i18n(pmpro_getSales("all time")); ?></td>
+			<td><?php echo pmpro_formatPrice(pmpro_getRevenue("all time"));?></td>
+		</tr>
+	</tbody>
+	</table>	
 </span>
 <?php
 }
@@ -87,9 +96,9 @@ function pmpro_report_sales_page()
 	if(isset($_REQUEST['month']))
 		$month = intval($_REQUEST['month']);
 	else
-		$month = date("n");
+		$month = date("n", current_time('timestamp'));
 	
-	$thisyear = date("Y");
+	$thisyear = date("Y", current_time('timestamp'));
 	if(isset($_REQUEST['year']))
 		$year = intval($_REQUEST['year']);
 	else
@@ -104,7 +113,7 @@ function pmpro_report_sales_page()
 	if($period == "daily")
 	{
 		$startdate = $year . '-' . substr("0" . $month, strlen($month) - 1, 2) . '-01';		
-		$enddate = $year . '-' . substr("0" . $month, strlen($month) - 1, 2) . '-31';		
+		$enddate = $year . '-' . substr("0" . $month, strlen($month) - 1, 2) . '-32';		
 		$date_function = 'DAY';
 	}
 	elseif($period == "monthly")
@@ -123,7 +132,7 @@ function pmpro_report_sales_page()
 	$gateway_environment = pmpro_getOption("gateway_environment");
 	
 	//get data
-	$sqlQuery = "SELECT $date_function(timestamp) as date, $type_function(total) as value FROM $wpdb->pmpro_membership_orders WHERE timestamp >= '" . $startdate . "' AND status NOT IN('refunded', 'review', 'token', 'error') AND gateway_environment = '" . esc_sql($gateway_environment) . "' ";
+	$sqlQuery = "SELECT $date_function(timestamp) as date, $type_function(total) as value FROM $wpdb->pmpro_membership_orders WHERE total > 0 AND timestamp >= '" . $startdate . "' AND status NOT IN('refunded', 'review', 'token', 'error') AND gateway_environment = '" . esc_sql($gateway_environment) . "' ";
 	
 	if(!empty($enddate))
 		$sqlQuery .= "AND timestamp < '" . $enddate . "' ";
@@ -185,12 +194,12 @@ function pmpro_report_sales_page()
 	}	
 	?>
 	<form id="posts-filter" method="get" action="">		
-	<h2>
+	<h1>
 		<?php _e('Sales and Revenue', 'pmpro');?>
-	</h2>
+	</h1>
 	
 	<div class="tablenav top">
-		<?php _ex('Show', 'Dropdown label, e.g. Show Daily Revenue for January', 'pmpro')?>
+		<?php _e('Show', 'pmpro')?>
 		<select id="period" name="period">
 			<option value="daily" <?php selected($period, "daily");?>><?php _e('Daily', 'pmpro');?></option>
 			<option value="monthly" <?php selected($period, "monthly");?>><?php _e('Monthly', 'pmpro');?></option>
@@ -200,7 +209,7 @@ function pmpro_report_sales_page()
 			<option value="revenue" <?php selected($type, "revenue");?>><?php _e('Revenue', 'pmpro');?></option>
 			<option value="sales" <?php selected($type, "sales");?>><?php _e('Sales', 'pmpro');?></option>
 		</select>
-		<span id="for"><?php _ex('for', 'Dropdown label, e.g. Show Daily Revenue for January', 'pmpro')?></span>
+		<span id="for"><?php _e('for', 'pmpro')?></span>
 		<select id="month" name="month">
 			<?php for($i = 1; $i < 13; $i++) { ?>
 				<option value="<?php echo $i;?>" <?php selected($month, $i);?>><?php echo date("F", mktime(0, 0, 0, $i, 2));?></option>
@@ -211,7 +220,7 @@ function pmpro_report_sales_page()
 				<option value="<?php echo $i;?>" <?php selected($year, $i);?>><?php echo $i;?></option>
 			<?php } ?>
 		</select>
-		<span id="for"><?php _ex('for', 'Dropdown label, e.g. Show Daily Revenue for January', 'pmpro')?></span>
+		<span id="for"><?php _e('for', 'pmpro')?></span>
 		<select name="level">
 			<option value="" <?php if(!$l) { ?>selected="selected"<?php } ?>><?php _e('All Levels', 'pmpro');?></option>
 			<?php
@@ -227,7 +236,7 @@ function pmpro_report_sales_page()
 		
 		<input type="hidden" name="page" value="pmpro-reports" />		
 		<input type="hidden" name="report" value="sales" />	
-		<input type="submit" class="button action" value="<?php _ex('Generate Report', 'Submit button value.', 'pmpro');?>" />
+		<input type="submit" class="button action" value="<?php _e('Generate Report', 'pmpro');?>" />
 	</div>
 	
 	<div id="chart_div" style="clear: both; width: 100%; height: 500px;"></div>				
@@ -318,13 +327,13 @@ function pmpro_getSales($period, $levels = NULL)
 	if(!empty($cache) && !empty($cache[$period]) && !empty($cache[$period][$levels]))
 		return $cache[$period][$levels];
 		
-	//a sale is an order with status NOT IN('refunded', 'review', 'token', 'error')
+	//a sale is an order with status NOT IN('refunded', 'review', 'token', 'error') with a total > 0
 	if($period == "today")
-		$startdate = date("Y-m-d");
+		$startdate = date("Y-m-d", current_time('timestamp'));
 	elseif($period == "this month")
-		$startdate = date("Y-m") . "-01";
+		$startdate = date("Y-m", current_time('timestamp')) . "-01";
 	elseif($period == "this year")
-		$startdate = date("Y") . "-01-01";
+		$startdate = date("Y", current_time('timestamp')) . "-01-01";
 	else
 		$startdate = "";
 	
@@ -332,7 +341,7 @@ function pmpro_getSales($period, $levels = NULL)
 	
 	//build query
 	global $wpdb;
-	$sqlQuery = "SELECT COUNT(*) FROM $wpdb->pmpro_membership_orders WHERE status NOT IN('refunded', 'review', 'token', 'error') AND timestamp >= '" . $startdate . "' AND gateway_environment = '" . esc_sql($gateway_environment) . "' ";
+	$sqlQuery = "SELECT COUNT(*) FROM $wpdb->pmpro_membership_orders WHERE total > 0 AND status NOT IN('refunded', 'review', 'token', 'error') AND timestamp >= '" . $startdate . "' AND gateway_environment = '" . esc_sql($gateway_environment) . "' ";
 	
 	//restrict by level
 	if(!empty($levels))
@@ -363,11 +372,11 @@ function pmpro_getRevenue($period, $levels = NULL)
 		
 	//a sale is an order with status NOT IN('refunded', 'review', 'token', 'error')
 	if($period == "today")
-		$startdate = date("Y-m-d");
+		$startdate = date("Y-m-d", current_time('timestamp'));
 	elseif($period == "this month")
-		$startdate = date("Y-m") . "-01";
+		$startdate = date("Y-m", current_time('timestamp')) . "-01";
 	elseif($period == "this year")
-		$startdate = date("Y") . "-01-01";
+		$startdate = date("Y", current_time('timestamp')) . "-01-01";
 	else
 		$startdate = "";
 	

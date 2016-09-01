@@ -10,7 +10,7 @@
 		define('PMPRO_STRIPE_WEBHOOK_DELAY', 2);
 
 	//in case the file is loaded directly
-	if(!defined("WP_USE_THEMES"))
+	if(!defined("ABSPATH"))
 	{
 		define('WP_USE_THEMES', false);
 		require_once(dirname(__FILE__) . '/../../../../wp-load.php');
@@ -19,7 +19,12 @@
 	if(!class_exists("Stripe"))
 		require_once(dirname(__FILE__) . "/../includes/lib/Stripe/Stripe.php");
 
-	Stripe::setApiKey(pmpro_getOption("stripe_secretkey"));
+	try {
+		Stripe::setApiKey( pmpro_getOption( "stripe_secretkey" ) );
+	} catch ( Exception $e ) {
+		$logstr .= "Unable to set API key for Stripe gateway: " . $e->getMessage();
+		pmpro_stripeWebhookExit();
+	}
 
 	// retrieve the request's body and parse it as JSON
 	if(empty($_REQUEST['event_id']))
@@ -41,180 +46,209 @@
 	{
 		try
 		{
-			$event = Stripe_Event::retrieve($event_id);
+			global $pmpro_stripe_event;
+			$pmpro_stripe_event = Stripe_Event::retrieve($event_id);
 		}
 		catch(Exception $e)
 		{
 			$logstr .= "Could not find an event with ID #" . $event_id . ". " . $e->getMessage();
 			pmpro_stripeWebhookExit();
-			//$event = $post_event;			//for testing you may want to assume that the passed in event is legit
+			//$pmpro_stripe_event = $post_event;			//for testing you may want to assume that the passed in event is legit
 		}
 	}
 
 	global $wpdb;
 
 	//real event?
-	if(!empty($event->id))
+	if(!empty($pmpro_stripe_event->id))
 	{
 		//check what kind of event it is
-		if($event->type == "charge.succeeded")
+		if($pmpro_stripe_event->type == "invoice.payment_succeeded")
 		{
-			//do we have this order yet? (check status too)
-			$order = getOrderFromInvoiceEvent($event);
-
-			//no? create it
-			if(empty($order->id))
+			if($pmpro_stripe_event->data->object->amount_due > 0)
 			{
-				//last order for this subscription
-				$old_order = getOldOrderFromInvoiceEvent($event);
+				//do we have this order yet? (check status too)
+				$order = getOrderFromInvoiceEvent($pmpro_stripe_event);
 
-				if(empty($old_order))
-				{
-					$logstr .= "Couldn't find the original subscription.";
-					pmpro_stripeWebhookExit();
-				}
-
-				$user_id = $old_order->user_id;
-				$user = get_userdata($user_id);
-				$user->membership_level = pmpro_getMembershipLevelForUser($user_id);
-
-				if(empty($user))
-				{
-					$logstr .= "Couldn't find the old order's user. Order ID = " . $old_order->id . ".";
-					pmpro_stripeWebhookExit();
-				}
-
-				$invoice = $event->data->object;
-
-				//alright. create a new order/invoice
-				$morder = new MemberOrder();
-				$morder->user_id = $old_order->user_id;
-				$morder->membership_id = $old_order->membership_id;
-				$morder->InitialPayment = $invoice->amount / 100;	//not the initial payment, but the class is expecting that
-				$morder->PaymentAmount = $invoice->amount / 100;
-				$morder->payment_transaction_id = $invoice->id;
-				$morder->subscription_transaction_id = $invoice->customer;
-
-				$morder->gateway = $old_order->gateway;
-				$morder->gateway_environment = $old_order->gateway_environment;
-
-				$morder->FirstName = $old_order->FirstName;
-				$morder->LastName = $old_order->LastName;
-				$morder->Email = $wpdb->get_var("SELECT user_email FROM $wpdb->users WHERE ID = '" . $old_order->user_id . "' LIMIT 1");
-				$morder->Address1 = $old_order->Address1;
-				$morder->City = $old_order->billing->city;
-				$morder->State = $old_order->billing->state;
-				//$morder->CountryCode = $old_order->billing->city;
-				$morder->Zip = $old_order->billing->zip;
-				$morder->PhoneNumber = $old_order->billing->phone;
-
-				$morder->billing->name = $morder->FirstName . " " . $morder->LastName;
-				$morder->billing->street = $old_order->billing->street;
-				$morder->billing->city = $old_order->billing->city;
-				$morder->billing->state = $old_order->billing->state;
-				$morder->billing->zip = $old_order->billing->zip;
-				$morder->billing->country = $old_order->billing->country;
-				$morder->billing->phone = $old_order->billing->phone;
-
-				//get CC info that is on file
-				$morder->cardtype = get_user_meta($user_id, "pmpro_CardType", true);
-				$morder->accountnumber = hideCardNumber(get_user_meta($user_id, "pmpro_AccountNumber", true), false);
-				$morder->expirationmonth = get_user_meta($user_id, "pmpro_ExpirationMonth", true);
-				$morder->expirationyear = get_user_meta($user_id, "pmpro_ExpirationYear", true);
-				$morder->ExpirationDate = $morder->expirationmonth . $morder->expirationyear;
-				$morder->ExpirationDate_YdashM = $morder->expirationyear . "-" . $morder->expirationmonth;
-
-				//save
-				$morder->status = "success";
-				$morder->saveOrder();
-				$morder->getMemberOrderByID($morder->id);
-
-				//email the user their invoice
-				$pmproemail = new PMProEmail();
-				$pmproemail->sendInvoiceEmail($user, $morder);
-
-				$logstr .= "Created new order with ID #" . $morder->id . ". Event ID #" . $event->id . ".";
-
-				/*
-					Checking if there is an update "after next payment" for this user.
-				*/
-				$user_updates = $user->pmpro_stripe_updates;
-				if(!empty($user_updates))
-				{
-					foreach($user_updates as $key => $update)
+				//no? create it
+				if(empty($order->id))
+				{				
+					//last order for this subscription //getOldOrderFromInvoiceEvent($pmpro_stripe_event);
+					$old_order = new MemberOrder();
+					$old_order->getLastMemberOrderBySubscriptionTransactionID($pmpro_stripe_event->data->object->subscription);
+					
+					//lookup by customer id
+					if(empty($old_order) || empty($old_order->id))
 					{
-						if($update['when'] == 'payment')
-						{
-							//get current plan at Stripe to get payment date
-							$last_order = new MemberOrder();
-							$last_order->getLastMemberOrder($user_id);
-							$last_order->setGateway('stripe');
-							$last_order->Gateway->getCustomer();
-
-							if(!empty($last_order->Gateway->customer))
-							{
-								//find the first subscription
-								if(!empty($last_order->Gateway->customer->subscriptions['data'][0]))
-								{
-									$first_sub = $last_order->Gateway->customer->subscriptions['data'][0]->__toArray();
-									$end_timestamp = $first_sub['current_period_end'];
-								}
-							}
-
-							//if we didn't get an end date, let's set one one cycle out
-							$end_timestamp = strtotime("+" . $update['cycle_number'] . " " . $update['cycle_period']);
-
-							//build order object
-							$update_order = new MemberOrder();
-							$update_order->setGateway('stripe');
-							$update_order->user_id = $user->ID;
-							$update_order->membership_id = $user->membership_level->id;
-							$update_order->membership_name = $user->membership_level->name;
-							$update_order->InitialPayment = 0;
-							$update_order->PaymentAmount = $update['billing_amount'];
-							$update_order->ProfileStartDate = date("Y-m-d", $end_timestamp);
-							$update_order->BillingPeriod = $update['cycle_period'];
-							$update_order->BillingFrequency = $update['cycle_number'];
-
-							//update subscription
-							$update_order->Gateway->subscribe($update_order);
-
-							//update membership
-							$sqlQuery = "UPDATE $wpdb->pmpro_memberships_users
-											SET billing_amount = '" . esc_sql($update['billing_amount']) . "',
-												cycle_number = '" . esc_sql($update['cycle_number']) . "',
-												cycle_period = '" . esc_sql($update['cycle_period']) . "'
-											WHERE user_id = '" . esc_sql($user_id) . "'
-												AND membership_id = '" . esc_sql($last_order->membership_id) . "'
-												AND status = 'active'
-											LIMIT 1";
-
-							$wpdb->query($sqlQuery);
-
-							//remove this update
-							unset($user_updates[$key]);
-
-							//only process the first next payment update
-							break;
-						}
+						$old_order->getLastMemberOrderBySubscriptionTransactionID($pmpro_stripe_event->data->object->customer);
+					}
+					
+					//still can't find the order
+					if(empty($old_order) || empty($old_order->id))
+					{
+						$logstr .= "Couldn't find the original subscription.";
+						pmpro_stripeWebhookExit();
 					}
 
-					//save updates in case we removed some
-					update_user_meta($user_id, "pmpro_stripe_updates", $user_updates);
-				}
+					$user_id = $old_order->user_id;
+					$user = get_userdata($user_id);
+					$user->membership_level = pmpro_getMembershipLevelForUser($user_id);
 
-				pmpro_stripeWebhookExit();
+					if(empty($user))
+					{
+						$logstr .= "Couldn't find the old order's user. Order ID = " . $old_order->id . ".";
+						pmpro_stripeWebhookExit();
+					}
+
+					$invoice = $pmpro_stripe_event->data->object;
+
+					//alright. create a new order/invoice
+					$morder = new MemberOrder();
+					$morder->user_id = $old_order->user_id;
+					$morder->membership_id = $old_order->membership_id;
+
+					if(isset($invoice->amount))
+					{
+						$morder->subtotal = $invoice->amount / 100;					
+					}
+					elseif(isset($invoice->subtotal))
+					{
+						$morder->subtotal = (! empty( $invoice->subtotal ) ? $invoice->subtotal / 100 : 0);
+						$morder->tax = (! empty($invoice->tax) ? $invoice->tax / 100 : null);
+						$morder->total = (! empty($invoice->total) ? $invoice->total / 100 : 0);
+					}
+
+					$morder->payment_transaction_id = $invoice->id;
+					$morder->subscription_transaction_id = $invoice->subscription;
+
+					$morder->gateway = $old_order->gateway;
+					$morder->gateway_environment = $old_order->gateway_environment;
+
+					$morder->FirstName = $old_order->FirstName;
+					$morder->LastName = $old_order->LastName;
+					$morder->Email = $wpdb->get_var("SELECT user_email FROM $wpdb->users WHERE ID = '" . $old_order->user_id . "' LIMIT 1");
+					$morder->Address1 = $old_order->Address1;
+					$morder->City = $old_order->billing->city;
+					$morder->State = $old_order->billing->state;
+					//$morder->CountryCode = $old_order->billing->city;
+					$morder->Zip = $old_order->billing->zip;
+					$morder->PhoneNumber = $old_order->billing->phone;
+
+					$morder->billing->name = $morder->FirstName . " " . $morder->LastName;
+					$morder->billing->street = $old_order->billing->street;
+					$morder->billing->city = $old_order->billing->city;
+					$morder->billing->state = $old_order->billing->state;
+					$morder->billing->zip = $old_order->billing->zip;
+					$morder->billing->country = $old_order->billing->country;
+					$morder->billing->phone = $old_order->billing->phone;
+
+					//get CC info that is on file
+					$morder->cardtype = get_user_meta($user_id, "pmpro_CardType", true);
+					$morder->accountnumber = hideCardNumber(get_user_meta($user_id, "pmpro_AccountNumber", true), false);
+					$morder->expirationmonth = get_user_meta($user_id, "pmpro_ExpirationMonth", true);
+					$morder->expirationyear = get_user_meta($user_id, "pmpro_ExpirationYear", true);
+					$morder->ExpirationDate = $morder->expirationmonth . $morder->expirationyear;
+					$morder->ExpirationDate_YdashM = $morder->expirationyear . "-" . $morder->expirationmonth;
+
+					//save
+					$morder->status = "success";
+					$morder->saveOrder();
+					$morder->getMemberOrderByID($morder->id);
+
+					//email the user their invoice
+					$pmproemail = new PMProEmail();
+					$pmproemail->sendInvoiceEmail($user, $morder);
+
+					$logstr .= "Created new order with ID #" . $morder->id . ". Event ID #" . $pmpro_stripe_event->id . ".";
+
+					/*
+						Checking if there is an update "after next payment" for this user.
+					*/
+					$user_updates = $user->pmpro_stripe_updates;
+					if(!empty($user_updates))
+					{
+						foreach($user_updates as $key => $update)
+						{
+							if($update['when'] == 'payment')
+							{
+								//get current plan at Stripe to get payment date
+								$last_order = new MemberOrder();
+								$last_order->getLastMemberOrder($user_id);
+								$last_order->setGateway('stripe');
+								$last_order->Gateway->getCustomer();
+
+								if(!empty($last_order->Gateway->customer))
+								{
+									//find the first subscription
+									if(!empty($last_order->Gateway->customer->subscriptions['data'][0]))
+									{
+										$first_sub = $last_order->Gateway->customer->subscriptions['data'][0]->__toArray();
+										$end_timestamp = $first_sub['current_period_end'];
+									}
+								}
+
+								//if we didn't get an end date, let's set one one cycle out
+								$end_timestamp = strtotime("+" . $update['cycle_number'] . " " . $update['cycle_period']);
+
+								//build order object
+								$update_order = new MemberOrder();
+								$update_order->setGateway('stripe');
+								$update_order->user_id = $user->ID;
+								$update_order->membership_id = $user->membership_level->id;
+								$update_order->membership_name = $user->membership_level->name;
+								$update_order->InitialPayment = 0;
+								$update_order->PaymentAmount = $update['billing_amount'];
+								$update_order->ProfileStartDate = date("Y-m-d", $end_timestamp);
+								$update_order->BillingPeriod = $update['cycle_period'];
+								$update_order->BillingFrequency = $update['cycle_number'];
+
+								//update subscription
+								$update_order->Gateway->subscribe($update_order);
+
+								//update membership
+								$sqlQuery = "UPDATE $wpdb->pmpro_memberships_users
+												SET billing_amount = '" . esc_sql($update['billing_amount']) . "',
+													cycle_number = '" . esc_sql($update['cycle_number']) . "',
+													cycle_period = '" . esc_sql($update['cycle_period']) . "'
+												WHERE user_id = '" . esc_sql($user_id) . "'
+													AND membership_id = '" . esc_sql($last_order->membership_id) . "'
+													AND status = 'active'
+												LIMIT 1";
+
+								$wpdb->query($sqlQuery);
+
+								//remove this update
+								unset($user_updates[$key]);
+
+								//only process the first next payment update
+								break;
+							}
+						}
+
+						//save updates in case we removed some
+						update_user_meta($user_id, "pmpro_stripe_updates", $user_updates);
+					}
+
+					do_action('pmpro_subscription_payment_completed', $morder);
+
+					pmpro_stripeWebhookExit();
+				}
+				else
+				{
+					$logstr .= "We've already processed this order with ID #" . $order->id . ". Event ID #" . $pmpro_stripe_event->id . ".";
+					pmpro_stripeWebhookExit();
+				}
 			}
 			else
 			{
-				$logstr .= "We've already processed this order with ID #" . $order->id . ". Event ID #" . $event->id . ".";
+				$logstr .= "Ignoring an invoice for $0. Probably for a new subscription just created. Event ID #" . $pmpro_stripe_event->id . ".";
 				pmpro_stripeWebhookExit();
 			}
 		}
-		elseif($event->type == "charge.failed")
+		elseif($pmpro_stripe_event->type == "charge.failed")
 		{
 			//last order for this subscription
-			$old_order = getOldOrderFromInvoiceEvent($event);
+			$old_order = getOldOrderFromInvoiceEvent($pmpro_stripe_event);
 			$user_id = $old_order->user_id;
 			$user = get_userdata($user_id);
 
@@ -252,16 +286,16 @@
 			}
 			else
 			{
-				$logstr .= "Could not find the related subscription for event with ID #" . $event->id . ".";
-				if(!empty($event->data->object->customer))
-					$logstr .= " Customer ID #" . $event->data->object->customer . ".";
+				$logstr .= "Could not find the related subscription for event with ID #" . $pmpro_stripe_event->id . ".";
+				if(!empty($pmpro_stripe_event->data->object->customer))
+					$logstr .= " Customer ID #" . $pmpro_stripe_event->data->object->customer . ".";
 				pmpro_stripeWebhookExit();
 			}
 		}
-		elseif($event->type == "customer.subscription.deleted")
+		elseif($pmpro_stripe_event->type == "customer.subscription.deleted")
 		{
 			//for one of our users? if they still have a membership, notify the admin
-			$user = getUserFromCustomerEvent($event, "success", true);
+			$user = getUserFromCustomerEvent($pmpro_stripe_event, "success", true);
 			if(!empty($user->ID))
 			{
 				do_action("pmpro_stripe_subscription_deleted", $user->ID);
@@ -270,17 +304,17 @@
 				$pmproemail->data = array("body"=>"<p>" . sprintf(__("%s has had their payment subscription cancelled by Stripe. Please check that this user's membership is cancelled on your site if it should be.", "pmpro"), $user->display_name . " (" . $user->user_login . ", " . $user->user_email . ")") . "</p>");
 				$pmproemail->sendEmail(get_bloginfo("admin_email"));
 
-				$logstr .= "Subscription deleted for user ID #" . $user->ID . ". Event ID #" . $event->id . ".";
+				$logstr .= "Subscription deleted for user ID #" . $user->ID . ". Event ID #" . $pmpro_stripe_event->id . ".";
 				pmpro_stripeWebhookExit();
 			}
 			else
 			{
 				//check for any user at all
-				$user = getUserFromCustomerEvent($event);
+				$user = getUserFromCustomerEvent($pmpro_stripe_event);
 				if(!empty($user->ID))
-					$logstr .= "Stripe tells us a subscription is deleted. This was probably initiated from PMPro and the membership/order is already cancelled. Event ID #" . $event->id . ".";
+					$logstr .= "Stripe tells us a subscription is deleted. This was probably initiated from PMPro and the membership/order is already cancelled. Event ID #" . $pmpro_stripe_event->id . ".";
 				else
-					$logstr .= "Stripe tells us a subscription is deleted, but we could not find a user here for that subscription. Could be a subscription managed by a different app or plugin. Event ID #" . $event->id . ".";
+					$logstr .= "Stripe tells us a subscription is deleted, but we could not find a user here for that subscription. Could be a subscription managed by a different app or plugin. Event ID #" . $pmpro_stripe_event->id . ".";
 				pmpro_stripeWebhookExit();
 			}
 		}
@@ -294,14 +328,14 @@
 		pmpro_stripeWebhookExit();
 	}
 
-	function getUserFromInvoiceEvent($event)
+	function getUserFromInvoiceEvent($pmpro_stripe_event)
 	{
 		//pause here to give PMPro a chance to finish checkout
 		sleep(PMPRO_STRIPE_WEBHOOK_DELAY);
 
 		global $wpdb;
 
-		$customer_id = $event->data->object->customer;
+		$customer_id = $pmpro_stripe_event->data->object->customer;
 
 		//look up the order
 		$user_id = $wpdb->get_var("SELECT user_id FROM $wpdb->pmpro_membership_orders WHERE subscription_transaction_id = '" . esc_sql($customer_id) . "' LIMIT 1");
@@ -312,16 +346,16 @@
 			return false;
 	}
 
-	function getUserFromCustomerEvent($event, $status = false, $checkplan = true)
+	function getUserFromCustomerEvent($pmpro_stripe_event, $status = false, $checkplan = true)
 	{
 		//pause here to give PMPro a chance to finish checkout
 		sleep(PMPRO_STRIPE_WEBHOOK_DELAY);
 
 		global $wpdb;
 
-		$customer_id = $event->data->object->customer;
-		$subscription_id = $event->data->object->id;
-		$plan_id = $event->data->object->plan->id;
+		$customer_id = $pmpro_stripe_event->data->object->customer;
+		$subscription_id = $pmpro_stripe_event->data->object->id;
+		$plan_id = $pmpro_stripe_event->data->object->plan->id;
 
 		//look up the order
 		$sqlQuery = "SELECT user_id FROM $wpdb->pmpro_membership_orders WHERE (subscription_transaction_id = '" . esc_sql($customer_id) . "' OR subscription_transaction_id = '"  . esc_sql($subscription_id) . "') ";
@@ -339,14 +373,14 @@
 			return false;
 	}
 
-	function getOldOrderFromInvoiceEvent($event)
+	function getOldOrderFromInvoiceEvent($pmpro_stripe_event)
 	{
 		//pause here to give PMPro a chance to finish checkout
 		sleep(PMPRO_STRIPE_WEBHOOK_DELAY);
 
 		global $wpdb;
 
-		$customer_id = $event->data->object->customer;
+		$customer_id = $pmpro_stripe_event->data->object->customer;
 
 		// no customer passed? we can't cross reference
 		if(empty($customer_id))
@@ -362,30 +396,45 @@
 			// let's look up the Stripe subscription_id instead
 			// unfortunately, the subscription_id is not included in the JSON data from the Stripe event
 			// so, we must look up the subscription_id from the invoice_id, which IS included in the JSON data from the Stripe event
-			$invoice_id = $event->data->object->invoice;
-			$invoice = Stripe_Invoice::retrieve($invoice_id);
-			$subscription_id = $invoice->subscription;
-			$old_order_id = $wpdb->get_var("SELECT id FROM $wpdb->pmpro_membership_orders WHERE subscription_transaction_id = '" . $subscription_id . "' AND gateway = 'stripe' ORDER BY timestamp DESC LIMIT 1");
+			$invoice_id = $pmpro_stripe_event->data->object->invoice;
+
+			try {
+
+				$invoice = Stripe_Invoice::retrieve( $invoice_id );
+
+			} catch (Exception $e) {
+				error_log("Unable to fetch Stripe Invoice object: " . $e->getMessage());
+				$invoice = null;
+			}
+
+			if (isset( $invoice->subscription )) {
+				$subscription_id = $invoice->subscription;
+				$old_order_id    = $wpdb->get_var( "SELECT id FROM $wpdb->pmpro_membership_orders WHERE subscription_transaction_id = '" . $subscription_id . "' AND gateway = 'stripe' ORDER BY timestamp DESC LIMIT 1" );
+			}
 		}
 
-		$old_order = new MemberOrder($old_order_id);
+		if (!empty($old_order_id)) {
 
-		if(!empty($old_order->id))
-			return $old_order;
-		else
-			return false;
+			$old_order = new MemberOrder( $old_order_id );
+
+			if(isset($old_order->id) && ! empty($old_order->id))
+				return $old_order;
+		}
+
+		return false;
 	}
 
-	function getOrderFromInvoiceEvent($event)
+	function getOrderFromInvoiceEvent($pmpro_stripe_event)
 	{
 		//pause here to give PMPro a chance to finish checkout
 		sleep(PMPRO_STRIPE_WEBHOOK_DELAY);
 
-		$invoice_id = $event->data->object->id;
+		$invoice_id = $pmpro_stripe_event->data->object->id;
 
+		//get order by invoice id
 		$order = new MemberOrder();
-		$order->getMemberOrderByPaymentTransactionID($invoice_id);
-
+		$order->getMemberOrderByPaymentTransactionID($invoice_id);		
+		
 		if(!empty($order->id))
 			return $order;
 		else

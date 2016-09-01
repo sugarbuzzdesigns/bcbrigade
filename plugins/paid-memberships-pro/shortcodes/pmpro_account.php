@@ -19,10 +19,9 @@ function pmpro_shortcode_account($atts, $content=null, $code="")
 	//did they use 'section' instead of 'sections'?
 	if(!empty($section))
 		$sections = $section;
-	
-	//turn into an array
-	$sections = explode(',', $sections);		
-	
+
+	//Extract the user-defined sections for the shortcode
+	$sections = array_map('trim',explode(",",$sections));	
 	ob_start();
 	
 	//if a member is logged in, show them some info here (1. past invoices. 2. billing information with button to update.)
@@ -30,7 +29,7 @@ function pmpro_shortcode_account($atts, $content=null, $code="")
 	{
 		$ssorder = new MemberOrder();
 		$ssorder->getLastMemberOrder();
-		$invoices = $wpdb->get_results("SELECT *, UNIX_TIMESTAMP(timestamp) as timestamp FROM $wpdb->pmpro_membership_orders WHERE user_id = '$current_user->ID' ORDER BY timestamp DESC LIMIT 6");		
+		$invoices = $wpdb->get_results("SELECT *, UNIX_TIMESTAMP(timestamp) as timestamp FROM $wpdb->pmpro_membership_orders WHERE user_id = '$current_user->ID' AND status NOT IN('refunded', 'review', 'token', 'error') ORDER BY timestamp DESC LIMIT 6");		
 		?>	
 	<div id="pmpro_account">		
 		
@@ -56,8 +55,11 @@ function pmpro_shortcode_account($atts, $content=null, $code="")
 								<?php echo $current_user->membership_level->name?>
 								<div class="pmpro_actionlinks">
 									<?php do_action("pmpro_member_action_links_before"); ?>
-									<a href="<?php echo pmpro_url("checkout", "?level=" . $current_user->membership_level->id, "https")?>"><?php _e("Renew", "pmpro");?></a>
 									
+									<?php if( $current_user->membership_level->allow_signups && pmpro_isLevelExpiringSoon( $current_user->membership_level) ) { ?>
+										<a href="<?php echo pmpro_url("checkout", "?level=" . $current_user->membership_level->id, "https")?>"><?php _e("Renew", "pmpro");?></a>
+									<?php } ?>
+
 									<?php if((isset($ssorder->status) && $ssorder->status == "success") && (isset($ssorder->gateway) && in_array($ssorder->gateway, array("authorizenet", "paypal", "stripe", "braintree", "payflow", "cybersource")))) { ?>
 										<a href="<?php echo pmpro_url("billing", "", "https")?>"><?php _e("Update Billing Info", "pmpro"); ?></a>
 									<?php } ?>
@@ -95,7 +97,7 @@ function pmpro_shortcode_account($atts, $content=null, $code="")
 		
 		<?php if(in_array('profile', $sections)) { ?>
 			<div id="pmpro_account-profile" class="pmpro_box">	
-				<?php get_currentuserinfo(); ?> 
+				<?php wp_get_current_user(); ?> 
 				<h3><?php _e("My Account", "pmpro");?></h3>
 				<?php if($current_user->user_firstname) { ?>
 					<p><?php echo $current_user->user_firstname?> <?php echo $current_user->user_lastname?></p>
@@ -140,7 +142,7 @@ function pmpro_shortcode_account($atts, $content=null, $code="")
 						?>
 						<tr id="pmpro_account-invoice-<?php echo $invoice->code; ?>">
 							<td><a href="<?php echo pmpro_url("invoice", "?invoice=" . $invoice->code)?>"><?php echo date(get_option("date_format"), $invoice->timestamp)?></td>
-							<td><?php echo $invoice->membership_level->name?></td>
+							<td><?php if(!empty($invoice->membership_level)) echo $invoice->membership_level->name; else echo __("N/A", "pmpro");?></td>
 							<td><?php echo pmpro_formatPrice($invoice->total)?></td>
 						</tr>
 						<?php 

@@ -7,7 +7,7 @@
 	
 	class PMProGateway_braintree extends PMProGateway
 	{
-		function PMProGateway_braintree($gateway = NULL)
+		function __construct($gateway = NULL)
 		{			
 			$this->gateway = $gateway;
 			$this->gateway_environment = pmpro_getOption("gateway_environment");
@@ -55,8 +55,9 @@
 			add_filter('pmpro_payment_option_fields', array('PMProGateway_braintree', 'pmpro_payment_option_fields'), 10, 2);
 
 			//code to add at checkout if Braintree is the current gateway
-			$gateway = pmpro_getGateway();
-			if($gateway == "braintree")
+			$default_gateway = pmpro_getOption('gateway');
+			$current_gateway = pmpro_getGateway();			
+			if($default_gateway == "braintree" || $current_gateway == "braintree" && empty($_REQUEST['review']))	//$_REQUEST['review'] means the PayPal Express review page
 			{
 				add_action('pmpro_checkout_before_submit_button', array('PMProGateway_braintree', 'pmpro_checkout_before_submit_button'));
 				add_filter('pmpro_checkout_order', array('PMProGateway_braintree', 'pmpro_checkout_order'));
@@ -234,6 +235,7 @@
 		<input type='hidden' name='AccountNumber' id='BraintreeAccountNumber' />
 		<script type="text/javascript" src="https://js.braintreegateway.com/v1/braintree.js"></script>
 		<script type="text/javascript">
+			<!--
 			//set up braintree encryption
 			var braintree = Braintree.create('<?php echo pmpro_getOption("braintree_encryptionkey"); ?>');
 			braintree.onSubmitEncryptForm('pmpro_form');
@@ -257,6 +259,7 @@
 				pmpro_updateBraintreeAccountNumber();
 			});
 			pmpro_updateBraintreeAccountNumber();
+			-->
 		</script>
 		<?php
 		}
@@ -280,7 +283,10 @@
 			<table id="pmpro_payment_information_fields" class="pmpro_checkout top1em" width="100%" cellpadding="0" cellspacing="0" border="0" <?php if(!$pmpro_requirebilling || apply_filters("pmpro_hide_payment_information_fields", false) ) { ?>style="display: none;"<?php } ?>>
 			<thead>
 				<tr>
-					<th><span class="pmpro_thead-msg"><?php printf(__('We Accept %s', 'pmpro'), $pmpro_accepted_credit_cards_string);?></span><?php _e('Payment Information', 'pmpro');?></th>
+					<th>
+						<span class="pmpro_thead-name"><?php _e('Payment Information', 'pmpro');?></span>
+						<span class="pmpro_thead-msg"><?php printf(__('We Accept %s', 'pmpro'), $pmpro_accepted_credit_cards_string);?></span>
+					</th>
 				</tr>
 			</thead>
 			<tbody>                    
@@ -347,11 +353,11 @@
 						<?php
 							$pmpro_show_cvv = apply_filters("pmpro_show_cvv", true);
 							if($pmpro_show_cvv)
-							{
+							{								
 						?>
 						<div class="pmpro_payment-cvv">
-							<label for="CVV"><?php _ex('CVV', 'Credit card security code, CVV/CCV/CVV2', 'pmpro');?></label>
-							<input class="input" id="CVV" name="cvv" type="text" size="4" value="<?php if(!empty($_REQUEST['CVV'])) { echo esc_attr($_REQUEST['CVV']); }?>" class=" <?php echo pmpro_getClassForField("CVV");?>" data-encrypted-name="cvv" />  <small>(<a href="javascript:void(0);" onclick="javascript:window.open('<?php echo pmpro_https_filter(PMPRO_URL)?>/pages/popup-cvv.html','cvv','toolbar=no, location=no, directories=no, status=no, menubar=no, scrollbars=yes, resizable=yes, width=600, height=475');"><?php _ex("what's this?", 'link to CVV help', 'pmpro');?></a>)</small>
+							<label for="CVV"><?php _e('CVV', 'pmpro');?></label>
+							<input class="input" id="CVV" name="cvv" type="text" size="4" value="<?php if(!empty($_REQUEST['CVV'])) { echo esc_attr($_REQUEST['CVV']); }?>" class=" <?php echo pmpro_getClassForField("CVV");?>" data-encrypted-name="cvv" />  <small>(<a href="javascript:void(0);" onclick="javascript:window.open('<?php echo pmpro_https_filter(PMPRO_URL)?>/pages/popup-cvv.html','cvv','toolbar=no, location=no, directories=no, status=no, menubar=no, scrollbars=yes, resizable=yes, width=600, height=475');"><?php _e("what's this?", 'pmpro');?></a>)</small>
 						</div>
 						<?php
 							}

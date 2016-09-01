@@ -1347,13 +1347,18 @@ li.playing a {
   width: 60px;
   border-radius: 50%; }
 
-.audiojs .play-pause .fa-play {
+.audiojs .play-pause .fa-play,
+.audiojs .play-pause .fa-pause {
   position: absolute;
   left: 55%;
   top: 50%;
   display: block;
   -webkit-transform: translate(-50%, -50%);
   transform: translate(-50%, -50%); }
+
+.audiojs .play-pause .fa-pause {
+  left: 50%;
+}
 
 .audiojs .play-pause .pause,
 .audiojs .play-pause .loading {
@@ -1456,7 +1461,7 @@ li.playing a {
 
 .entry-content .song {
   font-family: monospace;
-  background: #fff url(http://subtlepatterns.com/patterns/linedpaper.png);
+  background: #fff url(../images/linedpaper.png);
   padding: 12px 15px 10px 15px;
   display: none; }
   .entry-content .song h3 {
@@ -3319,7 +3324,7 @@ you can add resource intensive styles.
   .video-wrap {
     margin-bottom: 20px;
     padding: 0 10px 0 0; }
-    .video-wrap:nth-child(2) {
+    .video-wrap:nth-child(2n) {
       padding: 0 0 0 10px; }
 
   /*********************

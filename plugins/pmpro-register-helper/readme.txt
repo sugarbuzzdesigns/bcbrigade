@@ -2,8 +2,8 @@
 Contributors: strangerstudios
 Tags: users, user meta, meta, memberships, registration
 Requires at least: 3.5
-Tested up to: 4.2.2
-Stable tag: 1.0
+Tested up to: 4.5.3
+Stable tag: 1.3.3
 
 Add extra fields to your checkout page. Works with Paid Memberships Pro.
 
@@ -17,7 +17,7 @@ This plugin currently requires Paid Memberships Pro.
 
 Add a sign up form to a post/widget/page using a shortcode:
 
-[pmpro_signup level="3" short="1" intro="0" button="Signup Now"]
+[pmpro_signup level="3" short="1" title="Sign Up for Gold Membership" intro="0" button="Signup Now"]
 
 Adding a field to your checkout page requires two steps: (1) create a field object, (2) call pmprorh_add_registration_field() to add the field to the checkout page. Optionally, you can create your own "checkout_box" or fieldset to the checkout page using pmprorh_add_checkout_box().
 
@@ -112,6 +112,49 @@ Note that the "checkout_boxes" location is now just the first checkout_box in th
 Please post it in the issues section of GitHub and we'll fix it as soon as we can. Thanks for helping. https://github.com/strangerstudios/pmpro-register-helper/issues
 
 == Changelog ==
+= 1.3.3 =
+* BUG: Still fixing the bug with dependency fields with labels with quotes in them.
+
+= 1.3.2=
+* BUG: Fixed a bug with dependency fields.
+
+= 1.3.1 =
+* ENHANCEMENT: Added an option html_attributes to fields that can be used to add arbitrary attributes to the HTML elements. e.g. set it to => array('placeholder'=>'Your Company') to set the placeholder attribute.
+
+= 1.3 =
+* BUG: Fixed warnings. (Thanks, Harsha and Thomas)
+* BUG: Now using disabled=disabled on select fields instead of readonly=readonly.
+* BUG: Fixed issues when the "profile" option of a field was set to "profile_only".
+* BUG/ENHANCEMENT: Now only loading the select2 CSS and JS on the frontend to avoid conflicts with other plugins using select2 in the backend. (Thanks, Justin/defunctl on GitHub)
+* BUG/ENHANCEMENT: Added handle to wp_enqueue_style() calls for templates to use.
+* ENHANCEMENT: Added CSS classes to file fields. (Thanks, Ted Barnett)
+
+= 1.2.1 =
+* BUG: Now using $pmpro_level global to check for level fields in case the site uses default level post meta or otherwise filters the level.
+* BUG: Fixed bug with select2 and multiselect fields when checking out with PayPal Express. (Thanks, samkam)
+
+= 1.2 =
+* BUG: Fixing conflicts that arise when field names overlap with public query vars. For example in WP 4.4 "title" was added as a public query var, which was often used as a field/usermeta name.
+* BUG: Fixed bug where fields were sometimes showing up for levels they weren't set for.
+* BUG: Fixed warnings.
+* ENHANCEMENT: Added "depends" support for radio button fields.
+* ENHANCEMENT: Added "pmprorh_section_header" filter to change the title of the default checkout box heading.
+
+= 1.1 =
+* BUG: Fixed display issues with file fields.
+* BUG: Fixed issue where the "levels" option was only accepting arrays. You can now pass integers as well to check for a single level. (Thanks, Andy Schaff)
+* ENHANCEMENT: No longer showing required asterisks for fields on the user profile page. We weren't forcing requirement on the profile page anyway and the asterisks were breaking some theme designs.
+* ENHANCEMENT: Added the pmprorh_get_html filter. First parameter $r is the HTML about to be returned by the getHTML method. The second parameter $field is the field object.
+
+= 1.0.2 =
+* BUG: Fixed bug where all fields with profile=>true were acting as if they were profile=>only. (Thanks, Merry Eisner)
+
+= 1.0.1 =
+* BUG/ENHANCEMENT: Fixed the "only" setting for the profile options, so you can use "profile"=>"only" to have fields that only show up in the profile and don't show up (or get checked for requirements) at checkout. You can also use "only_admin" to add profile fields that can only be seen/edited by admins.
+* ENHANCEMENT: Added "password" as a field type.
+* ENHANCEMENT: Added an "intro" attribute to the "pmpro_signup" shortcode. Pass any text into the attribute to have that text shown above the signup form.
+* ENHANCEMENT: Added a "login" attribute to the "pmpro_signup" shortcode. If set to 1 or true, a link to login will be shown below the signup button.
+
 = 1.0 =
 * No update from previous version, but setting to 1.0 since inclusion in the WordPress.org repository.
 * Please backup you version of PMPro Register Helper if you have made any changes to modules or other parts of the code before upgrading to 1.0+.

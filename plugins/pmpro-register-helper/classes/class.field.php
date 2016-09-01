@@ -3,12 +3,42 @@
 	{
 		function __construct($name = NULL, $type = NULL, $attr = NULL)
 		{
+			$this->defaults();
+
 			if(!empty($name))
 				return $this->set($name, $type, $attr);
 			else
 				return true;
 		}
-		
+
+		function defaults() {
+
+			// create default setting variables
+			$this->addmember = false;
+			$this->id = null;
+			$this->label = null;
+			$this->levels = null;
+			$this->memberlistcsv = false;
+			$this->readonly = false;
+			$this->depends = array();
+			$this->showrequired = true;
+			$this->showmainlabel = true;
+			$this->divclass = null;
+			$this->hint = null;
+			$this->size = null;
+			$this->rows = 5;
+			$this->cols = 80;
+			$this->required = false;
+			$this->options = array();
+			$this->multiple = false;
+			$this->text = null;
+			$this->file = null;
+			$this->html = null;
+			$this->profile = null;
+			$this->just_profile = false;
+			$this->class = null;
+		}
+
 		/*
 			setup field based on passed values
 			attr is array of one or more of the following:
@@ -16,6 +46,7 @@
 			- required = bool (require this field at registration?)
 			- options = array of strings (e.g. array("value"=>"option name", "value2" = "option 2 name"))
 			- profile = mixed (show field in profile page? true for both, "admins" for admins only)
+			- just_profile = bool (not required. true means only show field in profile)
 			- class = string (class to add to html element)
 		*/
 		function set($name, $type, $attr = array())
@@ -24,6 +55,9 @@
 			$this->type = $type;
 			$this->attr = $attr;
 			
+			//set meta key
+			$this->meta_key = $this->name;
+
 			//add attributes as properties of this class
 			if(!empty($attr))
 			{				
@@ -52,12 +86,17 @@
 			if(!isset($this->showmainlabel))
 				$this->showmainlabel = true;
 			
+			//add prefix to the name if equal to a query var
+			$public_query_vars = array('m', 'p', 'posts', 'w', 'cat', 'withcomments', 'withoutcomments', 's', 'search', 'exact', 'sentence', 'calendar', 'page', 'paged', 'more', 'tb', 'pb', 'author', 'order', 'orderby', 'year', 'monthnum', 'day', 'hour', 'minute', 'second', 'name', 'category_name', 'tag', 'feed', 'author_name', 'static', 'pagename', 'page_id', 'error', 'attachment', 'attachment_id', 'subpost', 'subpost_id', 'preview', 'robots', 'taxonomy', 'term', 'cpage', 'post_type', 'title', 'embed' );
+			if(in_array($this->name, $public_query_vars))
+				$this->name = "pmprorhprefix_" . $this->name;
+
 			//default fields						
 			if($this->type == "text")
 			{
 				if(empty($this->size))
 					$this->size = 30;
-			}
+			}			
 			elseif($this->type == "select" || $type == "multiselect" || $type == "select2" || $type == "radio")
 			{
 				//default option
@@ -109,7 +148,8 @@
 			//setup some vars
 			$file = $_FILES[$name];
 			$user = get_userdata($user_id);
-						
+			$meta_key = str_replace("pmprorhprefix_", "", $name);
+
 			//no file?
 			if(empty($file['name']))
 				return;
@@ -173,7 +213,7 @@
 			}
 						
 			//if we already have a file for this field, delete it
-			$old_file = get_user_meta($user->ID, $name, true);			
+			$old_file = get_user_meta($user->ID, $meta_key, true);			
 			if(!empty($old_file) && !empty($old_file['fullpath']) && file_exists($old_file['fullpath']))
 			{				
 				unlink($old_file['fullpath']);				
@@ -210,14 +250,15 @@
 			}
 			
 			//save filename in usermeta
-			update_user_meta($user_id, $name, array("original_filename"=>$file['name'], "filename"=>$filename, "fullpath"=> $pmprorh_dir . $filename, "fullurl"=>content_url("/uploads/pmpro-register-helper/" . $user->user_login . "/" . $filename), "size"=>$file['size']));			
+			update_user_meta($user_id, $meta_key, array("original_filename"=>$file['name'], "filename"=>$filename, "fullpath"=> $pmprorh_dir . $filename, "fullurl"=>content_url("/uploads/pmpro-register-helper/" . $user->user_login . "/" . $filename), "size"=>$file['size']));			
 		}
 
         //fix date then update user meta
         function saveDate($user_id, $name, $value)
         {
+        	$meta_key = str_replace("pmprorhprefix_", "", $name);
             $date = date('Y-m-d', strtotime(date($value['y'] . '-' . $value['m'] . '-' . $value['d'])));
-            update_user_meta($user_id, $name, $date);
+        	update_user_meta($user_id, $meta_key, $date);
         }
 		
 		//echo the HTML for the field
@@ -230,17 +271,34 @@
 		//get HTML for the field
 		function getHTML($value = "")
 		{			
+			//vars to store HTML to be added to the beginning or end
+			$r_beginning = "";
+			$r_end = "";
+
 			if($this->type == "text")
 			{
-				$r = '<input type="text" id="' . $this->id . '" name="' . $this->name . '" value="' . esc_attr($value) . '"';
+				$r = '<input type="text" id="' . $this->id . '" name="' . $this->name . '" value="' . esc_attr($value) . '" ';
 				if(!empty($this->size))
 					$r .= 'size="' . $this->size . '" ';
-				if(!empty($this->placeholder))
-					$r .= 'placeholder="' . $this->placeholder . '" ';				
 				if(!empty($this->class))
 					$r .= 'class="' . $this->class . '" ';
 				if(!empty($this->readonly))
 					$r .= 'readonly="readonly" ';
+				if(!empty($this->html_attributes))
+					$r .= $this->getHTMLAttributes();
+				$r .= ' />';				
+			}
+			elseif($this->type == "password")
+			{
+				$r = '<input type="password" id="' . $this->id . '" name="' . $this->name . '" value="' . esc_attr($value) . '" ';
+				if(!empty($this->size))
+					$r .= 'size="' . $this->size . '" ';
+				if(!empty($this->class))
+					$r .= 'class="' . $this->class . '" ';
+				if(!empty($this->readonly))
+					$r .= 'readonly="readonly" ';
+				if(!empty($this->html_attributes))
+					$r .= $this->getHTMLAttributes();
 				$r .= ' />';				
 			}
 			elseif($this->type == "select")
@@ -260,6 +318,8 @@
 					$r .= 'disabled="disabled" ';
 				if(!empty($this->multiple))
 					$r .= 'multiple="multiple" ';
+				if(!empty($this->html_attributes))
+					$r .= $this->getHTMLAttributes();
 				$r .= ">\n";
 				foreach($this->options as $ovalue => $option)
 				{
@@ -278,11 +338,13 @@
 				if(!is_array($value))
 					$value = array($value);
 				
-				$r = '<select id="' . $this->id . '" name="' . $this->name . '[]" multiple="multiple"';
+				$r = '<select id="' . $this->id . '" name="' . $this->name . '[]" multiple="multiple" ';
 				if(!empty($this->class))
 					$r .= 'class="' . $this->class . '" ';
 				if(!empty($this->readonly))
-					$r .= 'readonly="readonly" ';
+					$r .= 'disabled="disabled" ';
+				if(!empty($this->html_attributes))
+					$r .= $this->getHTMLAttributes();
 				$r .= ">\n";
 				foreach($this->options as $ovalue => $option)
 				{
@@ -304,7 +366,9 @@
 				if(!empty($this->class))
 					$r .= 'class="' . $this->class . '" ';
 				if(!empty($this->readonly))
-					$r .= 'readonly="readonly" ';
+					$r .= 'disabled="disabled" ';
+				if(!empty($this->html_attributes))
+					$r .= $this->getHTMLAttributes();
 				$r .= '>';
 				foreach($this->options as $ovalue => $option)
 				{
@@ -332,6 +396,8 @@
 						$r .= 'checked="checked"';
 					if(!empty($this->readonly))
 						$r .= 'readonly="readonly" ';
+					if(!empty($this->html_attributes))
+						$r .= $this->getHTMLAttributes();
 					$r .= ' /> ';
 					$r .= '<label class="pmprorh_radio_label" for="pmprorh_field_' . $this->name . $count . '">' . $option . '</label> &nbsp; ';
 				}
@@ -341,7 +407,9 @@
 				$r = '<input name="'.$this->name.'"' .' type="checkbox" value="1"'.' id="'.$this->id.'"';
 				$r.=checked( $value, 1,false);		
 				if(!empty($this->readonly))
-					$r .= 'readonly="readonly" ';		
+					$r .= 'readonly="readonly" ';
+				if(!empty($this->html_attributes))
+					$r .= $this->getHTMLAttributes();		
 				$r .= ' /> ';
 				$r .= '<label class="pmprorh_checkbox_label" for="' . $this->name . '">' . $this->text . '</label> &nbsp; ';
 				$r .= '<input type="hidden" name="'.$this->name.'_checkbox" value="1" />';	//extra field so we can track unchecked boxes
@@ -353,6 +421,8 @@
 					$r .= 'class="' . $this->class . '" ';
 				if(!empty($this->readonly))
 					$r .= 'readonly="readonly" ';
+				if(!empty($this->html_attributes))
+					$r .= $this->getHTMLAttributes();
 				$r .= '>' . esc_textarea($value) . '</textarea>';				
 			}
 			elseif($this->type == "hidden")
@@ -360,42 +430,50 @@
 				$r = '<input type="hidden" id="' . $this->id . '" name="' . $this->name . '" value="' . esc_attr($value) . '" ';
 				if(!empty($this->readonly))
 					$r .= 'readonly="readonly" ';
+				if(!empty($this->html_attributes))
+					$r .= $this->getHTMLAttributes();
 				$r .= '/>';						
 			}
 			elseif($this->type == "html")
 			{
 				//arbitrary html/etc
-				$r = $this->html;
+				if(!empty($this->html))
+					$r = $this->html;
+				else
+					$r = "";
 			}
 			elseif($this->type == "file")
 			{
 				$r = '';
 								
-				//show name of existing file
-				if(!empty($value))
-				{
-					$r .= '<div class="leftmar">Current File: <a target="_blank" href="' . $this->file['fullurl'] . '">' . basename($value) . '</a></div><div class="leftmar">';
-				}
-			
 				//file input
 				$r .= '<input type="file" id="' . $this->id . '" ';
 				if(!empty($this->accept))
 					$r .= 'accept="' . esc_attr($this->accept) . '" ';
+				if(!empty($this->class))
+					$r .= 'class="' . $this->class . '" ';
+				if(!empty($this->html_attributes))
+					$r .= $this->getHTMLAttributes();
 				$r .= 'name="' . $this->name . '" />';								
 				
 				//old value
 				if(is_user_logged_in())
 				{
 					global $current_user;
-					$old_value = get_user_meta($current_user->ID, $this->name, true);
+					$old_value = get_user_meta($current_user->ID, $this->meta_key, true);
 					if(!empty($old_value))
 						$r .= '<input type="hidden" name="' . $this->name . '_old" value="' . esc_attr($old_value['filename']) . '" />';
 				}
 				
-				//closing div
+				//show name of existing file
 				if(!empty($value))
-					$r .= '</div>';
-				
+				{
+					if(!empty($this->file['fullurl']))
+						$r_end .= '<div class="leftmar"><small class="lite">Current File: <a target="_blank" href="' . $this->file['fullurl'] . '">' . basename($value) . '</a></small></div>';
+					else
+						$r_end .= '<div class="leftmar"><small class="lite">Current File: ' . basename($value) . '</small></div>';
+				}
+			
 				if(!empty($this->readonly))
 					$r .= 'readonly="readonly" ';
 				
@@ -417,6 +495,9 @@
 
                 if(!empty($this->readonly))
                     $r .= 'disabled="disabled"';
+
+                if(!empty($this->html_attributes))
+					$r .= $this->getHTMLAttributes();
 
                 $r .= ' >';
 
@@ -464,15 +545,35 @@
 			if(!empty($this->required) && !isset($this->showrequired))
 				$this->showrequired = true;
 			
+			//but don't show required on the profile page unless overridden.
+			if(defined('IS_PROFILE_PAGE') && IS_PROFILE_PAGE && !apply_filters('pmprorh_show_required_on_profile', false, $this))
+				$this->showrequired = false;
+
 			if(!empty($this->required) && !empty($this->showrequired) && $this->showrequired !== 'label')
 			{
 				if(is_string($this->showrequired))
 					$r .= $this->showrequired;
 				else
 					$r .= '<span class="pmpro_asterisk"> *</span>';
-			}		
-			
+			}
+
+			//anything meant to be added to the beginning or end?
+			$r = $r_beginning . $r . $r_end;
+
+			//filter
+			$r = apply_filters('pmprorh_get_html', $r, $this);
+
 			return $r;
+		}
+
+		function getHTMLAttributes() {
+			$astring = "";
+			if(!empty($this->html_attributes)) {
+				foreach($this->html_attributes as $name => $value)
+					$astring .= '"' . $name . '"="' . $value . '" ';
+			}
+
+			return $astring;
 		}	
 		
 		function getDependenciesJS()
@@ -486,9 +587,12 @@
 				{
 					if(!empty($check['id']))
 					{
-						$checks[] = "(jQuery('#" . $check['id'] . "').val() == " . json_encode($check['value']) . " || jQuery.inArray(" . json_encode($check['value']) . ", jQuery('#" . $check['id'] . "').val()) > -1)";
-						$binds[] = "#" . $check['id'];
-					}
+						$checks[] = "((jQuery('#" . $check['id']."')".".is(':checkbox')) "
+						 ."? jQuery('#" . $check['id'] . ":checked').length > 1"
+						 .":(jQuery('#" . $check['id'] . "').val() == " . json_encode($check['value']) . " || jQuery.inArray(" . json_encode($check['value']) . ", jQuery('#" . $check['id'] . "').val()) > -1)) ||"."(jQuery(\"input:radio[name='".$check['id']."']:checked\").val() == ".json_encode($check['value'])." || jQuery.inArray(".json_encode($check['value']).", jQuery(\"input:radio[name='".$check['id']."']:checked\").val()) > -1)";
+					
+						$binds[] = "#" . $check['id'].",input:radio[name=".$check['id']."]";
+					}				
 				}
 								
 				if(!empty($checks) && !empty($binds))
@@ -539,7 +643,7 @@
 			elseif(isset($_SESSION[$this->name]))
 			{
 				//file or value?
-				if(is_array($_SESSION[$this->name]))
+				if(is_array($_SESSION[$this->name]) && !empty($_SESSION[$this->name]['name']))
 				{
 					$_FILES[$this->name] = $_SESSION[$this->name];
 					$this->file = $_SESSION[$this->name]['name'];
@@ -548,12 +652,12 @@
 				else
 					$value = $_SESSION[$this->name];
 			}
-			elseif(!empty($current_user->ID) && metadata_exists("user", $current_user->ID, $this->name))
+			elseif(!empty($current_user->ID) && metadata_exists("user", $current_user->ID, $this->meta_key))
 			{				
-				$meta = get_user_meta($current_user->ID, $this->name, true);				
+				$meta = get_user_meta($current_user->ID, $this->meta_key, true);				
 				if(is_array($meta) && !empty($meta['filename']))
 				{
-					$this->file = get_user_meta($current_user->ID, $this->name, true);
+					$this->file = get_user_meta($current_user->ID, $this->meta_key, true);
 					$value = $this->file['filename'];
 				}
 				else
@@ -566,9 +670,8 @@
 
 			//update class value
 			$this->class .= " " . pmpro_getClassForField($this->name);
-
 			?>
-			<div id="<?php echo $this->id;?>_div" <?php if(!empty($this->divclass)) echo 'class="' . $this->divclass . '"';?>>
+			<div id="<?php echo $this->id;?>_div" class="pmpro_checkout-field<?php if(!empty($this->divclass)) echo ' ' . $this->divclass; ?>">
 				<?php if(!empty($this->showmainlabel)) { ?>
 					<label for="<?php echo esc_attr($this->name);?>"><?php echo $this->label;?></label>
 					<?php 
@@ -596,12 +699,12 @@
 		function displayInProfile($user_id, $edit = NULL)
 		{
 			global $current_user;
-			if(metadata_exists("user", $user_id, $this->name))
+			if(metadata_exists("user", $user_id, $this->meta_key))
 			{
 				$meta = get_user_meta($user_id, $this->name, true);				
 				if(is_array($meta) && !empty($meta['filename']))
 				{
-					$this->file = get_user_meta($user_id, $this->name, true);
+					$this->file = get_user_meta($user_id, $this->meta_key, true);
 					$value = $this->file['filename'];
 				}
 				else

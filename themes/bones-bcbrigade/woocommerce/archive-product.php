@@ -19,7 +19,7 @@ get_header( 'shop' ); ?>
 	<div id="hero" class="wrap">
 		<img src="<?php bloginfo('template_directory'); ?>/library/images/heros/shop-hero.jpg" />
 	</div>
-		<div>	
+		<div>
 
 		<?php if ( is_user_logged_in() ) {
 			if($current_user->membership_level->ID != 1){ ?>
@@ -33,10 +33,10 @@ get_header( 'shop' ); ?>
 							<p>Upgrade your membership to <strong>Brigade Eagle Member</strong> and receive this special gift.</p>
 							<small>** Your chair will be shipped to the address you signed up with. Please update your <a href="/profile">profile</a> if you need to make changes to your shipping address.</small>
 							<a class="button cta" href="/membership-account/membership-checkout/?level=1">UPGRADE NOW!</a>
-						</div>		
-					</div>	
-				</section>		
-		<?php } }?> 			
+						</div>
+					</div>
+				</section>
+		<?php } }?>
 		<?php
 			/**
 			 * woocommerce_before_main_content hook
@@ -46,7 +46,7 @@ get_header( 'shop' ); ?>
 			 */
 			do_action( 'woocommerce_before_main_content' );
 		?>
-		
+
 
 			<?php do_action( 'woocommerce_archive_description' ); ?>
 

@@ -1,5 +1,27 @@
 <?php 
-global $wpdb, $pmpro_msg, $pmpro_msgt, $pmpro_levels, $current_user;
+global $wpdb, $pmpro_msg, $pmpro_msgt, $current_user;
+
+$pmpro_levels = pmpro_getAllLevels(false, true);
+$pmpro_level_order = pmpro_getOption('level_order');
+
+if(!empty($pmpro_level_order))
+{
+	$order = explode(',',$pmpro_level_order);
+
+	//reorder array
+	$reordered_levels = array();
+	foreach($order as $level_id) {
+		foreach($pmpro_levels as $key=>$level) {
+			if($level_id == $level->id)
+				$reordered_levels[] = $pmpro_levels[$key];
+		}
+	}
+
+	$pmpro_levels = $reordered_levels;
+}
+
+$pmpro_levels = apply_filters("pmpro_levels_array", $pmpro_levels);
+
 if($pmpro_msg)
 {
 ?>
@@ -30,7 +52,7 @@ if($pmpro_msg)
 		<td>
 			<?php 
 				if(pmpro_isLevelFree($level))
-					$cost_text = "<strong>" . _e("Free", "pmpro") . "</strong>";
+					$cost_text = "<strong>" . __("Free", "pmpro") . "</strong>";
 				else
 					$cost_text = pmpro_getLevelCost($level, true, true); 
 				$expiration_text = pmpro_getLevelExpiration($level);
@@ -51,17 +73,14 @@ if($pmpro_msg)
 			
 			<?php
 				//if it's a one-time-payment level, offer a link to renew				
-				if(!pmpro_isLevelRecurring($current_user->membership_level) && !empty($current_user->membership_level->enddate))
-				{
-				?>
-					<a class="pmpro_btn pmpro_btn-select" href="<?php echo pmpro_url("checkout", "?level=" . $level->id, "https")?>"><?php _e('Renew', 'pmpro');?></a>
-				<?php
-				}
-				else
-				{
-				?>
-					<a class="pmpro_btn disabled" href="<?php echo pmpro_url("account")?>"><?php _e('Your&nbsp;Level', 'pmpro');?></a>
-				<?php
+				if( pmpro_isLevelExpiringSoon( $current_user->membership_level) && $current_user->membership_level->allow_signups ) {
+					?>
+						<a class="pmpro_btn pmpro_btn-select" href="<?php echo pmpro_url("checkout", "?level=" . $level->id, "https")?>"><?php _e('Renew', 'pmpro');?></a>
+					<?php
+				} else {
+					?>
+						<a class="pmpro_btn disabled" href="<?php echo pmpro_url("account")?>"><?php _e('Your&nbsp;Level', 'pmpro');?></a>
+					<?php
 				}
 			?>
 			

@@ -26,7 +26,8 @@
 	if($saveid)
 	{
 		//get vars
-		$code = sanitize_text_field($_POST['code']);
+		//disallow/strip all non-alphanumeric characters except -
+		$code = preg_replace("/[^A-Za-z0-9\-]/", "", sanitize_text_field($_POST['code']));
 		$starts_month = intval($_POST['starts_month']);
 		$starts_day = intval($_POST['starts_day']);
 		$starts_year = intval($_POST['starts_year']);
@@ -396,7 +397,7 @@
 				</tbody>
 			</table>
 			
-			<?php do_action("pmpro_discount_code_after_settings"); ?>
+			<?php do_action("pmpro_discount_code_after_settings", $edit); ?>
 			
 			<h3><?php _e('Which Levels Will This Code Apply To?', 'pmpro'); ?></h3>
 			
@@ -606,6 +607,7 @@
 				}
 				else
 				{
+					$count = 0;
 					foreach($codes as $code)
 					{
 					?>
@@ -648,7 +650,7 @@
 							<a href="?page=pmpro-discountcodes&edit=<?php echo $code->id?>"><?php _e('edit', 'pmpro');?></a>																
 						</td>
 						<td>
-							<a href="javascript:askfirst('<?php printf(__('Are you sure you want to delete the %s discount code? The subscriptions for existing users will not change, but new users will not be able to use this code anymore.', 'pmpro'), $code->code);?>', '?page=pmpro-discountcodes&delete=<?php echo $code->id?>'); void(0);"><?php _e('delete', 'pmpro');?></a>	
+							<a href="javascript:askfirst('<?php echo str_replace("'", "\'", sprintf(__('Are you sure you want to delete the %s discount code? The subscriptions for existing users will not change, but new users will not be able to use this code anymore.', 'pmpro'), $code->code));?>', '?page=pmpro-discountcodes&delete=<?php echo $code->id?>'); void(0);"><?php _e('delete', 'pmpro');?></a>	
 						</td>
 					</tr>
 					<?php

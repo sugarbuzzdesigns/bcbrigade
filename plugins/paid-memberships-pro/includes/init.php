@@ -70,7 +70,7 @@ function pmpro_init()
 		wp_enqueue_style('pmpro_print', $print_css, array(), PMPRO_VERSION, "print");
 	}
 	
-	global $pmpro_pages, $pmpro_ready, $pmpro_currencies, $pmpro_currency, $pmpro_currency_symbol;
+	global $pmpro_pages, $pmpro_core_pages, $pmpro_ready, $pmpro_currencies, $pmpro_currency, $pmpro_currency_symbol;
 	$pmpro_pages = array();
 	$pmpro_pages["account"] = pmpro_getOption("account_page_id");
 	$pmpro_pages["billing"] = pmpro_getOption("billing_page_id");
@@ -80,7 +80,18 @@ function pmpro_init()
 	$pmpro_pages["invoice"] = pmpro_getOption("invoice_page_id");
 	$pmpro_pages["levels"] = pmpro_getOption("levels_page_id");
 
+	//save this in case we want a clean version of the array with just the core pages
+	$pmpro_core_pages = $pmpro_pages;
+	
 	$pmpro_ready = pmpro_is_ready();
+
+	/**
+	 * This action is documented in /adminpages/pagesettings.php
+	 */
+	$extra_pages = apply_filters('pmpro_extra_page_settings', array());
+	foreach($extra_pages as $name => $page)	
+		$pmpro_pages[$name] = pmpro_getOption($name . '_page_id');
+	
 
 	//set currency
 	$pmpro_currency = pmpro_getOption("currency");
@@ -105,20 +116,20 @@ function pmpro_wp()
 {
 	if(!is_admin())
 	{
-		global $post, $pmpro_pages, $pmpro_page_name, $pmpro_page_id, $pmpro_body_classes;		
+		global $post, $pmpro_pages, $pmpro_core_pages, $pmpro_page_name, $pmpro_page_id, $pmpro_body_classes;		
 		
 		//no pages yet?
 		if(empty($pmpro_pages))
 			return;
 		
 		//run the appropriate preheader function
-		foreach($pmpro_pages as $pmpro_page_name => $pmpro_page_id)
-		{						
+		foreach($pmpro_core_pages as $pmpro_page_name => $pmpro_page_id)
+		{
 			if(!empty($post->post_content) && strpos($post->post_content, "[pmpro_" . $pmpro_page_name . "]") !== false)
 			{
 				//preheader
 				require_once(PMPRO_DIR . "/preheaders/" . $pmpro_page_name . ".php");
-				
+
 				//add class to body
 				$pmpro_body_classes[] = "pmpro-" . str_replace("_", "-", $pmpro_page_name);
 								
@@ -126,20 +137,30 @@ function pmpro_wp()
 				function pmpro_pages_shortcode($atts, $content=null, $code="")
 				{
 					global $pmpro_page_name;
+					$temp_content = pmpro_loadTemplate($pmpro_page_name, 'local', 'pages');
+
+					/*
 					ob_start();
+
 					if(file_exists(get_stylesheet_directory() . "/paid-memberships-pro/pages/" . $pmpro_page_name . ".php"))
 						include(get_stylesheet_directory() . "/paid-memberships-pro/pages/" . $pmpro_page_name . ".php");
 					elseif(file_exists(get_template_directory() . "/paid-memberships-pro/pages/" . $pmpro_page_name . ".php"))
 						include(get_template_directory() . "/paid-memberships-pro/pages/" . $pmpro_page_name . ".php");
 					else
 						include(PMPRO_DIR . "/pages/" . $pmpro_page_name . ".php");
-					
+
 					$temp_content = ob_get_contents();
-					ob_end_clean();
+//					ob_end_clean();
+					*/
 					return apply_filters("pmpro_pages_shortcode_" . $pmpro_page_name, $temp_content);
 				}
 				add_shortcode("pmpro_" . $pmpro_page_name, "pmpro_pages_shortcode");
 				break;	//only the first page found gets a shortcode replacement
+			}
+			elseif(!empty($pmpro_page_id) && is_page($pmpro_page_id))
+			{
+				//shortcode has params, but we still want to load the preheader
+				require_once(PMPRO_DIR . "/preheaders/" . $pmpro_page_name . ".php");
 			}
 		}				
 	}
@@ -165,7 +186,7 @@ function pmpro_set_current_user()
 {
 	//this code runs at the beginning of the plugin
 	global $current_user, $wpdb;
-	get_currentuserinfo();
+	wp_get_current_user();
 	$id = intval($current_user->ID);
 	if($id)
 	{

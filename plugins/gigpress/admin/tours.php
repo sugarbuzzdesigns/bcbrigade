@@ -24,14 +24,13 @@ function gigpress_tours() {
 		gigpress_undo('tour');		
 	}
 
-	$url_args = (isset($_GET['gp-page'])) ? '&amp;gp-page=' . $_GET['gp-page'] : '';	
-
+	$url_args = (isset($_GET['gp-page'])) ? '&amp;gp-page=' . sanitize_text_field($_GET['gp-page']) : '';
+	
 	?>
 
 	<div class="wrap gigpress gp-tours">
 
-	<?php screen_icon('gigpress'); ?>		
-	<h2><?php _e("Tours", "gigpress"); ?></h2>
+	<h1><?php _e("Tours", "gigpress"); ?></h1>
 	
 	<p><?php _e("A tour is simply a named collection of shows that you want to group together.", "gigpress"); ?></p>
 	
@@ -46,11 +45,11 @@ function gigpress_tours() {
 		
 		if($tour_name) {
 			
-			$submit = '<span class="submit"><input type="submit" name="Submit" class="button-primary" value="' .  __("Update tour", "gigpress") . '" /></span> ' . __("or", "gigpress") . ' <a href="' . get_bloginfo('wpurl') . '/wp-admin/admin.php?page=gigpress-tours' . $url_args . '">' . __("cancel", "gigpress") . '</a>'; ?>
+			$submit = '<span class="submit"><input type="submit" name="Submit" class="button-primary" value="' .  __("Update tour", "gigpress") . '" /></span> ' . __("or", "gigpress") . ' <a href="' . admin_url('admin.php?page=gigpress-tours' . $url_args) . '">' . __("cancel", "gigpress") . '</a>'; ?>
 			
 			<h3><?php _e("Edit this tour", "gigpress"); ?></h3>
 		
-			<form method="post" action="<?php bloginfo('wpurl') ?>/wp-admin/admin.php?page=gigpress-tours<?php echo $url_args; ?>">
+			<form method="post" action="<?php echo admin_url('admin.php?page=gigpress-tours'.$url_args); ?>">
 				<input type="hidden" name="tour_id" value="<?php echo $tour_id; ?>" />			
 				<input type="hidden" name="gpaction" value="update" />
 			
@@ -69,9 +68,9 @@ function gigpress_tours() {
 		$tour_name = '';
 		$submit = '<span class="submit"><input type="submit" name="Submit" class="button-primary" value="' .  __("Add tour", "gigpress") . '" /></span>'; ?>
 			
-		<h3><?php _e("Add a tour", "gigpress"); ?></h3>
+		<h2><?php _e("Add a tour", "gigpress"); ?></h2>
 
-		<form method="post" action="<?php bloginfo('wpurl'); ?>/wp-admin/admin.php?page=gigpress-tours<?php echo $url_args; ?>">
+		<form method="post" action="<?php echo admin_url('admin.php?page=gigpress-tours'. $url_args); ?>">
 			<input type="hidden" name="gpaction" value="add" />
 	<?php 
 	}
@@ -85,7 +84,7 @@ function gigpress_tours() {
 			</table>		
 		</form>
 
-		<h3><?php _e("All tours", "gigpress"); ?></h3>
+		<h2><?php _e("All tours", "gigpress"); ?></h2>
 
 	<div class="tablenav">
 		<div class="alignleft">
@@ -119,7 +118,7 @@ function gigpress_tours() {
 			$i = 0;
 			foreach($tours as $tour) {
 				if($n = $wpdb->get_var("SELECT count(*) FROM ". GIGPRESS_SHOWS ." WHERE show_tour_id = ". $tour->tour_id ." AND show_status != 'deleted'")) {
-					$count = '<a href="' . get_bloginfo('wpurl') . '/wp-admin/admin.php?page=gigpress-shows&amp;tour_id=' . $tour->tour_id . '">' . $n . '</a>';
+					$count = '<a href="' . admin_url('admin.php?page=gigpress-shows&amp;tour_id=' . $tour->tour_id) . '">' . $n . '</a>';
 				} else {
 					$count = 0;
 				}
@@ -133,7 +132,7 @@ function gigpress_tours() {
 					<td><?php echo wptexturize($tour->tour_name); ?></td>
 					<td class="gp-centre"><?php echo $count; ?></td>
 					<td class="gp-centre">
-						<a href="<?php echo get_bloginfo('wpurl').'/wp-admin/admin.php?page=gigpress-tours&amp;gpaction=edit&amp;tour_id='.$tour->tour_id . $url_args; ?>" class="edit"><?php _e("Edit", "gigpress"); ?></a> | <a href="<?php echo wp_nonce_url(get_bloginfo('wpurl').'/wp-admin/admin.php?page=gigpress-tours&amp;gpaction=delete&amp;tour_id='.$tour->tour_id . $url_args, 'gigpress-action'); ?>" class="delete"><?php _e("Delete", "gigpress"); ?></a>
+						<a href="<?php echo admin_url('admin.php?page=gigpress-tours&amp;gpaction=edit&amp;tour_id='.$tour->tour_id . $url_args); ?>" class="edit"><?php _e("Edit", "gigpress"); ?></a> | <a href="<?php echo wp_nonce_url(admin_url('admin.php?page=gigpress-tours&amp;gpaction=delete&amp;tour_id='.$tour->tour_id . $url_args), 'gigpress-action'); ?>" class="delete"><?php _e("Delete", "gigpress"); ?></a>
 					</td>
 				</tr>
 				

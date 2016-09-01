@@ -65,18 +65,18 @@ class Theme_My_Login_User_Moderation extends Theme_My_Login_Abstract {
 
 		if ( in_array( $this->get_option( 'type' ), array( 'admin', 'email' ) ) ) {
 
-			add_action( 'register_post',         array( &$this, 'register_post'         )      );
-			add_filter( 'registration_redirect', array( &$this, 'registration_redirect' ), 100 );
+			add_action( 'register_post',         array( $this, 'register_post'         )      );
+			add_filter( 'registration_redirect', array( $this, 'registration_redirect' ), 100 );
 
-			add_action( 'authenticate',         array( &$this, 'authenticate'         ), 100, 3 );
-			add_filter( 'allow_password_reset', array( &$this, 'allow_password_reset' ),  10, 2 );
+			add_action( 'authenticate',         array( $this, 'authenticate'         ), 100, 3 );
+			add_filter( 'allow_password_reset', array( $this, 'allow_password_reset' ),  10, 2 );
 
-			add_action( 'tml_request',            array( &$this, 'action_messages'    )        );
-			add_action( 'tml_new_user_activated', array( &$this, 'new_user_activated' ), 10, 2 );
+			add_action( 'tml_request',            array( $this, 'action_messages'    ) );
+			add_action( 'tml_new_user_activated', array( $this, 'new_user_activated' ) );
 
 			if ( 'email' == $this->get_option( 'type' ) ) {
-				add_action( 'tml_request_activate',       array( &$this, 'user_activation' ) );
-				add_action( 'tml_request_sendactivation', array( &$this, 'send_activation' ) );
+				add_action( 'tml_request_activate',       array( $this, 'user_activation' ) );
+				add_action( 'tml_request_sendactivation', array( $this, 'send_activation' ) );
 			}
 		}
 	}
@@ -89,18 +89,18 @@ class Theme_My_Login_User_Moderation extends Theme_My_Login_Abstract {
 	 */
 	public function register_post() {
 		// Remove default new user notification
-		if ( has_action( 'tml_new_user_registered', 'wp_new_user_notification' ) )
-			remove_action( 'tml_new_user_registered', 'wp_new_user_notification', 10, 2 );
+		if ( has_action( 'register_new_user', 'wp_send_new_user_notifications' ) )
+			remove_action( 'register_new_user', 'wp_send_new_user_notifications' );
 
 		// Remove Custom Email new user notification
 		if ( class_exists( 'Theme_My_Login_Custom_Email' ) ) {
 			$custom_email = Theme_My_Login_Custom_Email::get_object();
-			if ( has_action( 'tml_new_user_registered', array( &$custom_email, 'new_user_notification' ) ) )
-				remove_action( 'tml_new_user_registered', array( &$custom_email, 'new_user_notification' ), 10, 2 );
+			if ( has_action( 'register_new_user', array( $custom_email, 'new_user_notification' ) ) )
+				remove_action( 'register_new_user', array( $custom_email, 'new_user_notification' ) );
 		}
 
 		// Moderate user upon registration
-		add_action( 'tml_new_user_registered', array( &$this, 'moderate_user' ), 100, 2 );
+		add_action( 'register_new_user', array( $this, 'moderate_user' ), 100 );
 	}
 
 	/**
@@ -241,9 +241,8 @@ class Theme_My_Login_User_Moderation extends Theme_My_Login_Abstract {
 	 * @access public
 	 *
 	 * @param int $user_id The user's ID
-	 * @param string $user_pass The user's password
 	 */
-	public function moderate_user( $user_id, $user_pass ) {
+	public function moderate_user( $user_id ) {
 		global $wpdb;
 
 		// Set user role to "pending"
@@ -256,23 +255,14 @@ class Theme_My_Login_User_Moderation extends Theme_My_Login_Abstract {
 		// Set user to "Pending" role
 		$user->set_role( 'pending' );
 
-		// Temporarily save plaintext pass
-		if ( isset( $_POST['user_pass'] ) )
-			update_user_meta( $user_id, 'user_pass', $_POST['user_pass'] );
-
 		// Send appropriate e-mail depending on moderation type
 		if ( 'email' == $this->get_option( 'type' ) ) {
-			// Generate an activation key
-			$key = wp_generate_password( 20, false );
-
-			// Set the activation key for the user
-			$wpdb->update( $wpdb->users, array( 'user_activation_key' => $key ), array( 'user_login' => $user->user_login ) );
-
 			// Send activation e-mail
-			self::new_user_activation_notification( $user_id, $key );
+			self::new_user_activation_notification( $user_id );
 		} elseif ( 'admin' == $this->get_option( 'type' ) ) {
 			// Send approval e-mail
-			self::new_user_approval_admin_notification( $user_id );
+			if ( apply_filters( 'send_new_user_approval_admin_notification', true ) )
+				self::new_user_approval_admin_notification( $user_id );
 		}
 	}
 
@@ -378,31 +368,21 @@ class Theme_My_Login_User_Moderation extends Theme_My_Login_Abstract {
 		$user_object = new WP_User( $user->ID );
 		$user_object->set_role( get_option( 'default_role' ) );
 
-		// Check for plaintext pass
-		if ( ! $user_pass = get_user_meta( $user->ID, 'user_pass', true ) ) {
-			$user_pass = wp_generate_password();
-			wp_set_password( $user_pass, $user->ID );
-		}
-
-		// Delete plaintext pass
-		delete_user_meta( $user->ID, 'user_pass' );
-
-		do_action( 'tml_new_user_activated', $user->ID, $user_pass );
+		do_action( 'tml_new_user_activated', $user->ID );
 
 		return true;
 	}
 
 	/**
-	 * Calls the "tml_new_user_registered" hook
+	 * Calls the "register_new_user" hook
 	 *
 	 * @since 6.0
 	 * @access public
 	 *
 	 * @param int $user_id The user's ID
-	 * @param string $user_pass The user's password
 	 */
-	public function new_user_activated( $user_id, $user_pass ) {
-		do_action( 'tml_new_user_registered', $user_id, $user_pass );
+	public function new_user_activated( $user_id ) {
+		do_action( 'register_new_user', $user_id );
 	}
 
 	/**
@@ -412,9 +392,8 @@ class Theme_My_Login_User_Moderation extends Theme_My_Login_Abstract {
 	 * @access public
 	 *
 	 * @param int $user_id The user's ID
-	 * @param string $key The unique activation key
 	 */
-	public static function new_user_activation_notification( $user_id, $key = '' ) {
+	public static function new_user_activation_notification( $user_id ) {
 		global $wpdb, $current_site;
 
 		$user = new WP_User( $user_id );
@@ -422,13 +401,11 @@ class Theme_My_Login_User_Moderation extends Theme_My_Login_Abstract {
 		$user_login = stripslashes( $user->user_login );
 		$user_email = stripslashes( $user->user_email );
 
-		if ( empty( $key ) ) {
-			$key = $wpdb->get_var( $wpdb->prepare( "SELECT user_activation_key FROM $wpdb->users WHERE user_login = %s", $user_login ) );
-			if ( empty( $key ) ) {
-				$key = wp_generate_password( 20, false );
-				$wpdb->update( $wpdb->users, array( 'user_activation_key' => $key ), array( 'user_login' => $user_login ) );
-			}
-		}
+		// Generate an activation key
+		$key = wp_generate_password( 20, false );
+
+		// Set the activation key for the user
+		$wpdb->update( $wpdb->users, array( 'user_activation_key' => $key ), array( 'user_login' => $user->user_login ) );
 
 		if ( is_multisite() ) {
 			$blogname = $current_site->site_name;
@@ -460,6 +437,9 @@ class Theme_My_Login_User_Moderation extends Theme_My_Login_Abstract {
 	 */
 	public static function new_user_approval_admin_notification( $user_id ) {
 		global $current_site;
+
+		if ( ! apply_filters( 'send_new_user_approval_admin_notification', true ) )
+			return;
 
 		$user = new WP_User( $user_id );
 

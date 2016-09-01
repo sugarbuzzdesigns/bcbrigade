@@ -7,14 +7,13 @@
 		
 	class PMProGateway_Twocheckout extends PMProGateway
 	{
-		function PMProGateway_Twocheckout($gateway = NULL)
+		function __construct($gateway = NULL)
 		{
 			if(!class_exists("Twocheckout"))
 				require_once(dirname(__FILE__) . "/../../includes/lib/Twocheckout/Twocheckout.php");
 			
 			//set API connection vars
-			Twocheckout::sellerId(pmpro_getOption('twocheckout_accountnumber'));
-			Twocheckout::privateKey(pmpro_getOption('twocheckout_privatekey'));
+			Twocheckout::sellerId(pmpro_getOption('twocheckout_accountnumber'));			
 			Twocheckout::username(pmpro_getOption('twocheckout_apiusername'));
 			Twocheckout::password(pmpro_getOption('twocheckout_apipassword'));
 			Twocheckout::$verifySSL = false;
@@ -74,8 +73,7 @@
 				'nuclear_HTTPS',
 				'gateway_environment',
 				'twocheckout_apiusername',
-				'twocheckout_apipassword',
-				'twocheckout_privatekey',
+				'twocheckout_apipassword',				
 				'twocheckout_accountnumber',
 				'twocheckout_secretword',
 				'currency',
@@ -133,16 +131,7 @@
 				<input type="text" id="twocheckout_apipassword" name="twocheckout_apipassword" size="60" value="<?php echo esc_attr($values['twocheckout_apipassword'])?>" />
 				<br /><small><?php _e('Password for the API user created.');?></small>
 			</td>
-		</tr>
-		<tr class="gateway gateway_twocheckout" <?php if($gateway != "twocheckout") { ?>style="display: none;"<?php } ?>>
-			<th scope="row" valign="top">
-				<label for="twocheckout_privatekey"><?php _e('API Private Key', 'pmpro');?>:</label>
-			</th>
-			<td>
-				<input type="text" name="twocheckout_privatekey" size="60" value="<?php echo $values['twocheckout_privatekey']?>" />
-				<br /><small><?php _e('Go to API in 2Checkout and generate a new key pair. Paste the Private Key here.');?></small>
-			</td>
-		</tr>
+		</tr>		
 		<tr class="gateway gateway_twocheckout" <?php if($gateway != "twocheckout") { ?>style="display: none;"<?php } ?>>
 			<th scope="row" valign="top">
 				<label for="twocheckout_accountnumber"><?php _e('Account Number', 'pmpro');?>:</label>
@@ -296,13 +285,13 @@
 			
 			// Recurring membership			
 			if( pmpro_isLevelRecurring( $order->membership_level ) ) {
-				$tco_args['li_0_startup_fee'] = number_format($initial_payment - $amount, 2);		//negative amount for lower initial payments
-				$recurring_payment = $order->membership_level->billing_amount;
-				$recurring_payment_tax = $order->getTaxForPrice($recurring_payment);
-				$recurring_payment = round((float)$recurring_payment + (float)$recurring_payment_tax, 2);
-				$tco_args['li_0_price'] = number_format($recurring_payment, 2);
+				$tco_args['li_0_startup_fee'] = number_format($initial_payment - $amount, 2, ".", "");		//negative amount for lower initial payments
+				$recurring_payment = number_format($order->membership_level->billing_amount, 2, ".", "");
+				$recurring_payment_tax = number_format($order->getTaxForPrice($recurring_payment), 2, ".", "");
+				$recurring_payment = number_format(round((float)$recurring_payment + (float)$recurring_payment_tax, 2), 2, ".", "");
+				$tco_args['li_0_price'] = number_format($recurring_payment, 2, ".", "");
 
-				$tco_args['li_0_recurrence'] = ( $order->BillingFrequency == 1 ) ? $order->BillingFrequency . ' ' . $order->BillingPeriod : $order->BillingFrequency . ' ' . $order->BillingPeriod . 's';
+				$tco_args['li_0_recurrence'] = ( $order->BillingFrequency == 1 ) ? $order->BillingFrequency . ' ' . $order->BillingPeriod : $order->BillingFrequency . ' ' . $order->BillingPeriod;
 
 				if( property_exists( $order, 'TotalBillingCycles' ) )
 					$tco_args['li_0_duration'] = ($order->BillingFrequency * $order->TotalBillingCycles ) . ' ' . $order->BillingPeriod;
@@ -311,7 +300,7 @@
 			}
 			// Non-recurring membership
 			else {
-				$tco_args['li_0_price'] = $initial_payment;
+				$tco_args['li_0_price'] = number_format($initial_payment, 2, ".", "");
 			}
 
 			// Demo mode?
@@ -332,7 +321,7 @@
 			if(!empty($order->TrialBillingPeriod)) {
 				$trial_amount = $order->TrialAmount;
 				$trial_tax = $order->getTaxForPrice($trial_amount);
-				$trial_amount = round((float)$trial_amount + (float)$trial_tax, 2);
+				$trial_amount = pmpro_formatPrice(round((float)$trial_amount + (float)$trial_tax, 2), false, false);
 				$tco_args['li_0_startup_fee'] = $trial_amount; // Negative trial amount
 			}				
 			

@@ -41,21 +41,21 @@ class Theme_My_Login_User_Moderation_Admin extends Theme_My_Login_Abstract {
 	 * @access protected
 	 */
 	protected function load() {
-		add_action( 'tml_activate_user-moderation/user-moderation.php',   array( &$this, 'activate'  ) );
-		add_action( 'tml_uninstall_user-moderation/user-moderation.php',  array( &$this, 'uninstall' ) );
+		add_action( 'tml_activate_user-moderation/user-moderation.php',   array( $this, 'activate'  ) );
+		add_action( 'tml_uninstall_user-moderation/user-moderation.php',  array( $this, 'uninstall' ) );
 
-		add_action( 'tml_modules_loaded', array( &$this, 'modules_loaded' ) );
+		add_action( 'tml_modules_loaded', array( $this, 'modules_loaded' ) );
 
 		if ( is_multisite() )
 			return;
 
-		add_action( 'admin_menu', array( &$this, 'admin_menu' ) );
-		add_action( 'admin_init', array( &$this, 'admin_init' ) );
+		add_action( 'admin_menu', array( $this, 'admin_menu' ) );
+		add_action( 'admin_init', array( $this, 'admin_init' ) );
 
-		add_action( 'load-users.php',   array( &$this, 'load_users_page'  )        );
-		add_filter( 'user_row_actions', array( &$this, 'user_row_actions' ), 10, 2 );
+		add_action( 'load-users.php',   array( $this, 'load_users_page'  )        );
+		add_filter( 'user_row_actions', array( $this, 'user_row_actions' ), 10, 2 );
 
-		add_action( 'delete_user', array( &$this, 'deny_user' ) );
+		add_action( 'delete_user', array( $this, 'deny_user' ) );
 	}
 
 	/**
@@ -137,12 +137,12 @@ class Theme_My_Login_User_Moderation_Admin extends Theme_My_Login_Abstract {
 			__( 'Moderation', 'theme-my-login' ),
 			'manage_options',
 			$this->options_key,
-			array( &$this, 'settings_page' )
+			array( $this, 'settings_page' )
 		);
 
 		add_settings_section( 'general', null, '__return_false', $this->options_key );
 
-		add_settings_field( 'type', __( 'Moderation Type', 'theme-my-login' ), array( &$this, 'settings_field_moderation_type' ), $this->options_key, 'general' );
+		add_settings_field( 'type', __( 'Moderation Type', 'theme-my-login' ), array( $this, 'settings_field_moderation_type' ), $this->options_key, 'general' );
 	}
 
 	/**
@@ -154,7 +154,7 @@ class Theme_My_Login_User_Moderation_Admin extends Theme_My_Login_Abstract {
 	 * @access public
 	 */
 	public function admin_init() {
-		register_setting( $this->options_key, $this->options_key, array( &$this, 'save_settings' ) );
+		register_setting( $this->options_key, $this->options_key, array( $this, 'save_settings' ) );
 	}
 
 	/**
@@ -216,7 +216,7 @@ class Theme_My_Login_User_Moderation_Admin extends Theme_My_Login_Abstract {
 	 * @access public
 	 */
 	public function load_users_page() {
-		add_action( 'admin_notices', array( &$this, 'admin_notices' ) );
+		add_action( 'admin_notices', array( $this, 'admin_notices' ) );
 
 		// Is there an action?
 		if ( isset( $_GET['action'] ) ) {
@@ -355,14 +355,8 @@ class Theme_My_Login_User_Moderation_Admin extends Theme_My_Login_Abstract {
 		$user_object->set_role( $approval_role );
 		unset( $user_object );
 
-		// Check for plaintext pass
-		if ( ! $user_pass = get_user_meta( $user->ID, 'user_pass', true ) ) {
-			$user_pass = wp_generate_password();
-			wp_set_password( $user_pass, $user->ID );
-		}
-
-		// Delete plaintext pass
-		delete_user_meta( $user->ID, 'user_pass' );
+		if ( ! apply_filters( 'send_new_user_approval_notification', true ) )
+			return;
 
 		if ( is_multisite() ) {
 			$blogname = $current_site->site_name;
@@ -372,15 +366,29 @@ class Theme_My_Login_User_Moderation_Admin extends Theme_My_Login_Abstract {
 			$blogname = wp_specialchars_decode( get_option( 'blogname' ), ENT_QUOTES );
 		}
 
+		// Generate something random for a password reset key
+		$key = wp_generate_password( 20, false );
+
+		do_action( 'retrieve_password_key', $user->user_login, $key );
+
+		// Now insert the key, hashed, into the DB
+		require_once ABSPATH . WPINC . '/class-phpass.php';
+		$wp_hasher = new PasswordHash( 8, true );
+
+		$hashed = time() . ':' . $wp_hasher->HashPassword( $key );
+		$wpdb->update( $wpdb->users, array( 'user_activation_key' => $hashed ), array( 'user_login' => $user->user_login ) );
+
 		$message  = sprintf( __( 'You have been approved access to %s', 'theme-my-login' ), $blogname         ) . "\r\n\r\n";
 		$message .= sprintf( __( 'Username: %s',                        'theme-my-login' ), $user->user_login ) . "\r\n";
-		$message .= sprintf( __( 'Password: %s',                        'theme-my-login' ), $user_pass        ) . "\r\n\r\n";
+		$message .= __( 'To set your password, visit the following address:', 'theme-my-login' ) . "\r\n\r\n";
+		$message .= '<' . network_site_url( "wp-login.php?action=rp&key=$key&login=" . rawurlencode( $user->user_login ), 'login' ) . ">\r\n\r\n";
+
 		$message .= site_url( 'wp-login.php', 'login' ) . "\r\n";
 
 		$title    = sprintf( __( '[%s] Registration Approved', 'theme-my-login' ), $blogname );
 
-		$title    = apply_filters( 'user_approval_notification_title',   $title,   $user->ID             );
-		$message  = apply_filters( 'user_approval_notification_message', $message, $user_pass, $user->ID );
+		$title    = apply_filters( 'user_approval_notification_title',   $title,         $user->ID );
+		$message  = apply_filters( 'user_approval_notification_message', $message, $key, $user->ID );
 
 		if ( $message && ! wp_mail( $user->user_email, $title, $message ) )
 			  die( '<p>' . __( 'The e-mail could not be sent.', 'theme-my-login' ) . "<br />\n" . __( 'Possible reason: your host may have disabled the mail() function...', 'theme-my-login' ) . '</p>' );
@@ -406,6 +414,9 @@ class Theme_My_Login_User_Moderation_Admin extends Theme_My_Login_Abstract {
 			return;
 
 		do_action( 'deny_user', $user->ID );
+
+		if ( ! apply_filters( 'send_new_user_denial_notification', true ) )
+			return;
 
 		if ( is_multisite() ) {
 			$blogname = $current_site->site_name;

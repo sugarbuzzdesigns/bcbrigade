@@ -2,10 +2,10 @@
 /*
 Plugin Name: WPS Hide Login
 Plugin URI: https://github.com/Tabrisrp/wps-hide-login
-Description: Change your login url and remove access to wp-login.php page | Change votre url de connexion et supprime l'accès à la page wp-login.php (sécurité augmentée)
-Author: WPServeur
+Description: Protect your website by changing the login URL and preventing access to wp-login.php page and wp-admin directory while not logged-in
+Author: Remy Perona for WPServeur
 Author URI: http://profiles.wordpress.org/tabrisrp/
-Version: 1.1.2
+Version: 1.1.7
 Text Domain: wps-hide-login
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
@@ -322,7 +322,8 @@ if ( defined( 'ABSPATH' )
 
 			if ( ! is_network_admin()
 				&& $pagenow === 'options-general.php'
-				&& isset( $_GET['settings-updated'] ) ) {
+				&& isset( $_GET['settings-updated'] )
+				&& ! isset( $_GET['page'] ) ) {
 
 				echo '<div class="updated notice is-dismissible"><p>' . sprintf( __( 'Your login page is now here: <strong><a href="%1$s">%2$s</a></strong>. Bookmark this page!', 'wps-hide-login' ), $this->new_login_url(), $this->new_login_url() ) . '</p></div>';
 
@@ -386,14 +387,8 @@ if ( defined( 'ABSPATH' )
 
 			global $pagenow;
 
-			if ( is_admin()
-				&& ! is_user_logged_in()
-				&& ! defined( 'DOING_AJAX' ) ) {
-
-				status_header(404);
-                nocache_headers();
-                include( get_404_template() );
-                exit;
+			if ( is_admin() && ! is_user_logged_in() && ! defined( 'DOING_AJAX' ) && $pagenow !== 'admin-post.php' ) {
+                wp_die( __( 'This has been disabled', 'wps-hide-login' ), 403 );
 			}
 
 			$request = parse_url( $_SERVER['REQUEST_URI'] );

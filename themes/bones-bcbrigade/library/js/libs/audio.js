@@ -74,7 +74,6 @@
             <em class="played">00:00</em>/<strong class="duration">00:00</strong> \
           </div> \
           <ul><li class="active" data-info-toggle="lyrics">Lyrics</li><li data-info-toggle="about">About</li></ul> \
-          <a href="#" class="button cta buy-song">BUY</a> \
           <div class="error-message"></div></div> \
           <div class="scrubber"> \
           <div class="progress"></div> \

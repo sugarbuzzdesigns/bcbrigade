@@ -32,10 +32,6 @@ function pmpro_login_redirect($redirect_to, $request, $user)
 		//not logging in (login form) so return what was given		
 	}
 	
-	//let's strip the https if force_ssl_login is set, but force_ssl_admin is not
-	if(force_ssl_login() && !force_ssl_admin())
-		$redirect_to = str_replace("https:", "http:", $redirect_to);
-	
 	return apply_filters("pmpro_login_redirect_url", $redirect_to, $request, $user);
 }
 add_filter('login_redirect','pmpro_login_redirect', 10, 3);
@@ -55,7 +51,7 @@ add_filter('wp_signup_location', 'pmpro_wp_signup_location');
 //redirect from default login pages to PMPro
 function pmpro_login_head()
 {		
-	$login_redirect = apply_filters("pmpro_login_redirect", __return_false);
+	$login_redirect = apply_filters("pmpro_login_redirect", true);
 	
 	if((pmpro_is_login_page() || is_page("login") ||
 		class_exists("Theme_My_Login") && defined('Theme_My_Login::version') && version_compare(Theme_My_Login::version, "6.3") >= 0 && (Theme_My_Login::is_tml_page("register") || Theme_My_Login::is_tml_page("login"))

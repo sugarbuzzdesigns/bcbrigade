@@ -5,18 +5,31 @@
 function pmpro_has_membership_access($post_id = NULL, $user_id = NULL, $return_membership_levels = false)
 {
 	global $post, $wpdb, $current_user;
-	//use globals if no values supplied
-	if(!$post_id && !empty($post))
-		$post_id = $post->ID;
-	if(!$user_id)
-		$user_id = $current_user->ID;
 
+	//get queried object in case we check against that
+	if(!is_admin())
+		$queried_object = get_queried_object();
+	else
+		$queried_object = NULL;
+		
+	//use post global or queried object if no $post_id was passed in
+	if(!$post_id && !empty($post) && !empty($post->ID))
+		$post_id = $post->ID;
+	elseif(!$post_id && !empty($queried_object) && !empty($queried_object->ID))
+		$post_id = $queried_object->ID;
+	
 	//no post, return true (changed from false in version 1.7.2)
 	if(!$post_id)
 		return true;
-
+	
+	//use current user if no value is supplied
+	if(!$user_id)
+		$user_id = $current_user->ID;
+	
 	//if no post or current_user object, set them up
-	if(!empty($post->ID) && $post_id == $post->ID)
+	if(isset($queried_object->ID) && !empty($queried_object->ID) && $post_id == $queried_object->ID)
+		$mypost = $queried_object;
+	elseif(isset($post->ID) && !empty($post->ID) && $post_id == $post->ID)
 		$mypost = $post;
 	else
 		$mypost = get_post($post_id);
@@ -27,7 +40,7 @@ function pmpro_has_membership_access($post_id = NULL, $user_id = NULL, $return_m
 		$myuser = get_userdata($user_id);
 
 	//for these post types, we want to check the parent
-	if($mypost->post_type == "attachment" || $mypost->post_type == "revision")
+	if(isset($mypost->post_type) && in_array( $mypost->post_type, array("attachment", "revision")))
 	{
 		$mypost = get_post($mypost->post_parent);
 	}
@@ -35,7 +48,7 @@ function pmpro_has_membership_access($post_id = NULL, $user_id = NULL, $return_m
 	// Allow plugins and themes to find the protected post        
     $mypost = apply_filters( 'pmpro_membership_access_post', $mypost, $myuser );
 	
-	if($mypost->post_type == "post")
+	if(isset($mypost->post_type) && $mypost->post_type == "post")
 	{
 		$post_categories = wp_get_post_categories($mypost->ID);
 
@@ -53,7 +66,7 @@ function pmpro_has_membership_access($post_id = NULL, $user_id = NULL, $return_m
 	else
 	{
 		//are any membership levels associated with this page?
-		$sqlQuery = "SELECT m.id, m.name FROM $wpdb->pmpro_memberships_pages mp LEFT JOIN $wpdb->pmpro_membership_levels m ON mp.membership_id = m.id WHERE mp.page_id = '" . $mypost->ID . "'";
+		$sqlQuery = "SELECT m.id, m.name FROM $wpdb->pmpro_memberships_pages mp LEFT JOIN $wpdb->pmpro_membership_levels m ON mp.membership_id = m.id WHERE mp.page_id = '" . $post_id . "'";
 	}
 
 
@@ -145,15 +158,27 @@ function pmpro_search_filter($query)
 		//get page ids that are in my levels
         $levels = pmpro_getMembershipLevelsForUser($current_user->ID);
         $my_pages = array();
+		$member_pages = array();
 
         if($levels) {
             foreach($levels as $key => $level) {
                 //get restricted posts for level
-                $sql = "SELECT page_id FROM $wpdb->pmpro_memberships_pages WHERE membership_id=" . $current_user->membership_level->ID;
-                $member_pages = $wpdb->get_col($sql);
-                $my_pages = array_unique(array_merge($my_pages, $member_pages));
-            }
-        }
+
+				// make sure the object contains membership info.
+				if (isset($level->ID)) {
+
+					$sql = $wpdb->prepare("
+						SELECT page_id
+						FROM {$wpdb->pmpro_memberships_pages}
+						WHERE membership_id = %d",
+						$level->ID
+					);
+
+					$member_pages = $wpdb->get_col($sql);
+					$my_pages = array_unique(array_merge($my_pages, $member_pages));
+				}
+            } // foreach
+        } // if($levels)
 
         //get hidden page ids
         if(!empty($my_pages))
@@ -323,7 +348,7 @@ function pmpro_membership_content_filter($content, $skipcheck = false)
 		$pmpro_content_message_post = '</div>';
 
 		$sr_search = array("!!levels!!", "!!referrer!!");
-		$sr_replace = array(pmpro_implodeToEnglish($post_membership_levels_names), $_SERVER['REQUEST_URI']);
+		$sr_replace = array(pmpro_implodeToEnglish($post_membership_levels_names), urlencode(site_url($_SERVER['REQUEST_URI'])));
 
 		//get the correct message to show at the bottom
 		if(is_feed())
@@ -437,8 +462,8 @@ function pmpro_comments_filter($comments, $post_id = NULL)
 
 	return $comments;
 }
-add_filter("comments_array", "pmpro_comments_filter");
-add_filter("comments_open", "pmpro_comments_filter");
+add_filter("comments_array", "pmpro_comments_filter", 10, 2);
+add_filter("comments_open", "pmpro_comments_filter", 10, 2);
 
 //keep non-members from getting to certain pages (attachments, etc)
 function pmpro_hide_pages_redirect()
@@ -459,3 +484,80 @@ function pmpro_hide_pages_redirect()
 	}
 }
 add_action('wp', 'pmpro_hide_pages_redirect');
+
+/**
+ * Adds custom classes to the array of post classes.
+ *
+ * pmpro-level-required = this post requires at least one level
+ * pmpro-level-1 = this post requires level 1
+ * pmpro-has-access = this post is usually locked, but the current user has access to this post
+ *
+ * @param array $classes Classes for the post element.
+ * @return array
+ *
+ * @since 1.8.5.4
+ */
+function pmpro_post_classes( $classes, $class, $post_id ) {	
+	
+	$post = get_post($post_id);
+	
+	if(empty($post))
+		return $classes;
+	
+	$post_levels = array();
+	$post_levels = pmpro_has_membership_access($post->ID,NULL,true);
+	
+	if(!empty($post_levels))
+	{
+		if(!empty($post_levels[1]))
+		{
+			$classes[] = 'pmpro-level-required';
+			foreach($post_levels[1] as $post_level)
+				$classes[] = 'pmpro-level-' . $post_level[0];
+		}
+		if(!empty($post_levels[0]) && $post_levels[0] == true)
+			$classes[] = 'pmpro-has-access';
+		else
+			$classes[] = 'pmpro-no-access';
+	}
+	return $classes;
+}
+add_filter( 'post_class', 'pmpro_post_classes', 10, 3 );
+
+/**
+ * Adds custom classes to the array of body classes.
+ * Same as the above, but acts on the "queried object" instead of the post global.
+ *
+ * pmpro-body-level-required = this post requires at least one level
+ * pmpro-body-level-1 = this post requires level 1
+ * pmpro-body-has-access = this post is usually locked, but the current user has access to this post
+ *
+ * @param array $classes Classes for the body element.
+ * @return array
+ *
+ * @since 1.8.6.1
+ */
+function pmpro_body_classes( $classes ) {	
+	
+	$post = get_queried_object();
+	
+	if(empty($post) || !is_singular())
+		return $classes;
+	
+	$post_levels = array();
+	$post_levels = pmpro_has_membership_access($post->ID,NULL,true);
+	
+	if(!empty($post_levels))
+	{
+		if(!empty($post_levels[1]))
+		{
+			$classes[] = 'pmpro-body-level-required';
+			foreach($post_levels[1] as $post_level)
+				$classes[] = 'pmpro-body-level-' . $post_level[0];
+		}
+		if(!empty($post_levels[0]) && $post_levels[0] == true)
+			$classes[] = 'pmpro-body-has-access';
+	}
+	return $classes;
+}
+add_filter( 'body_class', 'pmpro_body_classes' );

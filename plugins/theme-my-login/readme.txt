@@ -1,9 +1,10 @@
 === Theme My Login ===
 Contributors: jfarthing84
+Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=EZLVANPT4A9SW
 Tags: widget, login, registration, theme, custom, log in, register, sidebar, gravatar, redirection, e-mail
-Requires at least: 3.7
-Tested up to: 4.2
-Stable tag: 6.3.12
+Requires at least: 4.5
+Tested up to: 4.5.2
+Stable tag: 6.4.5
 
 Themes the WordPress login pages according to your theme.
 
@@ -47,7 +48,7 @@ Visit yoursite.com/wp-login.php.
 
 = What happened to the language folder? =
 
-As of version 6.3, Theme My Login no longer ships with translation files. Translations will be available at http://downloads.jfarthing.com.
+As of version 6.3, Theme My Login no longer ships with translation files. Translations will be available at http://translate.wordpress.org.
 
 = How do I obtain additional assistance? =
 
@@ -55,6 +56,49 @@ Please visit http://www.jfarthing.com/development/theme-my-login.
 
 
 == Changelog ==
+
+= 6.4.5 =
+* Don't clear username input on login form when autofocusing
+* Fix custom e-mail disable checkboxes defaulting to being checked
+* Fix login type functionality
+* Bring wp-login.php duplicated code up to date
+* Require WordPress 4.5
+
+= 6.4.4 =
+* Fix file loading for non-standard directory setups
+* Fix language files not loading properly
+* Fix password reset cookie path
+
+= 6.4.3 =
+* Fix sending of custom emails when creating a user
+* Fix sending of custom emails on user activation/approval
+* Fix translation loading logic
+* Require WordPress 4.4
+
+= 6.4.2 =
+* Fix deprecated function notices
+* Deprecate "tml_user_password_changed" hook in favor of "after_password_reset"
+* Deprecate "tml_new_user_registered" hook in favor of "register_new_user"
+
+= 6.4.1 =
+* Allow array of actions in Theme_My_Login::is_tml_page()
+* Lost Password nav menu item will only show when not logged in
+* Hide action links on Reset Password page
+* Fix false password reset error caused by referer redirection
+* Fix PHP strict warning about abstract class constructor compatibility
+
+= 6.4 =
+* Add option to login using either username only, email only or both
+* Add option to disable user denial notification when admin approval is active
+* Update reCAPTCHA module to API version 2.0
+* Login and Register nav menu items only show when not logged in
+* Logout and Profile nav menu items only show when logged in
+* Better default stylesheet
+* Fix TML pages displaying in search results
+* Fix logout redirect
+* Fix broken interim login when wp-login.php is disabled
+* Remove AJAX module
+* Require WordPress 4.3.1
 
 = 6.3.12 =
 * Fix multiple widget custom redirect error

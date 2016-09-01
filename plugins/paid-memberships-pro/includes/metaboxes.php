@@ -34,9 +34,14 @@ function pmpro_page_meta()
 		}
     ?>
     </ul>
-	<?php if('post' == get_post_type($post) && $in_member_cat) { ?>
+	<?php 
+		if('post' == get_post_type($post) && $in_member_cat) { ?>
 		<p class="pmpro_meta_notice">* <?php _e("This post is already protected for this level because it is within a category that requires membership.", "pmpro");?></p>
-	<?php } ?>
+	<?php 
+		}
+		
+		do_action('pmpro_after_require_membership_metabox', $post);
+	?>
 <?php
 }
 
@@ -106,3 +111,31 @@ if (is_admin())
 
 	require_once(PMPRO_DIR . "/adminpages/dashboard.php");
 }
+
+//show membership level restrictions on category edit
+function pmpro_taxonomy_meta($term)
+{
+	global $membership_levels, $post, $wpdb;
+	
+	$protectedlevels = array();
+	foreach($membership_levels as $level)
+	{
+		$protectedlevel = $wpdb->get_col("SELECT category_id FROM $wpdb->pmpro_memberships_categories WHERE membership_id = $level->id AND category_id = $term->term_id");
+		if(!empty($protectedlevel))
+			$protectedlevels[] .= '<a target="_blank" href="admin.php?page=pmpro-membershiplevels&edit=' . $level->id . '">' . $level->name. '</a>';
+	}
+	if(!empty($protectedlevels)) 
+	{ 
+		?>
+		<tr class="form-field">
+			<th scope="row" valign="top"><?php _e( 'Membership Levels', 'pmpro' ); ?></label></th>
+			<td>
+				<p><strong>
+					<?php echo implode(', ',$protectedlevels); ?></strong></p>
+				<p class="description"><?php _e('Only members of these levels will be able to view posts in this category.','pmpro'); ?></p>
+			</td>
+		</tr>
+	<?php
+	}
+}
+add_action( 'category_edit_form_fields', 'pmpro_taxonomy_meta', 10, 2 );

@@ -13,7 +13,7 @@
 		$s = "";
 
 	if(isset($_REQUEST['l']))
-		$l = intval($_REQUEST['l']);
+		$l = sanitize_text_field($_REQUEST['l']);
 	else
 		$l = false;
 
@@ -61,7 +61,17 @@
 		if(isset($_REQUEST['limit']))
 			$limit = intval($_REQUEST['limit']);
 		else
-			$limit = 15;
+		{
+			/**
+			 * Filter to set the default number of items to show per page
+			 * on the Members List page in the admin.
+			 *
+			 * @since 1.8.4.5
+			 *
+			 * @param int $limit The number of items to show per page.
+			 */
+			$limit = apply_filters('pmpro_memberslist_per_page', 15);
+		}
 
 		$end = $pn * $limit;
 		$start = $end - $limit;
@@ -258,7 +268,7 @@
 	</form>
 
 	<?php
-	echo pmpro_getPaginationString($pn, $totalrows, $limit, 1, get_admin_url(NULL, "/admin.php?page=pmpro-memberslist&s=" . urlencode($s)), "&l=$l&limit=$limit&pn=");
+	echo pmpro_getPaginationString($pn, $totalrows, $limit, 1, add_query_arg(array("s" => urlencode($s), "l" => $l, "limit" => $limit)));
 	?>
 
 <?php

@@ -7,7 +7,7 @@
 	
 	class PMProGateway_check extends PMProGateway
 	{
-		function PMProGateway_check($gateway = NULL)
+		function __construct($gateway = NULL)
 		{
 			$this->gateway = $gateway;
 			return $this->gateway;
@@ -26,6 +26,7 @@
 			//add fields to payment settings
 			add_filter('pmpro_payment_options', array('PMProGateway_check', 'pmpro_payment_options'));
 			add_filter('pmpro_payment_option_fields', array('PMProGateway_check', 'pmpro_payment_option_fields'), 10, 2);
+			add_filter('pmpro_checkout_after_payment_information_fields', array('PMProGateway_check', 'pmpro_checkout_after_payment_information_fields'));
 
 			//code to add at checkout
 			$gateway = pmpro_getGateway();
@@ -136,6 +137,22 @@
 			
 			return $fields;
 		}
+
+		/**
+		 * Show instructions on checkout page
+		 * Moved here from pages/checkout.php
+		 * @since 1.8.9.3
+		 */
+		static function pmpro_checkout_after_payment_information_fields() {
+			global $gateway;
+			global $pmpro_level;
+
+			if($gateway == "check" && !pmpro_isLevelFree($pmpro_level)) {
+				$instructions = pmpro_getOption("instructions");
+				echo '<div class="pmpro_check_instructions">' . wpautop($instructions) . '</div>';
+			}
+		}
+
 		
 		/**
 		 * Process checkout.
@@ -234,6 +251,7 @@
 						$order->ProfileStartDate = apply_filters("pmpro_profile_start_date", $order->ProfileStartDate, $order);
 						if($this->subscribe($order))
 						{
+							$order->status = apply_filters("pmpro_check_status_after_checkout", "success");	//saved on checkout page	
 							return true;
 						}
 						else

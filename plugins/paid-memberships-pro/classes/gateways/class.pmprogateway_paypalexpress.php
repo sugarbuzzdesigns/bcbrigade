@@ -7,7 +7,7 @@
 
 	class PMProGateway_paypalexpress extends PMProGateway
 	{
-		function PMProGateway_paypalexpress($gateway = NULL)
+		function __construct($gateway = NULL)
 		{
 			$this->gateway = $gateway;
 			return $this->gateway;
@@ -26,6 +26,16 @@
 			//add fields to payment settings
 			add_filter('pmpro_payment_options', array('PMProGateway_paypalexpress', 'pmpro_payment_options'));
 
+			/*
+				Filter pmpro_next_payment to get actual value
+				via the PayPal API. This is disabled by default
+				for performance reasons, but you can enable it
+				by copying this line into a custom plugin or
+				your active theme's functions.php and uncommenting
+				it there.
+			*/
+			//add_filter('pmpro_next_payment', array('PMProGateway_paypalexpress', 'pmpro_next_payment'), 10, 3);
+			
 			/*
 				This code is the same for PayPal Website Payments Pro, PayPal Express, and PayPal Standard
 				So we only load it if we haven't already.
@@ -49,7 +59,18 @@
 				add_action('pmpro_checkout_before_processing', array('PMProGateway_paypalexpress', 'pmpro_checkout_before_processing'));
 				add_filter('pmpro_checkout_default_submit_button', array('PMProGateway_paypalexpress', 'pmpro_checkout_default_submit_button'));
 				add_action('pmpro_checkout_after_form', array('PMProGateway_paypalexpress', 'pmpro_checkout_after_form'));
+				add_action('http_api_curl', array('PMProGateway_paypalexpress', 'http_api_curl'), 10, 3);
 			}
+		}
+
+		/**
+		 * Update the SSLVERSION for CURL to support PayPal Express moving to TLS 1.2
+		 *
+		 * @since 1.8.9.1
+		 */
+		static function http_api_curl($handle, $r, $url) {
+			if(strpos($url, 'paypal.com') !== false)
+				curl_setopt( $handle, CURLOPT_SSLVERSION, 6 );
 		}
 
 		/**
@@ -83,7 +104,8 @@
 				'currency',
 				'use_ssl',
 				'tax_state',
-				'tax_rate'
+				'tax_rate',
+				'paypalexpress_skip_confirmation'
 			);
 
 			return $options;
@@ -153,6 +175,17 @@
 			</th>
 			<td>
 				<input type="text" id="apisignature" name="apisignature" size="60" value="<?php echo esc_attr($values['apisignature'])?>" />
+			</td>
+		</tr>
+		<tr class="gateway gateway_paypal gateway_paypalexpress" <?php if($gateway != "paypal" && $gateway != "paypalexpress") { ?>style="display: none;"<?php } ?>>
+			<th scope="row" valign="top">
+				<label for="paypalexpress_skip_confirmation"><?php _e('Confirmation Step', 'pmpro');?>:</label>
+			</th>
+			<td>
+				<select id="paypalexpress_skip_confirmation" name="paypalexpress_skip_confirmation">
+					<option value="0" <?php selected(pmpro_getOption('paypalexpress_skip_confirmation'), 0);?>>Require an extra confirmation after users return from PayPal Express.</option>
+					<option value="1" <?php selected(pmpro_getOption('paypalexpress_skip_confirmation'), 1);?>>Skip the extra confirmation after users return from PayPal Express.</option>
+				</select>
 			</td>
 		</tr>
 		<tr class="gateway gateway_paypal gateway_paypalexpress gateway_paypalstandard" <?php if($gateway != "paypal" && $gateway != "paypalexpress" && $gateway != "paypalstandard") { ?>style="display: none;"<?php } ?>>
@@ -269,7 +302,11 @@
 					$pmpro_msgt = "pmpro_error";
 				}
 			}
-			elseif(!empty($_REQUEST['confirm']))
+			
+			if(empty($pmpro_msg) &&
+				(!empty($_REQUEST['confirm']) ||
+				(pmpro_getOption('paypalexpress_skip_confirmation') && $pmpro_review))
+			)
 			{
 				$morder = new MemberOrder();
 				$morder->getMemberOrderByPayPalToken($_REQUEST['token']);
@@ -396,13 +433,11 @@
 
 			//show our submit buttons
 			?>
-			<?php if($gateway == "paypal" || $gateway == "paypalexpress" || $gateway == "paypalstandard") { ?>
 			<span id="pmpro_paypalexpress_checkout" <?php if(($gateway != "paypalexpress" && $gateway != "paypalstandard") || !$pmpro_requirebilling) { ?>style="display: none;"<?php } ?>>
 				<input type="hidden" name="submit-checkout" value="1" />
-				<input type="image" value="<?php _e('Check Out with PayPal', 'pmpro');?> &raquo;" src="<?php echo apply_filters("pmpro_paypal_button_image", "https://www.paypal.com/en_US/i/btn/btn_xpressCheckout.gif");?>" />
+				<input type="image" class="pmpro_btn-submit-checkout" value="<?php _e('Check Out with PayPal', 'pmpro');?> &raquo;" src="<?php echo apply_filters("pmpro_paypal_button_image", "https://www.paypal.com/en_US/i/btn/btn_xpressCheckout.gif");?>" />
 			</span>
-			<?php } ?>
-
+			
 			<span id="pmpro_submit_span" <?php if(($gateway == "paypalexpress" || $gateway == "paypalstandard") && $pmpro_requirebilling) { ?>style="display: none;"<?php } ?>>
 				<input type="hidden" name="submit-checkout" value="1" />
 				<input type="submit" class="pmpro_btn pmpro_btn-submit-checkout" value="<?php if($pmpro_requirebilling) { _e('Submit and Check Out', 'pmpro'); } else { _e('Submit and Confirm', 'pmpro');}?> &raquo;" />
@@ -422,6 +457,7 @@
 		{
 		?>
 		<script>
+			<!--
 			//choosing payment method
 			jQuery('input[name=gateway]').click(function() {
 				if(jQuery(this).val() == 'paypal')
@@ -444,6 +480,7 @@
 			jQuery('a.pmpro_radio').click(function() {
 				jQuery(this).prev().click();
 			});
+			-->
 		</script>
 		<?php
 		}
@@ -478,7 +515,7 @@
 				$nvpStr .= "&PROFILESTARTDATE=" . $order->ProfileStartDate;
 			if(!empty($order->BillingFrequency))
 				$nvpStr .= "&BILLINGPERIOD=" . $order->BillingPeriod . "&BILLINGFREQUENCY=" . $order->BillingFrequency . "&AUTOBILLAMT=AddToNextBilling&L_BILLINGTYPE0=RecurringPayments";
-			$nvpStr .= "&DESC=" . urlencode(substr($order->membership_level->name . " at " . get_bloginfo("name"), 0, 127));
+			$nvpStr .= "&DESC=" . urlencode( apply_filters( 'pmpro_paypal_level_description', substr($order->membership_level->name . " at " . get_bloginfo("name"), 0, 127), $order->membership_level->name, $order, get_bloginfo("name")) );
 			$nvpStr .= "&NOTIFYURL=" . urlencode(admin_url('admin-ajax.php') . "?action=ipnhandler");
 			$nvpStr .= "&NOSHIPPING=1&L_BILLINGAGREEMENTDESCRIPTION0=" . urlencode(substr($order->membership_level->name . " at " . get_bloginfo("name"), 0, 127)) . "&L_PAYMENTTYPE0=Any";
 
@@ -517,8 +554,8 @@
 			$nvpStr .= "&CANCELURL=" . urlencode(pmpro_url("levels"));
 
 			$account_optional = apply_filters('pmpro_paypal_account_optional', true);
-            		if ($account_optional)
-                		$nvpStr .= '&SOLUTIONTYPE=Sole&LANDINGPAGE=Billing';
+    		if ($account_optional)
+        		$nvpStr .= '&SOLUTIONTYPE=Sole&LANDINGPAGE=Billing';
 
 			$nvpStr = apply_filters("pmpro_set_express_checkout_nvpstr", $nvpStr, $order);
 
@@ -535,11 +572,11 @@
 				$order->saveOrder();
 
 				//redirect to paypal
-				$paypal_url = "https://www.paypal.com/webscr&cmd=_express-checkout&useraction=commit&token=" . $this->httpParsedResponseAr['TOKEN'];
+				$paypal_url = "https://www.paypal.com/webscr?cmd=_express-checkout&useraction=commit&token=" . $this->httpParsedResponseAr['TOKEN'];
 				$environment = pmpro_getOption("gateway_environment");
 				if("sandbox" === $environment || "beta-sandbox" === $environment)
 				{
-					$paypal_url = "https://www.sandbox.paypal.com/webscr&useraction=commit&cmd=_express-checkout&token="  . $this->httpParsedResponseAr['TOKEN'];
+					$paypal_url = "https://www.sandbox.paypal.com/webscr?cmd=_express-checkout&useraction=commit&token="  . $this->httpParsedResponseAr['TOKEN'];
 				}
 
 				wp_redirect($paypal_url);
@@ -613,7 +650,7 @@
 			*/
 			if(!empty($order->BillingFrequency))
 				$nvpStr .= "&BILLINGPERIOD=" . $order->BillingPeriod . "&BILLINGFREQUENCY=" . $order->BillingFrequency . "&AUTOBILLAMT=AddToNextBilling";
-			$nvpStr .= "&DESC=" . urlencode(substr($order->membership_level->name . " at " . get_bloginfo("name"), 0, 127));
+			$nvpStr .= "&DESC=" . urlencode( apply_filters( 'pmpro_paypal_level_description', substr($order->membership_level->name . " at " . get_bloginfo("name"), 0, 127), $order->membership_level->name, $order, get_bloginfo("name")) );
 			$nvpStr .= "&NOTIFYURL=" . urlencode(admin_url('admin-ajax.php') . "?action=ipnhandler");
 			$nvpStr .= "&NOSHIPPING=1";
 
@@ -672,7 +709,7 @@
 				$nvpStr .= "&TAXAMT=" . $amount_tax;
 			$nvpStr .= "&BILLINGPERIOD=" . $order->BillingPeriod . "&BILLINGFREQUENCY=" . $order->BillingFrequency . "&AUTOBILLAMT=AddToNextBilling";
 			$nvpStr .= "&NOTIFYURL=" . urlencode(admin_url('admin-ajax.php') . "?action=ipnhandler");
-			$nvpStr .= "&DESC=" . urlencode(substr($order->membership_level->name . " at " . get_bloginfo("name"), 0, 127));
+			$nvpStr .= "&DESC=" . urlencode( apply_filters( 'pmpro_paypal_level_description', substr($order->membership_level->name . " at " . get_bloginfo("name"), 0, 127), $order->membership_level->name, $order, get_bloginfo("name")) );
 
 			//if billing cycles are defined
 			if(!empty($order->TotalBillingCycles))
@@ -771,6 +808,44 @@
 				return false;
 			}
 		}
+		
+		/**
+		 * Filter pmpro_next_payment to get date via API if possible
+		 *
+		 * @since 1.8.5
+		*/
+		static function pmpro_next_payment($timestamp, $user_id, $order_status)
+		{
+			//find the last order for this user
+			if(!empty($user_id))
+			{
+				//get last order
+				$order = new MemberOrder();
+				$order->getLastMemberOrder($user_id, $order_status);
+				
+				//check if this is a paypal express order with a subscription transaction id
+				if(!empty($order->id) && !empty($order->subscription_transaction_id) && $order->gateway == "paypalexpress")
+				{
+					//get the subscription status
+					$status = $order->getGatewaySubscriptionStatus();					
+										
+					if(!empty($status) && !empty($status['NEXTBILLINGDATE']))
+					{
+						//found the next billing date at PayPal, going to use that						
+						$timestamp = strtotime(urldecode($status['NEXTBILLINGDATE']), current_time('timestamp'));
+					}
+					elseif(!empty($status) && !empty($status['PROFILESTARTDATE']) && $order_status == "cancelled")
+					{
+						//startdate is in the future and we cancelled so going to use that as the next payment date
+						$startdate_timestamp = strtotime(urldecode($status['PROFILESTARTDATE']), current_time('timestamp'));
+						if($startdate_timestamp > current_time('timestamp'))
+							$timestamp = $startdate_timestamp;
+					}
+				}
+			}
+						
+			return $timestamp;
+		}
 
 		/**
 		 * PAYPAL Function
@@ -794,44 +869,30 @@
 
 			$version = urlencode('72.0');
 
-			// setting the curl parameters.
-			$ch = curl_init();
-			curl_setopt($ch, CURLOPT_URL, $API_Endpoint);
-			curl_setopt($ch, CURLOPT_VERBOSE, 1);
-
-			// turning off the server and peer verification(TrustManager Concept).
-			curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, FALSE);
-			curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, FALSE);
-
-			curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-			curl_setopt($ch, CURLOPT_POST, 1);
-
-			// NVPRequest for submitting to server
+			//NVPRequest for submitting to server
 			$nvpreq = "METHOD=" . urlencode($methodName_) . "&VERSION=" . urlencode($version) . "&PWD=" . urlencode($API_Password) . "&USER=" . urlencode($API_UserName) . "&SIGNATURE=" . urlencode($API_Signature) . "&BUTTONSOURCE=" . urlencode(PAYPAL_BN_CODE) . $nvpStr_;
 
-			// setting the nvpreq as POST FIELD to curl
-			curl_setopt($ch, CURLOPT_POSTFIELDS, $nvpreq);
+			//post to PayPal
+			$response = wp_remote_post( $API_Endpoint, array(
+					'timeout' => 60,
+					'sslverify' => FALSE,
+					'httpversion' => '1.1',
+					'body' => $nvpreq
+			    )
+			);
 
-			// getting response from server
-			$httpResponse = curl_exec($ch);
+			if ( is_wp_error( $response ) ) {
+			   $error_message = $response->get_error_message();
+			   die( "methodName_ failed: $error_message" );
+			} else {
+				//extract the response details
+				$httpParsedResponseAr = array();
+				parse_str(wp_remote_retrieve_body($response), $httpParsedResponseAr);
 
-			if(!$httpResponse) {
-				exit("$methodName_ failed: ".curl_error($ch).'('.curl_errno($ch).')');
-			}
-
-			// Extract the RefundTransaction response details
-			$httpResponseAr = explode("&", $httpResponse);
-
-			$httpParsedResponseAr = array();
-			foreach ($httpResponseAr as $i => $value) {
-				$tmpAr = explode("=", $value);
-				if(sizeof($tmpAr) > 1) {
-					$httpParsedResponseAr[$tmpAr[0]] = $tmpAr[1];
+				//check for valid response
+				if((0 == sizeof($httpParsedResponseAr)) || !array_key_exists('ACK', $httpParsedResponseAr)) {
+					exit("Invalid HTTP Response for POST request($nvpreq) to $API_Endpoint.");
 				}
-			}
-
-			if((0 == sizeof($httpParsedResponseAr)) || !array_key_exists('ACK', $httpParsedResponseAr)) {
-				exit("Invalid HTTP Response for POST request($nvpreq) to $API_Endpoint.");
 			}
 
 			return $httpParsedResponseAr;

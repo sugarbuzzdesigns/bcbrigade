@@ -2,8 +2,8 @@
 Contributors: mrherbivore
 Donate link: http://gigpress.com/donate
 Tags: concerts, bands, tours, shows, record labels, music, musicians, performers, artists
-Requires at least: 3.0
-Tested up to: 4.2
+Requires at least: 4.0
+Tested up to: 4.4
 
 GigPress is a live performance listing and management plugin that's been serving musicians and performers since 2007.
 
@@ -19,6 +19,40 @@ GigPress is a powerful live performance listing and management plugin designed f
 * No lock-in here. Import your shows from a CSV file, without fear of duplicate data. Export your shows database to CSV - filtered by artist, tour, and date.
 
 == Changelog ==
+
+= 2.3.16 = 
+
+* The Related Posts menu will now only show posts of the "post" type
+* Updated French translations (courtesy of François Fuchs)
+
+= 2.3.15 =
+
+* Fixed timezone bug which affected some users when upgrading to 2.3.14
+
+= 2.3.14 =
+
+* Added a new setting to choose the timezone used to determine upcoming/expired shows
+* Updated some markup in the admin for improved accessibility and aesthetics in WordPress 4.4
+* Removed calls to the deprecated `screen_icon()` function
+
+= 2.3.13 =
+
+* Fixed an issue where the encoded forward-slash in the GigPress "Add a show" URL would trigger a 404 when saving under certain server setups
+* Fix for bug where show status would be imported from CSV as an integer rather than a string (h/t ade11)
+
+= 2.3.12 =
+
+* Fix for bug introduced in last version where some show defaults would not be saved
+
+= 2.3.11 =
+
+* Fixed some SQL and XSS vulnerabilities in the admin
+
+= 2.3.10 =
+
+* Removed PHP 4-style class constructor from widget for compatibility with WordPress 4.3
+* Added better error checking and reporting to CSV imports
+* Added Catalan translation (thanks Jordi Flamarich)
 
 = 2.3.9 =
 

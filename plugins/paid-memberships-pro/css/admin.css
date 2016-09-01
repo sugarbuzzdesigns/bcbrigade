@@ -38,6 +38,7 @@ tr td.level_name a {font-size: 115%; font-weight: bold; }
 .membership-levels tr.alternate {background: #f9f9f9;}
 .membership-levels tr.ui-sortable-helper {border: 1px solid #2997C8;}
 tr.testclass {border: 3px solid #2997C8; background: #2997C8;}
+.membershipcategory_hasparent {margin-left: 25px; }
 
 /* settings */
 tr.pmpro_settings_divider td {padding: 5px; margin: 0; color: #555; border-top: 1px solid #CCC; border-bottom: 1px solid #CCC;}
@@ -116,3 +117,7 @@ h2.nav-tab-wrapper {margin-bottom: 1em; }
 .pmpro_reports-holder { }
 .pmpro_clickable {cursor: pointer;}
 .js .postbox.pmpro_clickable h3 {cursor: pointer;}
+.pmpro_reports-holder .wp-list-table tbody td {font-size: 1.2rem; font-weight: bold; }
+@media screen and (max-width: 782px) {
+	.pmpro_reports-holder tr:not(.inline-edit-row):not(.no-items) td:not(.check-column) {display: table-cell; }
+}

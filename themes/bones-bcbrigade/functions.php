@@ -504,4 +504,24 @@ function example_has_gravatar( $email_address ) {
 
 } // end example_has_gravatar
 
+function bcb_add_shipping_address_td($theuser){
+  $id = $theuser->ID;
+  $first = get_user_meta( $id, 'first_name', true );
+  $last = get_user_meta( $id, 'last_name', true );
+  $address = get_user_meta( $id, 'address', true );
+  $city = get_user_meta( $id, 'city', true ); 
+  $zip = get_user_meta( $id, 'zip', true ); 
+  $state = get_user_meta( $id, 'state', true );
+
+  echo '<td>' . $first . ' ' . $last . '<br>' . $address . '<br>' . $city . '<br>' . $zip . ' ' . $state . '</td>';
+}
+
+function bcb_add_shipping_address_th(){
+  echo '<th>Shipping Address</th>';
+}
+
+add_action('pmpro_memberslist_extra_cols_body', 'bcb_add_shipping_address_td');
+
+add_action('pmpro_memberslist_extra_cols_header', 'bcb_add_shipping_address_th');
+
 /* DON'T DELETE THIS CLOSING TAG */ ?>

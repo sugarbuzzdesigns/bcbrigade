@@ -46,7 +46,7 @@
 		<li><strong><?php _e('Account', 'pmpro');?>:</strong> <?php echo $current_user->display_name?> (<?php echo $current_user->user_email?>)</li>
 		<li><strong><?php _e('Membership Level', 'pmpro');?>:</strong> <?php echo $current_user->membership_level->name?></li>
 		<?php if($current_user->membership_level->enddate) { ?>
-			<li><strong><?php _e('Membership Expires', 'pmpro');?>:</strong> <?php echo date(get_option('date_format'), $current_user->membership_level->enddate)?></li>
+			<li><strong><?php _e('Membership Expires', 'pmpro');?>:</strong> <?php echo date_i18n(get_option('date_format'), $current_user->membership_level->enddate)?></li>
 		<?php } ?>
 		<?php if($pmpro_invoice->getDiscountCode()) { ?>
 			<li><strong><?php _e('Discount Code', 'pmpro');?>:</strong> <?php echo $pmpro_invoice->discount_code->code?></li>
@@ -102,7 +102,7 @@
 	?>	
 	<ul>
 		<li><strong><?php _e('Account', 'pmpro');?>:</strong> <?php echo $current_user->display_name?> (<?php echo $current_user->user_email?>)</li>
-		<li><strong><?php _e('Membership Level', 'pmpro');?>:</strong> <?php if(!empty($current_user->membership_level)) echo $current_user->membership_level->name; else _ex("Pending", "User without membership is in {pending} status.", "pmpro");?></li>
+		<li><strong><?php _e('Membership Level', 'pmpro');?>:</strong> <?php if(!empty($current_user->membership_level)) echo $current_user->membership_level->name; else _e("Pending", "pmpro");?></li>
 	</ul>	
 <?php 
 	} 
@@ -110,7 +110,7 @@
 <nav id="nav-below" class="navigation" role="navigation">
 	<div class="nav-next alignright">
 		<?php if(!empty($current_user->membership_level)) { ?>
-			<a href="/"><?php _e('Home &rarr;', 'pmpro');?></a>
+			<a href="<?php echo pmpro_url("account")?>"><?php _e('View Your Membership Account &rarr;', 'pmpro');?></a>
 		<?php } else { ?>
 			<?php _e('If your account is not activated within a few minutes, please contact the site owner.', 'pmpro');?>
 		<?php } ?>

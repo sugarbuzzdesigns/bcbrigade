@@ -2,13 +2,27 @@
 	global $wpdb, $current_user, $pmpro_msg, $pmpro_msgt, $show_paypal_link;
 	global $bfirstname, $blastname, $baddress1, $baddress2, $bcity, $bstate, $bzipcode, $bcountry, $bphone, $bemail, $bconfirmemail, $CardType, $AccountNumber, $ExpirationMonth, $ExpirationYear;
 
+	if (! is_user_logged_in())
+		wp_redirect(pmpro_url('levels'));
+
+	/**
+	 * Filter to set if PMPro uses email or text as the type for email field inputs.
+	 * 
+	 * @since 1.8.4.5
+	 *
+	 * @param bool $use_email_type, true to use email type, false to use text type
+	 */
+	$pmpro_email_field_type = apply_filters('pmpro_email_field_type', true);
+	
 	$gateway = pmpro_getOption("gateway");
 
 	//set to true via filter to have Stripe use the minimal billing fields
 	$pmpro_stripe_lite = apply_filters("pmpro_stripe_lite", !pmpro_getOption("stripe_billingaddress")); //default is oposite of the stripe_billingaddress setting
 
 	$level = $current_user->membership_level;
-	if($level)
+
+	//Make sure the $level object is a valid level definition
+	if(isset($level->id) && !empty($level->id))
 	{
 	?>
 		<p><?php printf(__("Logged in as <strong>%s</strong>.", "pmpro"), $current_user->user_login);?> <small><a href="<?php echo wp_logout_url(get_bloginfo("url") . "/membership-checkout/?level=" . $level->id);?>"><?php _e("logout", "pmpro");?></a></small></p>
@@ -55,7 +69,11 @@
 				}
 			?>
 
-			<?php if(empty($pmpro_stripe_lite) || $gateway != "stripe") { ?>
+			<?php 
+				$pmpro_include_billing_address_fields = apply_filters('pmpro_include_billing_address_fields', true);
+				if($pmpro_include_billing_address_fields)
+				{ 
+			?>
 			<table id="pmpro_billing_address_fields" class="pmpro_checkout" width="100%" cellpadding="0" cellspacing="0" border="0">
 			<thead>
 				<tr>
@@ -195,11 +213,11 @@
 						?>
 						<div>
 							<label for="bemail"><?php _e('E-mail Address', 'pmpro');?></label>
-							<input id="bemail" name="bemail" type="text" class="input" size="20" value="<?php echo esc_attr($bemail)?>" />
+							<input id="bemail" name="bemail" type="<?php echo ($pmpro_email_field_type ? 'email' : 'text'); ?>" class="input" size="20" value="<?php echo esc_attr($bemail)?>" />
 						</div>
 						<div>
 							<label for="bconfirmemail"><?php _e('Confirm E-mail', 'pmpro');?></label>
-							<input id="bconfirmemail" name="bconfirmemail" type="text" class="input" size="20" value="<?php echo esc_attr($bconfirmemail)?>" />
+							<input id="bconfirmemail" name="bconfirmemail" type="<?php echo ($pmpro_email_field_type ? 'email' : 'text'); ?>" class="input" size="20" value="<?php echo esc_attr($bconfirmemail)?>" />
 
 						</div>
 						<?php } ?>
@@ -210,15 +228,25 @@
 			<?php } ?>
 
 			<?php
+			//make sure gateways will show up credit card fields
+			global $pmpro_requirebilling;
+			$pmpro_requirebilling = true;
+			
+			//do we need to show the payment information (credit card) fields? gateways will override this
+			$pmpro_include_payment_information_fields = apply_filters('pmpro_include_payment_information_fields', true);						
+			if($pmpro_include_payment_information_fields)
+			{
 				$pmpro_accepted_credit_cards = pmpro_getOption("accepted_credit_cards");
 				$pmpro_accepted_credit_cards = explode(",", $pmpro_accepted_credit_cards);
 				$pmpro_accepted_credit_cards_string = pmpro_implodeToEnglish($pmpro_accepted_credit_cards);
 			?>
-
 			<table id="pmpro_payment_information_fields" class="pmpro_checkout top1em" width="100%" cellpadding="0" cellspacing="0" border="0">
 			<thead>
 				<tr>
-					<th colspan="2"><span class="pmpro_thead-msg"><?php printf(__('We accept %s', 'pmpro'), $pmpro_accepted_credit_cards_string);?></span><?php _e('Credit Card Information', 'pmpro');?></th>
+					<th>
+						<span class="pmpro_thead-name"><?php _e('Credit Card Information', 'pmpro');?></span>
+						<span class="pmpro_thead-msg"><?php printf(__('We accept %s', 'pmpro'), $pmpro_accepted_credit_cards_string);?></span>
+					</th>
 				</tr>
 			</thead>
 			<tbody>
@@ -233,17 +261,55 @@
 							<?php
 							}
 						?>
-						<?php if(empty($pmpro_stripe_lite) || $gateway != "stripe") { ?>
-						<div>
-							<label for="CardType"><?php _e('Card Type', 'pmpro');?></label>
-							<select id="CardType" <?php if($gateway != "stripe") { ?>name="CardType"<?php } ?>>
-								<?php foreach($pmpro_accepted_credit_cards as $cc) { ?>
-									<option value="<?php echo $cc?>" <?php if($CardType == $cc) { ?>selected="selected"<?php } ?>><?php echo $cc?></option>
-								<?php } ?>
-							</select>
-						</div>
-						<?php } ?>
+						
+						<?php
+							$pmpro_include_cardtype_field = apply_filters('pmpro_include_cardtype_field', false);
+							if($pmpro_include_cardtype_field)
+							{
+							?>
+							<div class="pmpro_payment-card-type">
+								<label for="CardType"><?php _e('Card Type', 'pmpro');?></label>
+								<select id="CardType" name="CardType" class=" <?php echo pmpro_getClassForField("CardType");?>">
+									<?php foreach($pmpro_accepted_credit_cards as $cc) { ?>
+										<option value="<?php echo $cc?>" <?php if($CardType == $cc) { ?>selected="selected"<?php } ?>><?php echo $cc?></option>
+									<?php } ?>
+								</select>
+							</div>
+							<?php
+							}
+							else
+							{
+							?>
+							<input type="hidden" id="CardType" name="CardType" value="<?php echo esc_attr($CardType);?>" />
+							<script>
+								<!--
+								jQuery(document).ready(function() {
+										jQuery('#AccountNumber').validateCreditCard(function(result) {
+											var cardtypenames = {
+												"amex"                      : "American Express",
+												"diners_club_carte_blanche" : "Diners Club Carte Blanche",
+												"diners_club_international" : "Diners Club International",
+												"discover"                  : "Discover",
+												"jcb"                       : "JCB",
+												"laser"                     : "Laser",
+												"maestro"                   : "Maestro",
+												"mastercard"                : "Mastercard",
+												"visa"                      : "Visa",
+												"visa_electron"             : "Visa Electron"
+											};
 
+											if(result.card_type)
+												jQuery('#CardType').val(cardtypenames[result.card_type.name]);
+											else
+												jQuery('#CardType').val('Unknown Card Type');
+										});
+								});
+								-->
+							</script>
+							<?php
+							}
+						?>
+						
 						<div>
 							<label for="AccountNumber"><?php _e('Card Number', 'pmpro');?></label>
 							<input id="AccountNumber" <?php if($gateway != "stripe" && $gateway != "braintree") { ?>name="AccountNumber"<?php } ?> class="input <?php echo pmpro_getClassForField("AccountNumber");?>" type="text" size="25" value="<?php echo esc_attr($AccountNumber)?>" <?php if($gateway == "braintree") { ?>data-encrypted-name="number"<?php } ?> autocomplete="off" />
@@ -280,10 +346,11 @@
 							$pmpro_show_cvv = apply_filters("pmpro_show_cvv", true);
 							if($pmpro_show_cvv)
 							{
+								$cvv_template = pmpro_loadTemplate('popup-cvv', 'url', 'pages', 'html');
 						?>
 						<div>
-							<label for="CVV"><?php _ex('CVV', 'Credit card security code, CVV/CCV/CVV2', 'pmpro');?></label>
-							<input class="input" id="CVV" <?php if($gateway != "stripe" && $gateway != "braintree") { ?>name="CVV"<?php } ?> type="text" size="4" value="<?php if(!empty($_REQUEST['CVV'])) { echo esc_attr($_REQUEST['CVV']); }?>" class=" <?php echo pmpro_getClassForField("CVV");?>" <?php if($gateway == "braintree") { ?>data-encrypted-name="cvv"<?php } ?> />  <small>(<a href="javascript:void(0);" onclick="javascript:window.open('<?php echo pmpro_https_filter(PMPRO_URL)?>/pages/popup-cvv.html','cvv','toolbar=no, location=no, directories=no, status=no, menubar=no, scrollbars=yes, resizable=yes, width=600, height=475');"><?php _ex("what's this?", 'link to CVV help', 'pmpro');?></a>)</small>
+							<label for="CVV"><?php _e('CVV', 'pmpro');?></label>
+							<input class="input" id="CVV" <?php if($gateway != "stripe" && $gateway != "braintree") { ?>name="CVV"<?php } ?> type="text" size="4" value="<?php if(!empty($_REQUEST['CVV'])) { echo esc_attr($_REQUEST['CVV']); }?>" class=" <?php echo pmpro_getClassForField("CVV");?>" <?php if($gateway == "braintree") { ?>data-encrypted-name="cvv"<?php } ?> />  <small>(<a href="javascript:void(0);" onclick="javascript:window.open('<?php echo pmpro_https_filter($cvv_template); ?>,'cvv','toolbar=no, location=no, directories=no, status=no, menubar=no, scrollbars=yes, resizable=yes, width=600, height=475');"><?php _e("what's this?", 'pmpro');?></a>)</small>
 						</div>
 						<?php
 							}
@@ -298,6 +365,7 @@
 				<input type='hidden' name='AccountNumber' id='BraintreeAccountNumber' />
 				<script type="text/javascript" src="https://js.braintreegateway.com/v1/braintree.js"></script>
 				<script type="text/javascript">
+					<!--
 					//setup braintree encryption
 					var braintree = Braintree.create('<?php echo pmpro_getOption("braintree_encryptionkey"); ?>');
 					braintree.onSubmitEncryptForm('pmpro_form');
@@ -321,8 +389,11 @@
 						pmpro_updateBraintreeAccountNumber();
 					});
 					pmpro_updateBraintreeAccountNumber();
+					-->
 				</script>
-			<?php } ?>
+			<?php }
+				} // if false === $hide_cc_fields
+			?>
 
 			<div align="center">
 				<input type="hidden" name="update-billing" value="1" />
@@ -332,12 +403,14 @@
 
 		</form>
 		<script>
+			<!--
 			// Find ALL <form> tags on your page
 			jQuery('form').submit(function(){
 				// On submit disable its submit button
 				jQuery('input[type=submit]', this).attr('disabled', 'disabled');
 				jQuery('input[type=image]', this).attr('disabled', 'disabled');
 			});
+			-->
 		</script>
 	<?php } ?>
 <?php } else { ?>
